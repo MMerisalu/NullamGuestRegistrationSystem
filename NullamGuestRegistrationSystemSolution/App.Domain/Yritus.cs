@@ -18,7 +18,7 @@ namespace App.Domain
         [MaxLength(1000)]
         public string? Lisainfo { get; set; }
 
-        public ICollection<Attendee>? Osavotjad { get; set; }
+        public ICollection<Osavotja>? Osavotjad { get; set; }
 
     }
 
