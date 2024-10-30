@@ -412,7 +412,11 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+*appsettings.json
+
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode
+/NullamGuestRegistrationSystemSolution/WebApp/appsettings.json
+/NullamGuestRegistrationSystemSolution/WebApp/appsettings.Development.json
