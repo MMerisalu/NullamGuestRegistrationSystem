@@ -1,4 +1,5 @@
 ﻿
+using App.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.DAL.EF;
@@ -11,7 +12,7 @@ public class AppDbContext : DbContext
         this.ChangeTracker.LazyLoadingEnabled = false;
     }
 
-    
+    public DbSet<Event> Events { get; set; } = default!;
     //public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
