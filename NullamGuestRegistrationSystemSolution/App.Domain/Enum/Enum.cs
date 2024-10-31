@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace App.Domain.Enum
 {
-    public enum OsavotjaTyyp
+    public enum OsavõtjaTüüp
     {
         Eraisik,
-        Ettevote
+        Ettevõte
         
     }
 }

@@ -12,9 +12,9 @@ public class AppDbContext : DbContext
         this.ChangeTracker.LazyLoadingEnabled = false;
     }
 
-    public DbSet<Yritus> Yritused { get; set; } = default!;
-    public DbSet<Osavotja> Osavotjad { get; set; } = default!;
-    public DbSet<OsavotumaksuMaksmiseViis> OsavotumaksuMaksmiseViisid { get; set; } = default!;
+    public DbSet<Üritus> Üritused { get; set; } = default!;
+    public DbSet<Osavõtja> Osavõtjad { get; set; } = default!;
+    public DbSet<OsavõtumaksuMaksmiseViis> OsavõtumaksuMaksmiseViisid { get; set; } = default!;
     //public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)

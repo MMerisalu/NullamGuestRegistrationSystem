@@ -29,10 +29,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-
 builder.Services.AddLocalization(options => { options.ResourcesPath = ""; });
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddRazorPages();
 
 /*
 
@@ -63,23 +63,22 @@ builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     typeof(App.DAL.EF.AutoMapperConfig));*/
 
 
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddCookie(options => { options.SlidingExpiration = true; })
-    .AddJwtBearer(cfg =>
-    {
-        cfg.RequireHttpsMetadata = false;
-        cfg.SaveToken = true;
-        cfg.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
-            ValidAudience = builder.Configuration["JWT:Issuer"],
-            ValidateAudience = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
-            ClockSkew = TimeSpan.Zero // remove delay of token when expire
-        };
-    });
+//builder.Services
+//    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddCookie(options => { options.SlidingExpiration = true; })
+//    .AddJwtBearer(cfg =>
+//    {
+//        cfg.RequireHttpsMetadata = false;
+//        cfg.SaveToken = true;
+//        cfg.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidIssuer = builder.Configuration["JWT:Issuer"],
+//            ValidAudience = builder.Configuration["JWT:Issuer"],
+//            ValidateAudience = true,
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
+//            ClockSkew = TimeSpan.Zero // remove delay of token when expire
+//        };
+//    });
 
 
 
@@ -131,11 +130,10 @@ var requestLocalizationOptions = ((IApplicationBuilder)app).ApplicationServices
 if (requestLocalizationOptions != null)
     app.UseRequestLocalization(requestLocalizationOptions);
 
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllerRoute(
-    "areas",
-    "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+//app.MapControllerRoute(
+//    "areas",
+//    "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 app.MapControllerRoute(
     "default",

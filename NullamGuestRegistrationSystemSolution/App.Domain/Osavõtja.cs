@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace App.Domain
 {
-    public class Osavotja: DomainEntityId
+    public class Osavõtja: DomainEntityId
     {
-        public OsavotjaTyyp OsavotjaTyyp { get; set; }
+        public OsavõtjaTüüp OsavõtjaTüüp { get; set; }
         #region Eraisiku info
        
         [MaxLength(64)]
@@ -31,8 +31,9 @@ namespace App.Domain
         [DataType(DataType.MultilineText)]
         public string? EraisikuLisainfo { get; set; }
         #endregion
-        [MaxLength(64)]
         #region Ettevõte info
+        [MaxLength(64)]
+        
         public string? EttevõtteJuriidilineNimi { get; set; }
 
         [RegularExpression("^[0-9]+$")]
@@ -44,7 +45,7 @@ namespace App.Domain
         #endregion
         public int OsavotumaksuMaksmiseViisId { get; set; }
         
-        public OsavotumaksuMaksmiseViis? OsavotumaksuMaksmiseViis { get; set; }
+        public OsavõtumaksuMaksmiseViis? OsavotumaksuMaksmiseViis { get; set; }
 
     }
 }

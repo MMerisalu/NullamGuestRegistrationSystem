@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace App.Domain
 {
-    public class Yritus: DomainEntityId
+    public class Üritus: DomainEntityId
     {
         [Required]
         [MaxLength(64)]
-        public string YrituseNimi { get; set; } = default!;
+        public string ÜrituseNimi { get; set; } = default!;
 
         public DateTime Toimumisaeg { get; set; }
         
@@ -18,7 +18,12 @@ namespace App.Domain
         [MaxLength(1000)]
         public string? Lisainfo { get; set; }
 
-        public ICollection<Osavotja>? Osavotjad { get; set; }
+        public ICollection<Osavõtja>? Osavõtjad { get; set; }
+
+        // Võib-olla ei tuleks seda andmebaasis hoida, sest välja väärtus on arvutatav
+
+        public int OsavõtjateArv { get; set; }
+
 
     }
 

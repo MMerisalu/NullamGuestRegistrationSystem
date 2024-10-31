@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace App.Domain
 {
-    public class OsavotumaksuMaksmiseViis: DomainEntityId
+    public class OsavõtumaksuMaksmiseViis: DomainEntityId
     {
         [Required]
         [MaxLength(64)]
-        public string OsavotumaksuMaksmiseViisiNimetus { get; set; }
+        public string OsavõtumaksuMaksmiseViisiNimetus { get; set; } = default!;
     }
 }

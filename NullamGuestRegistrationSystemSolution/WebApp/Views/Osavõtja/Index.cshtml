@@ -1,0 +1,83 @@
+﻿@model IEnumerable<App.Domain.Osavõtja>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OsavõtjaTüüp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eesnimi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Perekonnanimi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Isikukood)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EraisikuLisainfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EttevõtteJuriidilineNimi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EttevõtteRegistrikood)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EttevõttestTulevateOsavõtjateArv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OsavotumaksuMaksmiseViis)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OsavõtjaTüüp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Eesnimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Perekonnanimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isikukood)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EraisikuLisainfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EttevõtteJuriidilineNimi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EttevõtteRegistrikood)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EttevõttestTulevateOsavõtjateArv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OsavotumaksuMaksmiseViis.OsavõtumaksuMaksmiseViisiNimetus)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

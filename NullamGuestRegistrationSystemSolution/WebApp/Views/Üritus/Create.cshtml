@@ -1,0 +1,53 @@
+﻿@model App.Domain.Üritus
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Üritus</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ÜrituseNimi" class="control-label"></label>
+                <input asp-for="ÜrituseNimi" class="form-control" />
+                <span asp-validation-for="ÜrituseNimi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Toimumisaeg" class="control-label"></label>
+                <input asp-for="Toimumisaeg" class="form-control" />
+                <span asp-validation-for="Toimumisaeg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Koht" class="control-label"></label>
+                <input asp-for="Koht" class="form-control" />
+                <span asp-validation-for="Koht" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lisainfo" class="control-label"></label>
+                <input asp-for="Lisainfo" class="form-control" />
+                <span asp-validation-for="Lisainfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OsavõtjateArv" class="control-label"></label>
+                <input asp-for="OsavõtjateArv" class="form-control" />
+                <span asp-validation-for="OsavõtjateArv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
