@@ -1,4 +1,6 @@
-﻿@model App.Domain.Osavõtja
+﻿@using App.Domain.Enum
+@using WebApp.ViewModels
+@model LisaMuudaOsavõtja
 
 @{
     ViewData["Title"] = "Create";
@@ -11,13 +13,28 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="OsavõtjaTüüp" class="control-label"></label>
-                <select asp-for="OsavõtjaTüüp" class="form-control"></select>
+
+                @foreach (var tüüp in Enum.GetValues(typeof(OsavõtjaTüüp)).Cast<OsavõtjaTüüp>())
+                {
+                    <div class="form-check">
+                        <input type="radio" asp-for="OsavõtjaTüüp" value="@tüüp" class="form-check-input" />
+                        <label class="form-check-label">@tüüp</label>
+                    </div>
+                }
+
                 <span asp-validation-for="OsavõtjaTüüp" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            @* <div class="form-group">
+                <label asp-for="OsavõtjaTüüp" class="control-label"></label>
+                <input type="radio" value="@OsavõtjaTüüp.Eraisik" asp-for="OsavõtjaTüüp" class="form-control" asp-items="Html.GetEnumSelectList<OsavõtjaTüüp>()"></input>
+                <label>@OsavõtjaTüüp.Eraisik</label>
+                <span asp-validation-for="OsavõtjaTüüp" class="text-danger"></span>
+            </div> *@
+           @*  <div class="form-group">
                 <label asp-for="Eesnimi" class="control-label"></label>
                 <input asp-for="Eesnimi" class="form-control" />
                 <span asp-validation-for="Eesnimi" class="text-danger"></span>
@@ -55,7 +72,7 @@
             <div class="form-group">
                 <label asp-for="OsavotumaksuMaksmiseViisId" class="control-label"></label>
                 <select asp-for="OsavotumaksuMaksmiseViisId" class ="form-control" asp-items="ViewBag.OsavotumaksuMaksmiseViisId"></select>
-            </div>
+            </div> *@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

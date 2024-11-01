@@ -8,7 +8,7 @@ namespace WebApp.ViewModels
         public int Id { get; set; }
         
         [Display(Name = "Ürituse Nimi")]
-        [Required(ErrorMessage = "Väli Ürituse Nimi on kohustuslik!")]
+        [Required(ErrorMessage = "Väli Ürituse nimi on kohustuslik!")]
         [MaxLength(64, ErrorMessage = "Väljale sisestava teksti maksimaalne pikkus on 64 tähemärki!")]
         [StringLength(64)]
         public string ÜrituseNimi { get; set; } = default!;
