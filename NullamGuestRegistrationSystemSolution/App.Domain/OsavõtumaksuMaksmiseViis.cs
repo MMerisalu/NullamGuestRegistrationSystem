@@ -16,7 +16,7 @@ namespace App.Domain
         // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
         // kasutajale andmeid kuvada, hetkel jätan selle siia.
 
-        [Display(Name = "Osavõtumaksu Maksmise Viisi Nimetus")]
+        [Display(Name = "Osavõtumaksu makseviis")]
         public string OsavõtumaksuMaksmiseViisiNimetus { get; set; } = default!;
     }
 }

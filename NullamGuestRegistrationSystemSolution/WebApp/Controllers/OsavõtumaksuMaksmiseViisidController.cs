@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -25,28 +26,12 @@ namespace WebApp.Controllers
             return View(await _context.OsavõtumaksuMaksmiseViisid.ToListAsync());
         }
 
-        // GET: OsavõtumaksuMaksmiseViisid/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var osavõtumaksuMaksmiseViis = await _context.OsavõtumaksuMaksmiseViisid
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (osavõtumaksuMaksmiseViis == null)
-            {
-                return NotFound();
-            }
-
-            return View(osavõtumaksuMaksmiseViis);
-        }
-
+        
         // GET: OsavõtumaksuMaksmiseViisid/Create
         public IActionResult Create()
         {
-            return View();
+            var vm = new LisaMuudaMakseviisVM();
+            return View(vm);
         }
 
         // POST: OsavõtumaksuMaksmiseViisid/Create
@@ -54,15 +39,17 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OsavõtumaksuMaksmiseViisiNimetus,Id")] OsavõtumaksuMaksmiseViis osavõtumaksuMaksmiseViis)
+        public async Task<IActionResult> Create(LisaMuudaMakseviisVM vm)
         {
             if (ModelState.IsValid)
             {
+                var osavõtumaksuMaksmiseViis = new OsavõtumaksuMaksmiseViis();
+                osavõtumaksuMaksmiseViis.OsavõtumaksuMaksmiseViisiNimetus = vm.OsavõtumaksuMaksmiseViisiNimetus;
                 _context.Add(osavõtumaksuMaksmiseViis);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(osavõtumaksuMaksmiseViis);
+            return View(vm);
         }
 
         // GET: OsavõtumaksuMaksmiseViisid/Edit/5
