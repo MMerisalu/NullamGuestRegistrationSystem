@@ -3,12 +3,11 @@
 @model LisaMuudaOsavõtja
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Osavõtja lisamine";
 }
 
-<h1>Create</h1>
+<h1>Osavõtja lisamine</h1>
 
-<h4>Osavõtja</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -27,14 +26,7 @@
 
                 <span asp-validation-for="OsavõtjaTüüp" class="text-danger"></span>
             </div>
-
-            @* <div class="form-group">
-                <label asp-for="OsavõtjaTüüp" class="control-label"></label>
-                <input type="radio" value="@OsavõtjaTüüp.Eraisik" asp-for="OsavõtjaTüüp" class="form-control" asp-items="Html.GetEnumSelectList<OsavõtjaTüüp>()"></input>
-                <label>@OsavõtjaTüüp.Eraisik</label>
-                <span asp-validation-for="OsavõtjaTüüp" class="text-danger"></span>
-            </div> *@
-           @*  <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Eesnimi" class="control-label"></label>
                 <input asp-for="Eesnimi" class="form-control" />
                 <span asp-validation-for="Eesnimi" class="text-danger"></span>
@@ -72,18 +64,25 @@
             <div class="form-group">
                 <label asp-for="OsavotumaksuMaksmiseViisId" class="control-label"></label>
                 <select asp-for="OsavotumaksuMaksmiseViisId" class ="form-control" asp-items="ViewBag.OsavotumaksuMaksmiseViisId"></select>
-            </div> *@
+            </div> 
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Lisa" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <button onclick="TagasiAvalehele()" class="btn btn-primary">Tagasi</button>
 </div>
 
 @section Scripts {
+    <script type="text/javascript">
+                function TagasiAvalehele() {
+                    window.location.href = '@Url.Action("Index", "Home")';
+                }
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }

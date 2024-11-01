@@ -12,9 +12,10 @@ namespace App.Domain
     public class Osavõtja: DomainEntityId
     {
         public OsavõtjaTüüp OsavõtjaTüüp { get; set; }
+
         #region Eraisiku info
+
         [MaxLength(64)]
-        
         public string? Eesnimi { get; set; }
         
         [MaxLength(64)]
@@ -33,8 +34,11 @@ namespace App.Domain
         // kasutajale andmeid kuvada, hetkel jätan selle siia.
         [Display(Name = "Eraisiku lisainfo" )]
         public string? EraisikuLisainfo { get; set; }
+
         #endregion
+
         #region Ettevõte info
+
         [MaxLength(64)]
         // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
         // kasutajale andmeid kuvada, hetkel jätan selle siia.
@@ -45,6 +49,7 @@ namespace App.Domain
         [MaxLength(8)]
         [Display(Name = "Ettevõtte Registrikood")]
         public string? EttevõtteRegistrikood{ get; set; }
+
         [Display(Name = "Ettevõttest Tulevate Osavõtjate Arv")]
         [Range(1, 250)]
         public int EttevõttestTulevateOsavõtjateArv { get; set; }
