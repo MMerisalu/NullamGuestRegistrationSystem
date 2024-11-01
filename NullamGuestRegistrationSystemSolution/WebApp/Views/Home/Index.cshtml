@@ -1,8 +1,55 @@
-﻿@{
+﻿@model IEnumerable<App.Domain.Üritus>
+@{
     ViewData["Title"] = "Avaleht";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ÜrituseNimi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Toimumisaeg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Koht)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lisainfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OsavõtjateArv)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ÜrituseNimi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Toimumisaeg)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Koht)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lisainfo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OsavõtjateArv)
+                </td>
+                <td>
+                    <a style="text-decoration:none" asp-action="Index" asp-controller="Osavõtjad">OSAVÕTJAD</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a style="text-decoration:none" asp-controller="Üritused" asp-action="Create">LISA ÜRITUS</a>
+</p>
