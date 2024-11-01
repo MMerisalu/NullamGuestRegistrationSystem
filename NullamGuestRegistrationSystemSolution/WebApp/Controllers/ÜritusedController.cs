@@ -56,15 +56,20 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ÜrituseNimi,Toimumisaeg,Koht,Lisainfo,OsavõtjateArv,Id")] Üritus üritus)
+        public async Task<IActionResult> Create(LisaMuudaÜritusVM vm)
         {
             if (ModelState.IsValid)
             {
+                var üritus = new Üritus();
+                üritus.ÜrituseNimi = vm.ÜrituseNimi;
+                üritus.Toimumisaeg = DateTime.Parse(vm.Toimumisaeg);
+                üritus.Koht = vm.Koht;
+                üritus.Lisainfo = vm.Lisainfo;
                 _context.Add(üritus);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home");
             }
-            return View(üritus);
+            return View(vm);
         }
 
         // GET: Üritused/Edit/5

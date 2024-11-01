@@ -6,6 +6,7 @@ namespace WebApp.ViewModels
     public class LisaMuudaÜritusVM
     {
         public int Id { get; set; }
+        
         [Display(Name = "Ürituse Nimi")]
         [Required(ErrorMessage = "Väli Ürituse Nimi on kohustuslik!")]
         [MaxLength(64, ErrorMessage = "Väljale sisestava teksti maksimaalne pikkus on 64 tähemärki!")]
