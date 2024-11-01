@@ -61,6 +61,7 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 var üritus = new Üritus();
+                üritus.ÜrituseNr += 1;
                 üritus.ÜrituseNimi = vm.ÜrituseNimi;
                 üritus.Toimumisaeg = DateTime.Parse(vm.Toimumisaeg);
                 üritus.Koht = vm.Koht;
@@ -153,12 +154,19 @@ namespace WebApp.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Home");
         }
 
         private bool ÜritusExists(int id)
         {
             return _context.Üritused.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> OsavõtjateNimekiri()
+        {
+          var vm = new OsavõtjateNimekiriVM();
+
+            return View(vm);
         }
     }
 }

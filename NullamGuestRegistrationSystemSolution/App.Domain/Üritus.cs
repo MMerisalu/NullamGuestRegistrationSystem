@@ -5,12 +5,17 @@ namespace App.Domain
 {
     public class Üritus: DomainEntityId
     {
+        public int ÜrituseNr { get; set; }
+        // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
+        // kasutajale andmeid kuvada, hetkel jätan selle siia.
+        public string ÜrituseNrVormindatud => $"{ÜrituseNr}.";
+
         [Required]
         [MaxLength(64)]
         // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
         // kasutajale andmeid kuvada, hetkel jätan selle siia.
 
-        [Display(Name = "Ürituse Nimi")]
+        [Display(Name = "Ürituse nimi")]
         public string ÜrituseNimi { get; set; } = default!;
 
         // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
@@ -28,9 +33,10 @@ namespace App.Domain
         public ICollection<Osavõtja>? Osavõtjad { get; set; }
 
         // Võib-olla ei tuleks seda andmebaasis hoida, sest välja väärtus on arvutatav
-        [Display(Name = "Osavõtjate Arv")]
+        [Display(Name = "Osavõtjate arv")]
         [Range(1, 4)]
         public int OsavõtjateArv { get; set; }
+
     }
   
 }

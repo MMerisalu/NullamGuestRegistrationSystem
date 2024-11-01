@@ -7,6 +7,8 @@
     <thead>
         <tr>
             <th>
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ÜrituseNimi)
             </th>
             <th>
@@ -29,7 +31,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ÜrituseNimi)
+                    @Html.DisplayFor(modelItem => item.ÜrituseNrVormindatud)
+                </td>
+                <td>
+                    <a style="text-decoration:none" asp-action="OsavõtjateNimekiri" asp-controller="Üritused" asp-route-id="@item.Id">@item.ÜrituseNimi</a> 
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Toimumisaeg)
@@ -45,7 +50,7 @@
                 </td>
                 <td>
                     <a style="text-decoration:none" asp-action="Delete" asp-controller="Üritused" asp-route-id="@item.Id">KUSTUTA ÜRITUS</a> |
-                    <a style="text-decoration:none" asp-action="Index" asp-controller="Osavõtjad">OSAVÕTJAD</a>
+                    <a style="text-decoration:none" asp-action="Create" asp-controller="Osavõtjad">LISA OSAVÕTJA</a>
                 </td>
             </tr>
         }
