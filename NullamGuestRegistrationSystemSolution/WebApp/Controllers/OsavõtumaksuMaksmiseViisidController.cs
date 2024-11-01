@@ -10,22 +10,22 @@ using App.Domain;
 
 namespace WebApp.Controllers
 {
-    public class ÜritusController : Controller
+    public class OsavõtumaksuMaksmiseViisidController : Controller
     {
         private readonly AppDbContext _context;
 
-        public ÜritusController(AppDbContext context)
+        public OsavõtumaksuMaksmiseViisidController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Üritus
+        // GET: OsavõtumaksuMaksmiseViisid
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Üritused.ToListAsync());
+            return View(await _context.OsavõtumaksuMaksmiseViisid.ToListAsync());
         }
 
-        // GET: Üritus/Details/5
+        // GET: OsavõtumaksuMaksmiseViisid/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var üritus = await _context.Üritused
+            var osavõtumaksuMaksmiseViis = await _context.OsavõtumaksuMaksmiseViisid
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (üritus == null)
+            if (osavõtumaksuMaksmiseViis == null)
             {
                 return NotFound();
             }
 
-            return View(üritus);
+            return View(osavõtumaksuMaksmiseViis);
         }
 
-        // GET: Üritus/Create
+        // GET: OsavõtumaksuMaksmiseViisid/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Üritus/Create
+        // POST: OsavõtumaksuMaksmiseViisid/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ÜrituseNimi,Toimumisaeg,Koht,Lisainfo,OsavõtjateArv,Id")] Üritus üritus)
+        public async Task<IActionResult> Create([Bind("OsavõtumaksuMaksmiseViisiNimetus,Id")] OsavõtumaksuMaksmiseViis osavõtumaksuMaksmiseViis)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(üritus);
+                _context.Add(osavõtumaksuMaksmiseViis);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(üritus);
+            return View(osavõtumaksuMaksmiseViis);
         }
 
-        // GET: Üritus/Edit/5
+        // GET: OsavõtumaksuMaksmiseViisid/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var üritus = await _context.Üritused.FindAsync(id);
-            if (üritus == null)
+            var osavõtumaksuMaksmiseViis = await _context.OsavõtumaksuMaksmiseViisid.FindAsync(id);
+            if (osavõtumaksuMaksmiseViis == null)
             {
                 return NotFound();
             }
-            return View(üritus);
+            return View(osavõtumaksuMaksmiseViis);
         }
 
-        // POST: Üritus/Edit/5
+        // POST: OsavõtumaksuMaksmiseViisid/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ÜrituseNimi,Toimumisaeg,Koht,Lisainfo,OsavõtjateArv,Id")] Üritus üritus)
+        public async Task<IActionResult> Edit(int id, [Bind("OsavõtumaksuMaksmiseViisiNimetus,Id")] OsavõtumaksuMaksmiseViis osavõtumaksuMaksmiseViis)
         {
-            if (id != üritus.Id)
+            if (id != osavõtumaksuMaksmiseViis.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(üritus);
+                    _context.Update(osavõtumaksuMaksmiseViis);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ÜritusExists(üritus.Id))
+                    if (!OsavõtumaksuMaksmiseViisExists(osavõtumaksuMaksmiseViis.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(üritus);
+            return View(osavõtumaksuMaksmiseViis);
         }
 
-        // GET: Üritus/Delete/5
+        // GET: OsavõtumaksuMaksmiseViisid/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,36 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var üritus = await _context.Üritused
+            var osavõtumaksuMaksmiseViis = await _context.OsavõtumaksuMaksmiseViisid
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (üritus == null)
+            if (osavõtumaksuMaksmiseViis == null)
             {
                 return NotFound();
             }
 
-            return View(üritus);
+            return View(osavõtumaksuMaksmiseViis);
         }
 
-        // POST: Üritus/Delete/5
+        // POST: OsavõtumaksuMaksmiseViisid/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var üritus = await _context.Üritused.FindAsync(id);
-            if (üritus != null)
+            var osavõtumaksuMaksmiseViis = await _context.OsavõtumaksuMaksmiseViisid.FindAsync(id);
+            if (osavõtumaksuMaksmiseViis != null)
             {
-                _context.Üritused.Remove(üritus);
+                _context.OsavõtumaksuMaksmiseViisid.Remove(osavõtumaksuMaksmiseViis);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ÜritusExists(int id)
+        private bool OsavõtumaksuMaksmiseViisExists(int id)
         {
-            return _context.Üritused.Any(e => e.Id == id);
+            return _context.OsavõtumaksuMaksmiseViisid.Any(e => e.Id == id);
         }
+
+        
     }
 }

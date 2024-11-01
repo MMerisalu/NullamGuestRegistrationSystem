@@ -12,6 +12,11 @@ namespace App.Domain
     {
         [Required]
         [MaxLength(64)]
+        
+        // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
+        // kasutajale andmeid kuvada, hetkel jätan selle siia.
+
+        [Display(Name = "Osavõtumaksu Maksmise Viisi Nimetus")]
         public string OsavõtumaksuMaksmiseViisiNimetus { get; set; } = default!;
     }
 }

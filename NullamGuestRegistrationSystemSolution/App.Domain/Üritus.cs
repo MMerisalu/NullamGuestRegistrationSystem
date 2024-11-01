@@ -7,8 +7,12 @@ namespace App.Domain
     {
         [Required]
         [MaxLength(64)]
-        public string ÜrituseNimi { get; set; } = default!;
+        // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
+        // kasutajale andmeid kuvada, hetkel jätan selle siia.
 
+        [Display(Name = "Ürituse Nimi")]
+        public string ÜrituseNimi { get; set; } = default!;
+        
         public DateTime Toimumisaeg { get; set; }
         
         [Required]
@@ -21,11 +25,9 @@ namespace App.Domain
         public ICollection<Osavõtja>? Osavõtjad { get; set; }
 
         // Võib-olla ei tuleks seda andmebaasis hoida, sest välja väärtus on arvutatav
-
+        [Display(Name = "Osavõtjate Arv")]
+        [Range(1, 4)]
         public int OsavõtjateArv { get; set; }
-
-
     }
-
-    
+  
 }

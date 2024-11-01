@@ -1,0 +1,91 @@
+﻿@using WebApp.ViewModels
+@model LisaMuudaÜritusVM
+
+@{
+    ViewData["Title"] = "Ürituse lisamine";
+}
+
+<h1>Ürituse lisamine</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ÜrituseNimi" class="control-label"></label>
+                <input asp-for="ÜrituseNimi" class="form-control" />
+                <span asp-validation-for="ÜrituseNimi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Toimumisaeg" class="control-label"></label>
+                <input name="Toimumisaeg" asp-for="Toimumisaeg" class="form-control" onchange="ToimumisajaValideerimine(this.value)" />
+                <span id="ToimumisajaKliendipoolneValideerimine" asp-validation-for="Toimumisaeg" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="Koht" class="control-label"></label>
+                <input asp-for="Koht" class="form-control" />
+                <span asp-validation-for="Koht" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lisainfo" class="control-label"></label>
+                <input asp-for="Lisainfo" class="form-control" />
+                <span asp-validation-for="Lisainfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OsavõtjateArv" class="control-label"></label>
+                <input asp-for="OsavõtjateArv" class="form-control" />
+                <span asp-validation-for="OsavõtjateArv" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <input type="submit" value="Lisa" class="btn btn-primary" />
+            </div>
+        </form>
+
+        <div>
+            <button onclick="TagasiAvalehele()" class="btn btn-primary">Tagasi</button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function TagasiAvalehele() {
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        function ToimumisajaValideerimine(value) {
+            let vea_span = document.getElementById('ToimumisajaKliendipoolneValideerimine');
+            const praeguneAeg = new Date();
+
+            let sisend = document.getElementById('Toimumisaeg').value;
+            const AASTA_SISENDIST = parseInt(sisend.substring(0, 4), 10);
+            const KUU_SISENDIST = parseInt(sisend.substring(5, 7), 10) - 1; 
+            const PAEV_SISENDIST = parseInt(sisend.substring(8, 10), 10);
+            const TUNNID_SISENDIST = parseInt(sisend.substring(11, 13), 10);
+            const MINUTID_SISENDIST = parseInt(sisend.substring(14), 10);
+    
+            const sisendAeg = new Date(AASTA_SISENDIST, KUU_SISENDIST, PAEV_SISENDIST, TUNNID_SISENDIST, MINUTID_SISENDIST);
+
+       
+            if (sisendAeg <= praeguneAeg) {
+
+                vea_span.innerHTML = "Sisestatud kuupäev / kellaaeg on juba möödunud. Palun valige uus."
+                vea_span.style.display = "block";
+                vea_span.style.color = "red";
+
+            }
+            else {
+                vea_span.style.display = "none";
+            }
+        }
+        
+            
+
+            
+
+      
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
