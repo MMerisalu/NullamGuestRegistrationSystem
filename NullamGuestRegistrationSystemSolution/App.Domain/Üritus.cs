@@ -12,7 +12,10 @@ namespace App.Domain
 
         [Display(Name = "Ürituse Nimi")]
         public string ÜrituseNimi { get; set; } = default!;
-        
+
+        // Tegelikult peaks display attribuut olema view model'is, mis vastutab selle eest, kuidas
+        // kasutajale andmeid kuvada, hetkel jätan selle siia.
+        [DisplayFormat(DataFormatString = "{0:g}")]
         public DateTime Toimumisaeg { get; set; }
         
         [Required]
