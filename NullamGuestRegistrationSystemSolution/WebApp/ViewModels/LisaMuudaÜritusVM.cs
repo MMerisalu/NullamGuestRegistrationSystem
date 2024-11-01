@@ -10,7 +10,7 @@ namespace WebApp.ViewModels
         [Display(Name = "Ürituse Nimi")]
         [Required(ErrorMessage = "Väli Ürituse Nimi on kohustuslik!")]
         [MaxLength(64, ErrorMessage = "Väljale sisestava teksti maksimaalne pikkus on 64 tähemärki!")]
-        [StringLength(64, ErrorMessage = "Väljale sisestava teksti maksimaalne pikkus peab jääma vahemikku 1 kuni 64 tähemärki!")]
+        [StringLength(64)]
         public string ÜrituseNimi { get; set; } = default!;
 
         [Required(ErrorMessage = "Väli Toimumisaeg on kohustuslik!")]
@@ -20,7 +20,7 @@ namespace WebApp.ViewModels
 
         [Required(ErrorMessage = "Väli Koht on kohustuslik!")]
         [MaxLength(64, ErrorMessage = "Väljale sisestava teksti maksimaalne pikkus on 64 tähemärki!")]
-        [StringLength(64, ErrorMessage = "Väljale sisestava teksti pikkus peab jääma vahemikku 1 kuni 64 tähemärki!")]
+        [StringLength(64, MinimumLength = 2, ErrorMessage = "Väljale sisestava teksti pikkus peab jääma vahemikku 2 kuni 64 tähemärki!")]
         public string Koht { get; set; } = default!;
 
         [MaxLength(1000, ErrorMessage = "Väljale sisestava teksti maksimaalne pikkus on 1000 tähemärki!")]

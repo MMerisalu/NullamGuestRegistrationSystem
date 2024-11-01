@@ -44,7 +44,8 @@
                     @Html.DisplayFor(modelItem => item.OsavõtjateArv)
                 </td>
                 <td>
-                    <a style="text-decoration:none" asp-action="Index" asp-controller="Osavõtjad">OSAVÕTJAD</a> 
+                    <a style="text-decoration:none" asp-action="Delete" asp-controller="Üritused" asp-route-id="@item.Id">KUSTUTA ÜRITUS</a> |
+                    <a style="text-decoration:none" asp-action="Index" asp-controller="Osavõtjad">OSAVÕTJAD</a>
                 </td>
             </tr>
         }
