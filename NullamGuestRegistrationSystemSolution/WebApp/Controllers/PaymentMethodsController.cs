@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -25,28 +26,12 @@ namespace WebApp.Controllers
             return View(await _context.PaymentMethods.ToListAsync());
         }
 
-        // GET: PaymentMethods/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var paymentMethod = await _context.PaymentMethods
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (paymentMethod == null)
-            {
-                return NotFound();
-            }
-
-            return View(paymentMethod);
-        }
-
+        
         // GET: PaymentMethods/Create
         public IActionResult Create()
         {
-            return View();
+            var vm = new CreateEditPaymentMethodVM();
+            return View(vm);
         }
 
         // POST: PaymentMethods/Create
@@ -54,20 +39,25 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id")] PaymentMethod paymentMethod)
+        public async Task<IActionResult> Create(CreateEditPaymentMethodVM vm)
         {
+            var paymentMethod = new PaymentMethod();
+            paymentMethod.Name = vm.Name;
+
             if (ModelState.IsValid)
             {
                 _context.Add(paymentMethod);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(paymentMethod);
+            return View(vm);
         }
 
         // GET: PaymentMethods/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var vm = new CreateEditPaymentMethodVM();
+
             if (id == null)
             {
                 return NotFound();
@@ -78,7 +68,10 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            return View(paymentMethod);
+
+            vm.Id = paymentMethod.Id;
+            vm.Name = paymentMethod.Name;
+            return View(vm);
         }
 
         // POST: PaymentMethods/Edit/5
@@ -86,12 +79,18 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Id")] PaymentMethod paymentMethod)
+        public async Task<IActionResult> Edit(int id, CreateEditPaymentMethodVM vm)
         {
-            if (id != paymentMethod.Id)
+
+            var paymentMethod = await _context.PaymentMethods.FindAsync(id);
+
+            if (id != paymentMethod.Id || paymentMethod == null)
             {
                 return NotFound();
             }
+
+            paymentMethod.Name = vm.Name;
+
 
             if (ModelState.IsValid)
             {
@@ -113,7 +112,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(paymentMethod);
+            return View(vm);
         }
 
         // GET: PaymentMethods/Delete/5
