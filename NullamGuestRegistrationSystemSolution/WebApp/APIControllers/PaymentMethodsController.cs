@@ -40,7 +40,7 @@ namespace WebApp.APIControllers
         {
             if (id != paymentMethod.Id)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             var paymentMethodDTO = await _uow.PaymentMethods.GetPaymentMethodByIdAsync(id);
@@ -49,9 +49,10 @@ namespace WebApp.APIControllers
             {
                 if (paymentMethodDTO == null) 
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
                 paymentMethodDTO.Name = paymentMethod.Name;
+                _uow.PaymentMethods.Update(paymentMethodDTO);
                 await _uow.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
