@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Domain
 {
-    public class PaymentMethod: DomainEntityId<int>
+    public class PaymentMethod : DomainEntityId<int>
     {
         [Required]
         [MaxLength(64)]

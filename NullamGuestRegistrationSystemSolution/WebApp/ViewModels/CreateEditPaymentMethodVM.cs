@@ -6,8 +6,9 @@ namespace WebApp.ViewModels
 {
     public class CreateEditPaymentMethodVM : DomainEntityId<int>
     {
-        [Required]
-        [MaxLength(64)]
+        [Required(ErrorMessage = "Väli Maksemeetod on kohustuslik!")]
+        [MaxLength(64, ErrorMessage = "Väljale Maksemeetod sisestatava teksti pikkus võib olla kuni 64 tähemärki! ")]
+        [StringLength(64)]
         [DisplayName("Maksemeetod")]
         public string Name { get; set; } = default!;
     }

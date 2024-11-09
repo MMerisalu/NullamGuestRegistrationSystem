@@ -12,11 +12,11 @@ public class AppDbContext : DbContext
     {
         this.ChangeTracker.LazyLoadingEnabled = false;
     }
-
-    
+ 
     public DbSet<PaymentMethod> PaymentMethods { get; set; } = default!;
-
-
+    public DbSet<Event> Events { get; set; } = default!;
+    public DbSet<EventAndAttendee> EventsAndAttendees { get; set; } = default!;
+    public DbSet<Attendee> Attendees { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

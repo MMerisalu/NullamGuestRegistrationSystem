@@ -1,0 +1,61 @@
+﻿@using WebApp.ViewModels
+@model CreateEditEventVM
+
+@{
+    ViewData["Title"] = "Ürituse lisamine";
+}
+
+<h1>Ürituse lisamine</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <partial name="_CreateEditEvent" model="Model" />
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Lisa" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <button class="btn btn-primary" onclick="BackToHomePage()">Tagasi</button>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+        function BackToHomePage() {
+        window.location.href = '@Url.Action("Index", "Home")';
+    }
+    function ValidateEventDateAndTime(value) {
+        let error_span = document.getElementById('Event_Date_And_Time_Client_Side_Validation');
+        const current_time = new Date();
+
+        let client_input = document.getElementById('EventDateAndTime').value;
+        const YEAR_FROM_INPUT = parseInt(client_input.substring(0, 4), 10);
+        const MONTH_FROM_INPUT = parseInt(client_input.substring(5, 7), 10) - 1;
+        const DAY_FROM_INPUT = parseInt(client_input.substring(8, 10), 10);
+        const HOURS_FROM_INPUT = parseInt(client_input.substring(11, 13), 10);
+        const MINUTES_FROM_INPUT = parseInt(client_input.substring(14), 10);
+
+        const input_time = new Date(YEAR_FROM_INPUT, MONTH_FROM_INPUT, DAY_FROM_INPUT, HOURS_FROM_INPUT, MINUTES_FROM_INPUT);
+
+        if (input_time <= current_time) {
+
+            error_span.innerHTML = "Sisestatud kuupäev / kellaaeg on juba möödunud. Palun valige uus."
+            error_span.style.display = "block";
+            error_span.style.color = "red";
+
+        }
+        else {
+            error_span.style.display = "none";
+        }
+    }     
+ </script>
+}

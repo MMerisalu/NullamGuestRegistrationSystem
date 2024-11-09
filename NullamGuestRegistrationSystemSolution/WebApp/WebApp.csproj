@@ -20,8 +20,4 @@
     <ProjectReference Include="..\App.DAL.EF\App.DAL.EF.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Shared\PartialViews\" />
-  </ItemGroup>
-
 </Project>
