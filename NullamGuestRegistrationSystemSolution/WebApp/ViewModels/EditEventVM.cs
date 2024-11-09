@@ -1,11 +1,10 @@
-﻿using App.Domain;
-using Base.Domain;
-using System.ComponentModel;
+﻿using Base.Domain;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace WebApp.ViewModels
 {
-    public class CreateEditEventVM : DomainEntityId<int>
+    public class EditEventVM: DomainEntityId<int>
     {
         [Required(ErrorMessage = "Väli Ürituse nimi on kohustuslik!")]
         [MaxLength(64, ErrorMessage = "Väljale Ürituse nimi sisestatava teksti pikkus võib olla kuni 64 tähemärki!")]
@@ -17,7 +16,7 @@ namespace WebApp.ViewModels
         [DisplayName("Toimumisaeg")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:g}", ApplyFormatInEditMode = false)]
-        public string EventDateAndTime { get; set; } = default!;
+        public DateTime EventDateAndTime { get; set; } = default!;
 
         [Required(ErrorMessage = "Väli Koht on kohustuslik!")]
         [MaxLength(64, ErrorMessage = "Väljale Koht sisestatava teksti pikkus võib olla kuni 64 tähemärki!")]

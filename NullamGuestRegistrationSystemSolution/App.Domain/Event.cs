@@ -16,6 +16,7 @@ namespace App.Domain
         [DisplayName("Ürituse nimi")]
         public string Name { get; set; } = default!;
 
+        [DisplayFormat(DataFormatString = "{0:g}")]
         [Required]
         [DisplayName("Toimumisaeg")]
         public DateTime EventDateAndTime { get; set; } = default!;

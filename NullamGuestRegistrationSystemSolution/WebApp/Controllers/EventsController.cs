@@ -47,7 +47,7 @@ namespace WebApp.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            var vm = new CreateEditEventVM();
+            var vm = new CreateEventVM();
             return View(vm);
         }
 
@@ -56,12 +56,13 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateEditEventVM vm)
+        public async Task<IActionResult> Create(CreateEventVM vm)
         {
             var newEvent = new Event();
             newEvent.Name = vm.Name;
             newEvent.EventDateAndTime = DateTime.Parse(vm.EventDateAndTime);
             newEvent.Location = vm.Location;
+            newEvent.AdditionalInfo = vm.AdditionalInfo;
             
             if (ModelState.IsValid)
             {
@@ -75,17 +76,23 @@ namespace WebApp.Controllers
         // GET: Events/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var vm = new EditEventVM();
             if (id == null)
             {
                 return NotFound();
             }
 
-            var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
+            var eventdb = await _context.Events.FindAsync(id);
+            if (eventdb == null)
             {
                 return NotFound();
             }
-            return View(@event);
+            vm.Id = eventdb.Id;
+            vm.Name = eventdb.Name;
+            vm.EventDateAndTime = eventdb.EventDateAndTime;
+            vm.Location = eventdb.Location;
+
+            return View(vm);
         }
 
         // POST: Events/Edit/5
@@ -93,23 +100,31 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,EventDateAndTime,Location,AdditionalInfo,Id")] Event @event)
+        public async Task<IActionResult> Edit(int id, EditEventVM vm)
         {
-            if (id != @event.Id)
+            if (id != vm.Id)
             {
                 return NotFound();
             }
-
+            var eventDb = await _context.Events.FindAsync(vm.Id);
+            if (eventDb == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(@event);
+                    eventDb.Name = vm.Name;
+                    eventDb.EventDateAndTime = vm.EventDateAndTime;
+                    eventDb.Location = vm.Location;
+                    eventDb.AdditionalInfo = vm.AdditionalInfo;
+                    _context.Update(eventDb);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(@event.Id))
+                    if (!EventExists(eventDb.Id))
                     {
                         return NotFound();
                     }
@@ -120,7 +135,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(@event);
+            return View(vm);
         }
 
         // GET: Events/Delete/5
