@@ -56,15 +56,20 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,EventDateAndTime,Location,AdditionalInfo,Id")] Event @event)
+        public async Task<IActionResult> Create(CreateEditEventVM vm)
         {
+            var newEvent = new Event();
+            newEvent.Name = vm.Name;
+            newEvent.EventDateAndTime = DateTime.Parse(vm.EventDateAndTime);
+            newEvent.Location = vm.Location;
+            
             if (ModelState.IsValid)
             {
-                _context.Add(@event);
+                _context.Add(newEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@event);
+            return View(vm);
         }
 
         // GET: Events/Edit/5
