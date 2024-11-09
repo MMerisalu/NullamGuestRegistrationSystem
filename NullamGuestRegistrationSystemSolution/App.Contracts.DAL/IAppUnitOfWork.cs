@@ -5,6 +5,6 @@ namespace App.Contracts.DAL;
 
 public interface IAppUnitOfWork : IUnitOfWork
 {
-    //ICountryRepository Countries { get; }
+    IPaymentMethodRepository PaymentMethods{ get; }
     
 }

@@ -12,10 +12,10 @@ public interface IPaymentMethodRepository: IEntityRepository<PaymentMethodDTO, i
 
 public interface IPaymentMethodRepositoryCustom<TEntity>
 {
-    Task<IEnumerable<TEntity?>> GetAllPaymentMehodsOrderedByNameAsync();
-    IEnumerable<TEntity?> GetAllPaymentMethodsOrderedByName();
-    
-
+    Task<IEnumerable<TEntity?>> GetAllPaymentMehodsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
+    IEnumerable<TEntity?> GetAllPaymentMethodsOrderedByName(bool noTracking = true, bool noIncludes = false);
+    Task<TEntity?> GetPaymentMethodByIdAsync(int id,bool noTracking = true, bool noIncludes = false);
+    TEntity? GetPaymentMethodById(int id, bool noTracking = true, bool noIncludes = false);
 
 
 }

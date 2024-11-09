@@ -5,6 +5,7 @@ using App.Domain;
 using Base.Contracts;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace App.DAL.EF.Repositories;
 
@@ -14,13 +15,44 @@ public class PaymentMethodRepository : BaseEntityRepository<PaymentMethod,Paymen
     {
     }
 
-    public Task<IEnumerable<PaymentMethodDTO?>> GetAllPaymentMehodsOrderedByNameAsync()
+    public async Task<IEnumerable<PaymentMethodDTO?>> GetAllPaymentMehodsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
     {
-        throw new NotImplementedException();
+        return(await CreateQuery(noTracking, noIncludes).Select(p => Mapper.Map(p)).ToListAsync());
     }
 
-    public IEnumerable<PaymentMethodDTO?> GetAllPaymentMethodsOrderedByName()
+
+    public IEnumerable<PaymentMethodDTO?> GetAllPaymentMethodsOrderedByName(bool noTracking = true, bool noIncludes = false)
     {
-        throw new NotImplementedException();
+        return CreateQuery(noTracking, noIncludes).Select(p => Mapper.Map(p));
+    }
+
+    public PaymentMethodDTO? GetPaymentMethodById(int id, bool noTracking = true, bool noIncludes = false)
+    {
+        return Mapper.Map(CreateQuery(noTracking, noIncludes).First(p => p.Id.Equals(id)));
+    }
+
+    public async Task<PaymentMethodDTO?> GetPaymentMethodByIdAsync(int id, bool noTracking = true, bool noIncludes = false)
+    {
+        return Mapper.Map(await CreateQuery(noTracking, noIncludes).FirstAsync(p => p.Id.Equals(id)));
+    }
+
+    protected override IQueryable<PaymentMethod> CreateQuery(bool noTracking = true, bool noIncludes = false)
+    {
+        
+        if (noTracking)
+        {
+            return RepoDbSet
+                .AsNoTracking();
+        }
+
+        if (noIncludes)
+        {
+            return RepoDbSet;
+
+        }
+
+        return RepoDbSet
+            .AsNoTracking();
+
     }
 }

@@ -1,12 +1,12 @@
-﻿//using App.DAL.DTO.AdminArea;
-//using AutoMapper;
-//using Base.DAL;
+﻿
+using AutoMapper;
+using Base.DAL;
 
-//namespace App.DAL.EF.Mappers;
+namespace App.DAL.EF.Mappers;
 
-//public class CountryMapper : BaseMapper<CountryDTO,App.Domain.Country>
-//{
-//    public CountryMapper(IMapper mapper) : base(mapper)
-//    {
-//    }
-//}
+public class PaymentMethodMapper : BaseMapper<App.Domain.PaymentMethod, App.DAL.DTO.PaymentMethodDTO>
+{
+    public PaymentMethodMapper(IMapper mapper) : base(mapper)
+    {
+    }
+}

@@ -1,4 +1,8 @@
+using App.Contracts.DAL;
+using App.Contracts.DAL.IAppRepositories;
 using App.DAL.EF;
+using App.DAL.EF.Repositories;
+using Base.DAL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +15,11 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connect
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IAppUnitOfWork, AppUOW>();
+//builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
 
 var app = builder.Build();
 

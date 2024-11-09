@@ -193,11 +193,9 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
     /// <remarks>This method manages filtering for records that have been "Soft Deleted", inheriting classes should call this base implementation <i><b>first.</b></i></remarks>
     /// <param name="noTracking">Disable tracking on the query results if this is set to true</param>
     /// <param name="noIncludes">Ignore Auto Includes if this is true</param>
-    /// <param name="showDeleted">If True, include "Soft Deleted" records in the query results</param>
     /// 
     /// <returns>The default query that you can further compose for your domain repo logic</returns>
-    protected virtual IQueryable<TDomainEntity> CreateQuery(bool noTracking = true, bool noIncludes = false,
-        bool showDeleted = false, bool showIgnored = false)
+    protected virtual IQueryable<TDomainEntity> CreateQuery(bool noTracking = true, bool noIncludes = false)
 
     {
         var query = RepoDbSet.AsQueryable();
