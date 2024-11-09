@@ -17,13 +17,13 @@ public class PaymentMethodRepository : BaseEntityRepository<PaymentMethod,Paymen
 
     public async Task<IEnumerable<PaymentMethodDTO?>> GetAllPaymentMehodsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
     {
-        return(await CreateQuery(noTracking, noIncludes).Select(p => Mapper.Map(p)).ToListAsync());
+        return(await CreateQuery(noTracking, noIncludes).OrderBy(p => p.Name).Select(p => Mapper.Map(p)).ToListAsync());
     }
 
 
     public IEnumerable<PaymentMethodDTO?> GetAllPaymentMethodsOrderedByName(bool noTracking = true, bool noIncludes = false)
     {
-        return CreateQuery(noTracking, noIncludes).Select(p => Mapper.Map(p));
+        return CreateQuery(noTracking, noIncludes).OrderBy(p => p.Name).Select(p => Mapper.Map(p));
     }
 
     public PaymentMethodDTO? GetPaymentMethodById(int id, bool noTracking = true, bool noIncludes = false)
