@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
+using Base.Contracts.DAL;
+using App.Contracts.DAL;
+using App.DAL.DTO;
 
 namespace WebApp.APIControllers
 {
@@ -14,53 +17,46 @@ namespace WebApp.APIControllers
     [ApiController]
     public class PaymentMethodsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public PaymentMethodsController(AppDbContext context)
+        public PaymentMethodsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/PaymentMethods
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PaymentMethod>>> GetPaymentMethods()
+        public async Task<ActionResult<IEnumerable<PaymentMethodDTO>>> GetPaymentMethods()
         {
-            return await _context.PaymentMethods.ToListAsync();
+            return Ok(await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync());
         }
 
-        // GET: api/PaymentMethods/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PaymentMethod>> GetPaymentMethod(int id)
-        {
-            var paymentMethod = await _context.PaymentMethods.FindAsync(id);
-
-            if (paymentMethod == null)
-            {
-                return NotFound();
-            }
-
-            return paymentMethod;
-        }
+        
 
         // PUT: api/PaymentMethods/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPaymentMethod(int id, PaymentMethod paymentMethod)
+        public async Task<IActionResult> PutPaymentMethod(int id, PaymentMethodDTO paymentMethod)
         {
             if (id != paymentMethod.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(paymentMethod).State = EntityState.Modified;
+            var paymentMethodDTO = await _uow.PaymentMethods.GetPaymentMethodByIdAsync(id);
 
             try
             {
-                await _context.SaveChangesAsync();
+                if (paymentMethodDTO == null) 
+                {
+                    return BadRequest();
+                }
+                paymentMethodDTO.Name = paymentMethod.Name;
+                await _uow.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PaymentMethodExists(id))
+                if (!_uow.PaymentMethods.Exists(id))
                 {
                     return NotFound();
                 }
@@ -76,10 +72,11 @@ namespace WebApp.APIControllers
         // POST: api/PaymentMethods
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PaymentMethod>> PostPaymentMethod(PaymentMethod paymentMethod)
+        public async Task<ActionResult<PaymentMethodDTO>> PostPaymentMethod(PaymentMethodDTO paymentMethod)
         {
-            _context.PaymentMethods.Add(paymentMethod);
-            await _context.SaveChangesAsync();
+      
+            _uow.PaymentMethods.Add(paymentMethod);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetPaymentMethod", new { id = paymentMethod.Id }, paymentMethod);
         }
@@ -88,21 +85,21 @@ namespace WebApp.APIControllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaymentMethod(int id)
         {
-            var paymentMethod = await _context.PaymentMethods.FindAsync(id);
+            var paymentMethod = await _uow.PaymentMethods.GetPaymentMethodByIdAsync(id);
             if (paymentMethod == null)
             {
                 return NotFound();
             }
 
-            _context.PaymentMethods.Remove(paymentMethod);
-            await _context.SaveChangesAsync();
+            await _uow.PaymentMethods.RemoveAsync(paymentMethod.Id);
+            await _uow.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PaymentMethodExists(int id)
+        private async Task<bool> PaymentMethodExists(int id)
         {
-            return _context.PaymentMethods.Any(e => e.Id == id);
+            return (await _uow.PaymentMethods.ExistsAsync(id)); 
         }
     }
 }
