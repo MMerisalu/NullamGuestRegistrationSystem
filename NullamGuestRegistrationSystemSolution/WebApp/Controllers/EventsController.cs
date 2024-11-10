@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
 using WebApp.ViewModels;
+using System.Drawing.Text;
 
 namespace WebApp.Controllers
 {
@@ -23,7 +24,9 @@ namespace WebApp.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Events.ToListAsync());
+            var events = await CreateEventIndexVM();
+            
+            return View(events);
         }
 
         // GET: Events/Details/5
@@ -63,7 +66,7 @@ namespace WebApp.Controllers
             newEvent.EventDateAndTime = DateTime.Parse(vm.EventDateAndTime);
             newEvent.Location = vm.Location;
             newEvent.AdditionalInfo = vm.AdditionalInfo;
-            
+
             if (ModelState.IsValid)
             {
                 _context.Add(newEvent);
@@ -175,5 +178,28 @@ namespace WebApp.Controllers
         {
             return _context.Events.Any(e => e.Id == id);
         }
+
+        private async Task<List<IndexEventVM>> CreateEventIndexVM()
+        {
+            var events = await _context.Events.ToListAsync();
+            var eventVms = new List<IndexEventVM>();
+            int numberOfEvents = events.Count;
+            for (int i = 0; i < numberOfEvents; i++)
+            {
+                var vm = new IndexEventVM()
+                {
+                    Id = events[i].Id,
+                    LineNumber = i + 1,
+                    Name = events[i].Name,
+                    EventDateAndTime = events[i].EventDateAndTime,
+                    Location = events[i].Location,
+                    AdditionalInfo = events[i].AdditionalInfo
+                };
+                eventVms.Add(vm);
+            }
+            return eventVms;
+        }
     }
+       
+    
 }
