@@ -2,12 +2,11 @@
 @model EditEventVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Ürituse muutmine";
 }
 
-<h1>Edit</h1>
+<h1>Ürituse muutmine</h1>
 
-<h4>Event</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -41,8 +40,9 @@
     </div>
 </div>
 
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <button class="btn btn-primary" onclick="BackToIndex()">Tagasi</button>
 </div>
 
 @section Scripts {
@@ -70,6 +70,10 @@
             else {
                 error_span.style.display = "none";
             }
+        }
+
+        function BackToIndex() {
+            window.location.href = '@Url.Action("Index")';
         }
             </script>
         

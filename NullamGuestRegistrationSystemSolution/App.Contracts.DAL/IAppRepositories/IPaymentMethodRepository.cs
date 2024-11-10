@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace App.Contracts.DAL.IAppRepositories;
 
-public interface IPaymentMethodRepository: IEntityRepository<PaymentMethodDTO, int>, IPaymentMethodRepositoryCustom<PaymentMethodDTO>
+public interface IPaymentMethodRepository: IEntityRepository<PaymentMethodDTO, int>, 
+    IPaymentMethodRepositoryCustom<PaymentMethodDTO>
 {
     
 }
@@ -16,6 +17,4 @@ public interface IPaymentMethodRepositoryCustom<TEntity>
     IEnumerable<TEntity?> GetAllPaymentMethodsOrderedByName(bool noTracking = true, bool noIncludes = false);
     Task<TEntity?> GetPaymentMethodByIdAsync(int id,bool noTracking = true, bool noIncludes = false);
     TEntity? GetPaymentMethodById(int id, bool noTracking = true, bool noIncludes = false);
-
-
 }

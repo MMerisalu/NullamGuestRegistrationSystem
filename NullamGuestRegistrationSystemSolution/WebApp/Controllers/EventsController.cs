@@ -29,24 +29,6 @@ namespace WebApp.Controllers
             return View(events);
         }
 
-        // GET: Events/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var @event = await _context.Events
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-
-            return View(@event);
-        }
-
         // GET: Events/Create
         public IActionResult Create()
         {
@@ -144,19 +126,26 @@ namespace WebApp.Controllers
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var vm = new DeleteEventVM();
             if (id == null)
             {
                 return NotFound();
             }
 
-            var @event = await _context.Events
+            var eventDb = await _context.Events
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            if (eventDb == null)
             {
                 return NotFound();
             }
 
-            return View(@event);
+            vm.Id = eventDb.Id;
+            vm.Name = eventDb.Name;
+            vm.EventDateAndTime = eventDb.EventDateAndTime;
+            vm.Location = eventDb.Location;
+            vm.AdditionalInfo = eventDb.AdditionalInfo;
+
+            return View(vm);
         }
 
         // POST: Events/Delete/5
@@ -164,10 +153,10 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @event = await _context.Events.FindAsync(id);
-            if (@event != null)
+            var eventDb = await _context.Events.FindAsync(id);
+            if (eventDb != null)
             {
-                _context.Events.Remove(@event);
+                _context.Events.Remove(eventDb);
             }
 
             await _context.SaveChangesAsync();

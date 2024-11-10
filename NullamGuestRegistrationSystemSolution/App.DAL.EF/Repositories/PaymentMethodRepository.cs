@@ -34,7 +34,6 @@ public class PaymentMethodRepository : BaseEntityRepository<PaymentMethod,Paymen
     public async Task<PaymentMethodDTO?> GetPaymentMethodByIdAsync(int id, bool noTracking = true, bool noIncludes = false)
     {
         return Mapper.Map( await CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(p => p.Id.Equals(id)));
-       
         
     }
 

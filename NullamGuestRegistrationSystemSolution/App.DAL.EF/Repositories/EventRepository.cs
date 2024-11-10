@@ -1,0 +1,61 @@
+﻿using App.Contracts.DAL.IAppRepositories;
+using App.DAL.DTO;
+using App.Domain;
+using Base.Contracts;
+using Base.DAL.EF;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace App.DAL.EF.Repositories
+{
+    public class EventRepository : BaseEntityRepository<Event, EventDTO, int, AppDbContext>, IEventRepository
+    {
+        public EventRepository(AppDbContext dbContext, IMapper<Event, EventDTO> mapper) : base(dbContext, mapper)
+        {
+        }
+
+        
+
+        
+            
+
+        public IEnumerable<EventDTO?> GetAllEventsOrderedByName(bool noTracking = true, bool noIncludes = false)
+        {
+            return CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToList();
+        }
+
+        public async Task<IEnumerable<EventDTO?>> GetAllEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
+        {
+            return (await base.CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToListAsync());
+        }
+
+        public EventDTO? GetEventById(int id, bool noTracking = true, bool noIncludes = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<EventDTO?> GetEventByIdAsync(int id, bool noTracking = true, bool noIncludes = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
+        {
+            var query = base.CreateQuery(noTracking, noIncludes);
+            if (noTracking) query = query.AsNoTracking();
+            if (noIncludes)
+            {
+                return query;
+            }
+
+            query = query.Include(a => a.Attendees);
+                
+            return query;
+        }
+    }
+}

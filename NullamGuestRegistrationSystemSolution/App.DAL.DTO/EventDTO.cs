@@ -1,22 +1,21 @@
 ﻿using Base.Domain;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace App.Domain
+namespace App.DAL.DTO
 {
-    public class Event : DomainEntityId<int>
+    public class EventDTO : DomainEntityId<int>
     {
         [Required]
         [MaxLength(64)]
         public string Name { get; set; } = default!;
-        
-        [Required]    
+
+        [Required]
         public DateTime EventDateAndTime { get; set; } = default!;
 
         [Required]
@@ -26,6 +25,6 @@ namespace App.Domain
         [MaxLength(1000)]
         public string? AdditionalInfo { get; set; }
 
-        public ICollection<EventAndAttendee>? Attendees { get; set; }
+        public int NumberOfAttendees { get; set; }
     }
 }
