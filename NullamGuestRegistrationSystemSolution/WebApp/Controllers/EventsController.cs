@@ -9,22 +9,26 @@ using App.DAL.EF;
 using App.Domain;
 using WebApp.ViewModels;
 using System.Drawing.Text;
+using App.Contracts.DAL.IAppRepositories;
+using App.Contracts.DAL;
+using App.DAL.DTO;
 
 namespace WebApp.Controllers
 {
     public class EventsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public EventsController(AppDbContext context)
+
+        public EventsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var events = await CreateEventIndexVM();
+            var events =  CreateEventIndexVM();
             
             return View(events);
         }
@@ -43,7 +47,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateEventVM vm)
         {
-            var newEvent = new Event();
+            var newEvent = new EventDTO();
             newEvent.Name = vm.Name;
             newEvent.EventDateAndTime = DateTime.Parse(vm.EventDateAndTime);
             newEvent.Location = vm.Location;
@@ -51,8 +55,8 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(newEvent);
-                await _context.SaveChangesAsync();
+                _uow.Events.Add(newEvent);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(vm);
@@ -67,7 +71,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var eventdb = await _context.Events.FindAsync(id);
+            var eventdb = await _uow.Events.FirstOrDefaultAsync(id.Value);
             if (eventdb == null)
             {
                 return NotFound();
@@ -91,7 +95,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            var eventDb = await _context.Events.FindAsync(vm.Id);
+            var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
             if (eventDb == null)
             {
                 return NotFound();
@@ -104,12 +108,12 @@ namespace WebApp.Controllers
                     eventDb.EventDateAndTime = vm.EventDateAndTime;
                     eventDb.Location = vm.Location;
                     eventDb.AdditionalInfo = vm.AdditionalInfo;
-                    _context.Update(eventDb);
-                    await _context.SaveChangesAsync();
+                    _uow.Events.Update(eventDb);
+                    await _uow.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(eventDb.Id))
+                    if (!_uow.Events.Exists(eventDb.Id))
                     {
                         return NotFound();
                     }
@@ -132,8 +136,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var eventDb = await _context.Events
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var eventDb = await _uow.Events.FirstOrDefaultAsync(id.Value);
             if (eventDb == null)
             {
                 return NotFound();
@@ -153,26 +156,26 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var eventDb = await _context.Events.FindAsync(id);
+            var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
             if (eventDb != null)
             {
-                _context.Events.Remove(eventDb);
+               await _uow.Events.RemoveAsync(eventDb.Id);
             }
 
-            await _context.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EventExists(int id)
+        private async Task<bool> EventExists(int id)
         {
-            return _context.Events.Any(e => e.Id == id);
+            return await _uow.Events.ExistsAsync(id);
         }
 
-        private async Task<List<IndexEventVM>> CreateEventIndexVM()
+        private List<IndexEventVM> CreateEventIndexVM()
         {
-            var events = await _context.Events.ToListAsync();
+            var events = _uow.Events.GetAllEventsOrderedByNameAsync().Result.ToList();
             var eventVms = new List<IndexEventVM>();
-            int numberOfEvents = events.Count;
+            int numberOfEvents = events.Count();
             for (int i = 0; i < numberOfEvents; i++)
             {
                 var vm = new IndexEventVM()

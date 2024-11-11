@@ -19,29 +19,24 @@ namespace App.DAL.EF.Repositories
         {
         }
 
-        
-
-        
-            
-
         public IEnumerable<EventDTO?> GetAllEventsOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
-            return CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToList();
+            return base.CreateQuery(noTracking, noIncludes).OrderBy(e => e.Name).Select(e => Mapper.Map(e)).ToList();
         }
 
         public async Task<IEnumerable<EventDTO?>> GetAllEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
         {
-            return (await base.CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToListAsync());
+            return (await base.CreateQuery(noTracking, noIncludes).OrderBy(e => e.Name).Select(e => Mapper.Map(e)).ToListAsync());
         }
 
         public EventDTO? GetEventById(int id, bool noTracking = true, bool noIncludes = false)
         {
-            throw new NotImplementedException();
+            return Mapper.Map(CreateQuery(noTracking, noIncludes).FirstOrDefault(e => e.Id.Equals(id)));
         }
 
-        public Task<EventDTO?> GetEventByIdAsync(int id, bool noTracking = true, bool noIncludes = false)
+        public async Task<EventDTO?> GetEventByIdAsync(int id, bool noTracking = true, bool noIncludes = false)
         {
-            throw new NotImplementedException();
+            return Mapper.Map(await base.CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(e => e.Id.Equals(id)));
         }
 
         protected IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)

@@ -12,7 +12,7 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUnitOfWork
     private readonly IMapper _mapper;
 
     private IPaymentMethodRepository? _paymentMethods;
-
+    private IEventRepository _events;
 
     public AppUOW(AppDbContext dbContext, IMapper mapper) : base(dbContext)
     {
@@ -22,4 +22,6 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUnitOfWork
     public virtual IPaymentMethodRepository PaymentMethods => _paymentMethods ??=
     new PaymentMethodRepository(UOWDbContext, new PaymentMethodMapper(_mapper));
 
+    public virtual IEventRepository Events => _events ??=
+    new EventRepository(UOWDbContext, new EventMapper(_mapper));
 }
