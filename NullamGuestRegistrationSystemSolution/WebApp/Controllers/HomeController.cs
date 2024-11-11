@@ -11,16 +11,20 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAppUnitOfWork _uow;
+        
+
         public HomeController(ILogger<HomeController> logger, IAppUnitOfWork uow)
         {
             _logger = logger;
             _uow = uow;
+            
         }
 
         public async Task<IActionResult> Index()
         {
+            var eventsController = new EventsController(_uow);
             var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync();
-            var events = CreateEventIndexVM(eventsDb);
+            var events = eventsController.CreateEventIndexVM(eventsDb);
             return View(events);
         }
 
@@ -35,24 +39,6 @@ namespace WebApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO> events)
-        {
-            var eventVms = new List<IndexEventVM>();
-            int numberOfEvents = events.Count();
-            for (int i = 0; i < numberOfEvents; i++)
-            {
-                var vm = new IndexEventVM()
-                {
-                    Id = events[i].Id,
-                    LineNumber = i + 1,
-                    Name = events[i].Name,
-                    EventDateAndTime = events[i].EventDateAndTime,
-                    Location = events[i].Location,
-                    AdditionalInfo = events[i].AdditionalInfo
-                };
-                eventVms.Add(vm);
-            }
-            return eventVms;
-        }
+        
     }
 }

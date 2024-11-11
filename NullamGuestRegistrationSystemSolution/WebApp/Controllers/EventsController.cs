@@ -25,9 +25,11 @@ namespace WebApp.Controllers
             _uow = uow;
         }
 
+       
         // GET: Events
         public async Task<IActionResult> Index()
         {
+            
             var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync();
             var events = CreateEventIndexVM(eventsDb);
             
@@ -58,7 +60,7 @@ namespace WebApp.Controllers
             {
                 _uow.Events.Add(newEvent);
                 await _uow.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), controllerName: "Home");
             }
             return View(vm);
         }
@@ -172,7 +174,27 @@ namespace WebApp.Controllers
             return await _uow.Events.ExistsAsync(id);
         }
 
-       
+        public IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO>? events)
+        {
+            var eventVms = new List<IndexEventVM>();
+            int numberOfEvents = events!.Count();
+            for (int i = 0; i < numberOfEvents; i++)
+            {
+                var vm = new IndexEventVM()
+                {
+                    Id = events![i].Id,
+                    LineNumber = i + 1,
+                    Name = events[i].Name,
+                    EventDateAndTime = events[i].EventDateAndTime,
+                    Location = events[i].Location,
+                    AdditionalInfo = events[i].AdditionalInfo
+                };
+                eventVms.Add(vm);
+            }
+            return eventVms;
+        }
+
+
     }
        
     
