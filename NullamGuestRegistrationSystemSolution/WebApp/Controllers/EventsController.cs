@@ -172,25 +172,7 @@ namespace WebApp.Controllers
             return await _uow.Events.ExistsAsync(id);
         }
 
-        private IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO> events)
-        {
-            var eventVms = new List<IndexEventVM>();
-            int numberOfEvents = events.Count();
-            for (int i = 0; i < numberOfEvents; i++)
-            {
-                var vm = new IndexEventVM()
-                {
-                    Id = events[i].Id,
-                    LineNumber = i + 1,
-                    Name = events[i].Name,
-                    EventDateAndTime = events[i].EventDateAndTime,
-                    Location = events[i].Location,
-                    AdditionalInfo = events[i].AdditionalInfo
-                };
-                eventVms.Add(vm);
-            }
-            return eventVms;
-        }
+       
     }
        
     
