@@ -16,7 +16,7 @@ namespace App.Contracts.DAL.IAppRepositories
 
     public interface IEventRepositoryCustom<TEntity>
     {
-        Task<IEnumerable<TEntity?>> GetAllEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
+        Task<List<TEntity?>> GetAllEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
         IEnumerable<TEntity?> GetAllEventsOrderedByName(bool noTracking = true, bool noIncludes = false);
         Task<TEntity?> GetEventByIdAsync(int id, bool noTracking = true, bool noIncludes = false);
         TEntity? GetEventById(int id, bool noTracking = true, bool noIncludes = false);

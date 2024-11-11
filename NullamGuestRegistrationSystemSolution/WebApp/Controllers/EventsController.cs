@@ -28,7 +28,8 @@ namespace WebApp.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var events =  CreateEventIndexVM();
+            var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync();
+            var events = CreateEventIndexVM(eventsDb);
             
             return View(events);
         }
@@ -171,9 +172,8 @@ namespace WebApp.Controllers
             return await _uow.Events.ExistsAsync(id);
         }
 
-        private List<IndexEventVM> CreateEventIndexVM()
+        private IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO> events)
         {
-            var events = _uow.Events.GetAllEventsOrderedByNameAsync().Result.ToList();
             var eventVms = new List<IndexEventVM>();
             int numberOfEvents = events.Count();
             for (int i = 0; i < numberOfEvents; i++)
