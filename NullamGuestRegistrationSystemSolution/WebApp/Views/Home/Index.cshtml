@@ -8,7 +8,7 @@
 <h1>Üritused</h1>
 
 <p>
-    <a style="text-decoration:none" asp-action="Create">Lisa uus üritus</a>
+    <a style="text-decoration:none" asp-controller="Events" asp-action="Create">Lisa uus üritus</a>
 </p>
 <table class="table">
     <thead>
@@ -51,8 +51,8 @@
                     @Html.DisplayFor(modelItem => item.AdditionalInfo)
                 </td>
                 <td>
-                    <a style="text-decoration:none" asp-action="Edit" asp-route-id="@item.Id">MUUDA</a> |
-                    <a style="text-decoration:none" asp-action="Delete" asp-route-id="@item.Id">KUSTUTA</a>
+                    <a style="text-decoration:none" asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id">MUUDA</a> |
+                    <a style="text-decoration:none" asp-controller="Events" asp-action="Delete" asp-route-id="@item.Id">KUSTUTA</a>
                 </td>
             </tr>
         }
