@@ -1,0 +1,89 @@
+﻿@model IEnumerable<App.Domain.Attendee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AttendeeType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SurName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GivenName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersonalIdentifier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersonAdditionalInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistryCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfPeopleFromCompany)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyAdditionalInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentMethod)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AttendeeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SurName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GivenName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonalIdentifier)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonAdditionalInfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegistryCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfPeopleFromCompany)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyAdditionalInfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMethod.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
