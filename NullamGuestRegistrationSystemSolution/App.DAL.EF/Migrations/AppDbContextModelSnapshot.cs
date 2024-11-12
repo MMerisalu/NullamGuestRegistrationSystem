@@ -64,7 +64,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Attendees");
+                    b.ToTable("Attendees", (string)null);
                 });
 
             modelBuilder.Entity("App.Domain.Event", b =>
@@ -92,7 +92,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("App.Domain.EventAndAttendee", b =>
@@ -113,7 +113,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("EventsAndAttendees");
+                    b.ToTable("EventsAndAttendees", (string)null);
                 });
 
             modelBuilder.Entity("App.Domain.PaymentMethod", b =>
@@ -129,7 +129,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("PaymentMethods", (string)null);
                 });
 
             modelBuilder.Entity("App.Domain.Attendee", b =>

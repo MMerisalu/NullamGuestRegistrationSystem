@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
 using App.Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -48,8 +49,8 @@ namespace WebApp.Controllers
         // GET: Attendees/Create
         public IActionResult Create()
         {
-            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethods, "Id", "Name");
-            return View();
+            var vm = new CreateEditAttendeeVM();
+            return View(vm);
         }
 
         // POST: Attendees/Create
