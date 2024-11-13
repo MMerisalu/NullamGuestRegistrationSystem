@@ -190,7 +190,6 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
     /// <summary>
     /// Create a query against this Repository that sets up the Tracking and default Includes based onthe passed in parameters.
     /// </summary>
-    /// <remarks>This method manages filtering for records that have been "Soft Deleted", inheriting classes should call this base implementation <i><b>first.</b></i></remarks>
     /// <param name="noTracking">Disable tracking on the query results if this is set to true</param>
     /// <param name="noIncludes">Ignore Auto Includes if this is true</param>
     /// 
