@@ -19,9 +19,9 @@ namespace App.DAL.EF.Repositories
         {
         }
 
-        public IEnumerable<List<EventDTO?>> GetAllEventsOrderedByName(bool noTracking = true, bool noIncludes = false)
+        public List<EventDTO?> GetAllEventsOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
-            return base.CreateQuery(noTracking, noIncludes).OrderBy(e => e.Name).Select(e => Mapper.Map(e)).ToList();
+            return base.CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToList();
         }
 
         public async Task<List<EventDTO?>> GetAllEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
