@@ -20,6 +20,9 @@ namespace App.Contracts.DAL.IAppRepositories
         List<TEntity?> GetAllEventsOrderedByName(bool noTracking = true, bool noIncludes = false);
         Task<TEntity?> GetEventByIdAsync(int id, bool noTracking = true, bool noIncludes = false);
         TEntity? GetEventById(int id, bool noTracking = true, bool noIncludes = false);
-       
+        Task<IEnumerable<TEntity?>> GetAllEventsDTOOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
+        IEnumerable<TEntity?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false);
+
+
     }
 }
