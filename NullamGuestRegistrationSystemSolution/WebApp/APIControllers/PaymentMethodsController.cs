@@ -36,23 +36,23 @@ namespace WebApp.APIControllers
         // PUT: api/PaymentMethods/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPaymentMethod(int id, PaymentMethodDTO paymentMethod)
+        public async Task<IActionResult> PutPaymentMethod(int id, PaymentMethodDTO paymentMethodDTO)
         {
-            if (id != paymentMethod.Id)
+            if (id != paymentMethodDTO.Id)
             {
                 return NotFound();
             }
 
-            var paymentMethodDTO = await _uow.PaymentMethods.GetPaymentMethodByIdAsync(id);
+            var paymentMethodDb= await _uow.PaymentMethods.GetPaymentMethodByIdAsync(id);
 
             try
             {
-                if (paymentMethodDTO == null) 
+                if (paymentMethodDb == null) 
                 {
                     return NotFound();
                 }
-                paymentMethodDTO.Name = paymentMethod.Name;
-                _uow.PaymentMethods.Update(paymentMethodDTO);
+                paymentMethodDb.Name = paymentMethodDTO.Name;
+                _uow.PaymentMethods.Update(paymentMethodDb);
                 await _uow.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -73,13 +73,16 @@ namespace WebApp.APIControllers
         // POST: api/PaymentMethods
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PaymentMethodDTO>> PostPaymentMethod(PaymentMethodDTO paymentMethod)
+        public async Task<ActionResult<PaymentMethodDTO>> PostPaymentMethod(PaymentMethodDTO paymentMethodDTO)
         {
-      
-            _uow.PaymentMethods.Add(paymentMethod);
+            if (paymentMethodDTO == null)
+            {
+                return BadRequest();
+            }
+            _uow.PaymentMethods.Add(paymentMethodDTO);
             await _uow.SaveChangesAsync();
 
-            return CreatedAtAction("GetPaymentMethod", new { id = paymentMethod.Id }, paymentMethod);
+            return CreatedAtAction("GetPaymentMethod", new { id = paymentMethodDTO.Id }, paymentMethodDTO);
         }
 
         // DELETE: api/PaymentMethods/5
