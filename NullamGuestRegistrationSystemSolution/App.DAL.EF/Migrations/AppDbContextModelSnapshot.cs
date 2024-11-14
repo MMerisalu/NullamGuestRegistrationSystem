@@ -15,7 +15,7 @@ namespace App.DAL.EF.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("App.Domain.Attendee", b =>
                 {
@@ -31,14 +31,12 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CompanyName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GivenName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("NumberOfPeopleFromCompany")
+                    b.Property<int?>("NumberOfPeopleFromCompany")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PaymentMethodId")
@@ -49,22 +47,19 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PersonalIdentifier")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RegistryCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SurName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("Attendees", (string)null);
+                    b.ToTable("Attendees");
                 });
 
             modelBuilder.Entity("App.Domain.Event", b =>
@@ -92,7 +87,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("App.Domain.EventAndAttendee", b =>
@@ -113,7 +108,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("EventsAndAttendees", (string)null);
+                    b.ToTable("EventsAndAttendees");
                 });
 
             modelBuilder.Entity("App.Domain.PaymentMethod", b =>
@@ -129,7 +124,7 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods", (string)null);
+                    b.ToTable("PaymentMethods");
                 });
 
             modelBuilder.Entity("App.Domain.Attendee", b =>

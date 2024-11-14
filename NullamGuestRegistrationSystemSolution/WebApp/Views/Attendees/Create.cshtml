@@ -5,6 +5,7 @@
 
 @{
     ViewData["Title"] = "Osavõtja lisamine";
+    AttendeeType? attendeeType = Model.AttendeeType;
 }
 
 <h1>Osavõtja lisamine</h1>
@@ -13,63 +14,8 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AttendeeType" class="control-label"></label>
-                @foreach (var type in Enum.GetValues(typeof(AttendeeType)).Cast<AttendeeType>())
-                {
-                    <div class="form-check">
-                        <input id="AttendeeTypeId" type="radio" asp-for="AttendeeType" value="@type" class="form-check-input" onchange="ShowHide(this.value)" />
-                        <label asp-for="AttendeeType">@type.GetDisplayName()</label>
-                    </div>
-                    <span asp-validation-for="AttendeeType" class="text-danger"></span>
-                }
-            </div>
-            <div class="form-group" style="display:none" id="sur_name_div">
-                <label asp-for="SurName" class="control-label"></label>
-                <input asp-for="SurName" class="form-control" />
-                <span asp-validation-for="SurName" class="text-danger"></span>
-            </div>
-             <div class="form-group" style="display:none" id="given_name_div">
-                <label asp-for="GivenName" class="control-label"></label>
-                <input asp-for="GivenName" class="form-control" />
-                <span asp-validation-for="GivenName" class="text-danger"></span>
-            </div>
-            @*
-            <div class="form-group">
-                <label asp-for="PersonalIdentifier" class="control-label"></label>
-                <input asp-for="PersonalIdentifier" class="form-control" />
-                <span asp-validation-for="PersonalIdentifier" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PersonAdditionalInfo" class="control-label"></label>
-                <input asp-for="PersonAdditionalInfo" class="form-control" />
-                <span asp-validation-for="PersonAdditionalInfo" class="text-danger"></span>
-            </div> *@
-            <div class="form-group" style="display:none" id="company_name_div">
-                <label asp-for="CompanyName" class="control-label"></label>
-                <input name="CompanyName" asp-for="CompanyName" class="form-control" />
-                <span asp-validation-for="CompanyName" class="text-danger"></span>
-            </div>
-            @* <div class="form-group">
-                <label asp-for="RegistryCode" class="control-label"></label>
-                <input asp-for="RegistryCode" class="form-control" />
-                <span asp-validation-for="RegistryCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumberOfPeopleFromCompany" class="control-label"></label>
-                <input asp-for="NumberOfPeopleFromCompany" class="form-control" min="0" max="250" />
-                <span asp-validation-for="NumberOfPeopleFromCompany" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompanyAdditionalInfo" class="control-label"></label>
-                <input asp-for="CompanyAdditionalInfo" class="form-control" />
-                <span asp-validation-for="CompanyAdditionalInfo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentMethodId" class="control-label"></label>
-                <select asp-for="PaymentMethodId" class ="form-control" asp-items="ViewBag.PaymentMethodId"></select>
-            </div> *@
+            <partial name="_CreateEditAttendee" model="Model" />
+            <br />
             <div class="form-group">
                 <input type="submit" value="Lisa" class="btn btn-primary" />
             </div>
@@ -83,28 +29,23 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-<script type="text/javascript">
-    function BackToHomePage() {
-        window.location.href = '@Url.Action("Index", "Attendees")';
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    function ShowHide(value) {
-        const SUR_NAME_DIV = document.getElementById('sur_name_div');
-        const GIVEN_NAME_DIV = document.getElementById('given_name_div');
-        const COMPANY_NAME_DIV = document.getElementById('company_name_div');
 
-        if (value == 'Person') {
-            console.log('Test');
-            SUR_NAME_DIV.style.display = 'block';
-            GIVEN_NAME_DIV.style.display = 'block';
-            COMPANY_NAME_DIV.style.display = 'none';
+    <script type="text/javascript">
+        function BackToHomePage() {
+            window.location.href = '@Url.Action("Index", "Attendees")';
         }
-        else if (value == 'Company') {
-            SUR_NAME_DIV.style.display = 'none';
-            GIVEN_NAME_DIV.style.display = 'none';
-            COMPANY_NAME_DIV.style.display = 'block';
+        function ShowHide(value) {
+            const companyDiv = document.getElementById("company_fields");
+            const personDiv = document.getElementById("person_fields");
+            const personStyleDisplay = value == 'Person' ? "block" : "none";
+            const companyStyleDisplay = value == 'Company' ? "block" : "none";
+            companyDiv.style.display = companyStyleDisplay;
+            personDiv.style.display = personStyleDisplay;
         }
-    }
-</script>
+        ShowHide('@attendeeType');
+
+    </script>
 }

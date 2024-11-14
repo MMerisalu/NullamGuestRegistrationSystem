@@ -4,6 +4,8 @@ using App.DAL.EF;
 using App.DAL.EF.Repositories;
 using Base.DAL;
 using Microsoft.EntityFrameworkCore;
+using UoN.ExpressiveAnnotations.Net8.Attributes;
+using UoN.ExpressiveAnnotations.Net8.DependencyInjection;
 //using UoN.ExpressiveAnnotations.Net8.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +22,8 @@ builder.Services.AddScoped<IAppUnitOfWork, AppUOW>();
 //builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-//builder.Services.AddExpressiveAnnotations();
-
+builder.Services.AddExpressiveAnnotations();
+RequiredIfAttribute.DefaultErrorMessage = "Väli {0} on kohustuslik!";
 
 var app = builder.Build();
 

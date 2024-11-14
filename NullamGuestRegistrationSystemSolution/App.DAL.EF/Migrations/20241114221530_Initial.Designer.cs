@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241109205245_AddedEventDomainEntity")]
-    partial class AddedEventDomainEntity
+    [Migration("20241114221530_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("App.Domain.Attendee", b =>
                 {
@@ -26,7 +26,41 @@ namespace App.DAL.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AttendeeType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CompanyAdditionalInfo")
+                        .HasMaxLength(5000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GivenName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("NumberOfPeopleFromCompany")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PersonAdditionalInfo")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PersonalIdentifier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RegistryCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SurName")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PaymentMethodId");
 
                     b.ToTable("Attendees");
                 });
@@ -96,10 +130,21 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("PaymentMethods");
                 });
 
+            modelBuilder.Entity("App.Domain.Attendee", b =>
+                {
+                    b.HasOne("App.Domain.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PaymentMethod");
+                });
+
             modelBuilder.Entity("App.Domain.EventAndAttendee", b =>
                 {
                     b.HasOne("App.Domain.Attendee", "Attendee")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("AttendeeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -113,6 +158,11 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Attendee");
 
                     b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("App.Domain.Attendee", b =>
+                {
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("App.Domain.Event", b =>

@@ -1,0 +1,81 @@
+﻿@using App.Domain
+@using WebApp.ViewModels
+@using WebApp.Helpers
+@model CreateEditAttendeeVM
+
+
+            <div class="form-group">
+                <label asp-for="AttendeeType" class="control-label"></label>
+                @foreach (var type in Enum.GetValues(typeof(AttendeeType)).Cast<AttendeeType>())
+                {
+                    <div class="form-check">
+                        <input id="AttendeeType_@type" type="radio" asp-for="AttendeeType" value="@type" class="form-check-input" onchange="ShowHide(this.value)" />
+                        <label for="AttendeeType_@type" class="form-check-label">@type.GetDisplayName()</label>
+                    </div>
+                }
+                <span asp-validation-for="AttendeeType" class="text-danger"></span>
+            </div>
+            <div id="person_fields">
+                <div id="sur_name_div" class="form-group">
+                    <label asp-for="SurName" class="control-label"></label>
+                    <input asp-for="SurName" class="form-control" />
+                    <span asp-validation-for="SurName" class="text-danger"></span>
+                </div>
+                <div id="given_name_div" class="form-group">
+                    <label asp-for="GivenName" class="control-label"></label>
+                    <input asp-for="GivenName" class="form-control" />
+                    <span asp-validation-for="GivenName" class="text-danger"></span>
+                </div>
+
+                <div id="personal_identifier_div" class="form-group">
+                    <label asp-for="PersonalIdentifier" class="control-label"></label>
+                    <input asp-for="PersonalIdentifier" class="form-control" />
+                    <span asp-validation-for="PersonalIdentifier" class="text-danger"></span>
+                </div>
+                <div id="person_additional_info_div" class="form-group">
+                    <label asp-for="PersonAdditionalInfo" class="control-label"></label>
+                    <textarea asp-for="PersonAdditionalInfo" class="form-control"></textarea>
+                    <span asp-validation-for="PersonAdditionalInfo" class="text-danger"></span>
+                </div>
+            </div>
+            <div id="company_fields">
+                <div id="company_name_div" class="form-group">
+                    <label asp-for="CompanyName" class="control-label"></label>
+                    <input name="CompanyName" asp-for="CompanyName" class="form-control" />
+                    <span asp-validation-for="CompanyName" class="text-danger"></span>
+                </div>
+                <div id="registry_code_div" class="form-group">
+                    <label asp-for="RegistryCode" class="control-label"></label>
+                    <input asp-for="RegistryCode" class="form-control" />
+                    <span asp-validation-for="RegistryCode" class="text-danger"></span>
+                </div>
+                <div id="number_of_people_from_company_div" class="form-group">
+                    <label asp-for="NumberOfPeopleFromCompany" class="control-label"></label>
+                    <input asp-for="NumberOfPeopleFromCompany" class="form-control" />
+                    <span asp-validation-for="NumberOfPeopleFromCompany" class="text-danger"></span>
+                </div>
+                <div id="company_additional_info_div" class="form-group">
+                    <label asp-for="CompanyAdditionalInfo" class="control-label"></label>
+                    <textarea asp-for="CompanyAdditionalInfo" class="form-control"></textarea>
+                    <span asp-validation-for="CompanyAdditionalInfo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentMethodId" class="control-label"></label>
+                <select name="PaymentMethodId" asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethods">
+                    <option value="">Palun valige</option>
+                </select>
+                <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+            </div>
+            <br />
+            
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}
+
+

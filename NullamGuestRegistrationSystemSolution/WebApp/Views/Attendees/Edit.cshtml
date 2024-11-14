@@ -1,79 +1,47 @@
-﻿@model App.Domain.Attendee
+﻿@using App.Domain
+@using WebApp.ViewModels
+@model CreateEditAttendeeVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Osavõtja muutmine";
+    AttendeeType? attendeeType = Model.AttendeeType;
 }
 
-<h1>Edit</h1>
+<h1>Osavõtja muutmine</h1>
 
-<h4>Attendee</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AttendeeType" class="control-label"></label>
-                <input asp-for="AttendeeType" class="form-control" />
-                <span asp-validation-for="AttendeeType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SurName" class="control-label"></label>
-                <input asp-for="SurName" class="form-control" />
-                <span asp-validation-for="SurName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GivenName" class="control-label"></label>
-                <input asp-for="GivenName" class="form-control" />
-                <span asp-validation-for="GivenName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PersonalIdentifier" class="control-label"></label>
-                <input asp-for="PersonalIdentifier" class="form-control" />
-                <span asp-validation-for="PersonalIdentifier" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PersonAdditionalInfo" class="control-label"></label>
-                <input asp-for="PersonAdditionalInfo" class="form-control" />
-                <span asp-validation-for="PersonAdditionalInfo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompanyName" class="control-label"></label>
-                <input asp-for="CompanyName" class="form-control" />
-                <span asp-validation-for="CompanyName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegistryCode" class="control-label"></label>
-                <input asp-for="RegistryCode" class="form-control" />
-                <span asp-validation-for="RegistryCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumberOfPeopleFromCompany" class="control-label"></label>
-                <input asp-for="NumberOfPeopleFromCompany" class="form-control" />
-                <span asp-validation-for="NumberOfPeopleFromCompany" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompanyAdditionalInfo" class="control-label"></label>
-                <input asp-for="CompanyAdditionalInfo" class="form-control" />
-                <span asp-validation-for="CompanyAdditionalInfo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentMethodId" class="control-label"></label>
-                <select asp-for="PaymentMethodId" class="form-control" asp-items="ViewBag.PaymentMethodId"></select>
-                <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
-            </div>
+            <partial name="_CreateEditAttendee" model="Model" />
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvesta" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <button class="btn btn-primary" onclick="BackToIndexPage()">Tagasi</button>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function BackToIndexPage() {
+            window.location.href = '@Url.Action("Index", "Attendees")';
+        }
+        function ShowHide(value) {
+            const companyDiv = document.getElementById("company_fields");
+            const personDiv = document.getElementById("person_fields");
+            const personStyleDisplay = value == 'Person' ? "block" : "none";
+            const companyStyleDisplay = value == 'Company' ? "block" : "none";
+            companyDiv.style.display = companyStyleDisplay;
+            personDiv.style.display = personStyleDisplay;
+        }
+        ShowHide('@attendeeType');
+
+    </script>
 }

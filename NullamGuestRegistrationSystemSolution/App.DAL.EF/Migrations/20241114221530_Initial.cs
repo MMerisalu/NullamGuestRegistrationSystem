@@ -6,23 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace App.DAL.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedEventDomainEntity : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Attendees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendees", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
@@ -37,6 +25,47 @@ namespace App.DAL.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attendees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AttendeeType = table.Column<int>(type: "INTEGER", nullable: true),
+                    SurName = table.Column<string>(type: "TEXT", nullable: true),
+                    GivenName = table.Column<string>(type: "TEXT", nullable: true),
+                    PersonalIdentifier = table.Column<string>(type: "TEXT", nullable: true),
+                    PersonAdditionalInfo = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    CompanyName = table.Column<string>(type: "TEXT", nullable: true),
+                    RegistryCode = table.Column<string>(type: "TEXT", nullable: true),
+                    NumberOfPeopleFromCompany = table.Column<int>(type: "INTEGER", nullable: true),
+                    CompanyAdditionalInfo = table.Column<string>(type: "TEXT", maxLength: 5000, nullable: true),
+                    PaymentMethodId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendees_PaymentMethods_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,6 +95,11 @@ namespace App.DAL.EF.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attendees_PaymentMethodId",
+                table: "Attendees",
+                column: "PaymentMethodId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EventsAndAttendees_AttendeeId",
                 table: "EventsAndAttendees",
                 column: "AttendeeId");
@@ -87,6 +121,9 @@ namespace App.DAL.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
         }
     }
 }

@@ -27,29 +27,13 @@ namespace WebApp.Controllers
             return View(await appDbContext.ToListAsync());
         }
 
-        // GET: Attendees/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attendee = await _context.Attendees
-                .Include(a => a.PaymentMethod)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (attendee == null)
-            {
-                return NotFound();
-            }
-
-            return View(attendee);
-        }
 
         // GET: Attendees/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var vm = new CreateEditAttendeeVM();
+            var paymentMethods = await _context.PaymentMethods.ToListAsync();
+            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
             return View(vm);
         }
 
@@ -58,21 +42,52 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AttendeeType,SurName,GivenName,PersonalIdentifier,PersonAdditionalInfo,CompanyName,RegistryCode,NumberOfPeopleFromCompany,CompanyAdditionalInfo,PaymentMethodId,Id")] Attendee attendee)
+        public async Task<IActionResult> Create(CreateEditAttendeeVM vm)
         {
+            var attendee = new Attendee();
+
+            if (!ModelState.IsValid)
+            {
+                var paymentMethods = await _context.PaymentMethods.ToListAsync();
+                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                return View(vm);
+            }
+
             if (ModelState.IsValid)
             {
+                attendee.AttendeeType = vm.AttendeeType;
+                if (vm.AttendeeType == AttendeeType.Person)
+                {
+                    attendee.SurName = vm.SurName!;
+                    attendee.GivenName = vm.GivenName!;
+                    attendee.PersonalIdentifier = vm.PersonalIdentifier!;
+                    attendee.PersonAdditionalInfo = vm.PersonAdditionalInfo;
+                }
+                else if (vm.AttendeeType == AttendeeType.Company)
+                {
+                    attendee.CompanyName = vm.CompanyName!;
+                    attendee.RegistryCode = vm.RegistryCode!;
+                    attendee.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
+                    attendee.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
+                }
+
+                attendee.PaymentMethodId = vm.PaymentMethodId;
+
                 _context.Add(attendee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethods, "Id", "Name", attendee.PaymentMethodId);
-            return View(attendee);
+
+            return View(vm);
         }
 
         // GET: Attendees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var vm = new CreateEditAttendeeVM();
+            var paymentMethods = await _context.PaymentMethods.ToListAsync();
+            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+
             if (id == null)
             {
                 return NotFound();
@@ -83,8 +98,26 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["PaymentMethodId"] = new SelectList(_context.PaymentMethods, "Id", "Name", attendee.PaymentMethodId);
-            return View(attendee);
+
+            vm.Id = attendee.Id;
+            vm.AttendeeType = attendee.AttendeeType;
+            if(vm.AttendeeType == AttendeeType.Person)
+            {
+                vm.SurName = attendee.SurName;
+                vm.GivenName = attendee.GivenName;
+                vm.PersonalIdentifier = attendee.PersonalIdentifier;
+                vm.PersonAdditionalInfo = attendee.PersonAdditionalInfo;
+            }
+            else if(vm.AttendeeType == AttendeeType.Company)
+            {
+                vm.CompanyName = attendee.CompanyName;
+                vm.RegistryCode = attendee.RegistryCode;
+                vm.NumberOfPeopleFromCompany = attendee.NumberOfPeopleFromCompany;
+                vm.CompanyAdditionalInfo = attendee.CompanyAdditionalInfo;
+            }
+            vm.PaymentMethodId = attendee.PaymentMethodId;
+            
+            return View(vm);
         }
 
         // POST: Attendees/Edit/5

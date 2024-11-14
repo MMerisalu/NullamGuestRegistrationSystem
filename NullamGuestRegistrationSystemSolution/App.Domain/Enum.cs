@@ -10,8 +10,9 @@ namespace App.Domain
 {
     public enum AttendeeType
     {
-        [Display(Name ="Isik")]
+        [Display(Name ="Eraisik")]
         Person = 1,
+
         [Display(Name = "Ettevõte")]
         Company
     }
