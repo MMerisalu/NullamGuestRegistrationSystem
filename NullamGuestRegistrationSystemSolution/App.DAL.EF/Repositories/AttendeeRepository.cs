@@ -75,7 +75,7 @@ namespace App.DAL.EF.Repositories
             {
                 var attendee = await CreateQuery(noTracking, noIncludes)
                 .FirstOrDefaultAsync(a => a.SurName!.Equals(surName) && 
-                a.GivenName.Equals(givenName));
+                a.GivenName!.Equals(givenName));
                 return attendee != null ? Mapper.Map(attendee) : null;
             }
             else if (attendeeType == AttendeeType.Company)
