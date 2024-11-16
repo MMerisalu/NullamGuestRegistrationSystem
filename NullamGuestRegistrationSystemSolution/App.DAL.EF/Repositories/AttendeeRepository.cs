@@ -53,40 +53,43 @@ namespace App.DAL.EF.Repositories
             return Mapper.Map(await CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(a => a.Id == id));
         }
 
-        public AttendeeDTO? GetAttendeeId(AttendeeType attendeeType, string? surName = null, string? givenName = null, string? companyName = null, bool noTracking = true, bool noIncludes = false)
+        public int? GetAttendeeId(AttendeeType attendeeType, string? surName = null, string? givenName = null, string? companyName = null, bool noTracking = true, bool noIncludes = false)
         {
             if (attendeeType == AttendeeType.Person)
             {
-                return Mapper.Map(CreateQuery(noTracking, noIncludes).FirstOrDefault(a => a.SurName.Equals(surName) 
-                 && givenName.Equals(givenName)));
+                var attendeeId = CreateQuery(noTracking, noIncludes).FirstOrDefault(a => a.SurName!.Equals(surName)
+                 && givenName!.Equals(givenName))!.Id;
+                return attendeeId;
+
             }
             else if (attendeeType == AttendeeType.Company)
             {
-                return Mapper.Map(CreateQuery(noTracking, noIncludes)
-                    .FirstOrDefault(a => a.CompanyName.Equals(companyName)));
+                var attendeeId = CreateQuery(noTracking, noIncludes)
+                    .FirstOrDefault(a => a.CompanyName!.Equals(companyName))!.Id;
+                return attendeeId;
             }
             // Should not get here
             return null;
         }
 
-        public async Task<AttendeeDTO?> GetAttendeeIdAsync(AttendeeType attendeeType, string? surName, string? givenName, string? companyName, bool noTracking = true, bool noIncludes = false)
-        {
-            if (attendeeType == AttendeeType.Person)
-            {
-                var attendee = await CreateQuery(noTracking, noIncludes)
-                .FirstOrDefaultAsync(a => a.SurName!.Equals(surName) && 
-                a.GivenName!.Equals(givenName));
-                return attendee != null ? Mapper.Map(attendee) : null;
-            }
-            else if (attendeeType == AttendeeType.Company)
-            {
-                var attendee = await CreateQuery(noTracking, noIncludes)
-                    .FirstOrDefaultAsync(a => a.CompanyName!.Equals(companyName));
-                return attendee != null ? Mapper.Map(attendee) : null;
-            }
-            // Should not get here
-            return null;
-        }
+        //public async Task<AttendeeDTO?> GetAttendeeIdAsync(AttendeeType attendeeType, string? surName, string? givenName, string? companyName, bool noTracking = true, bool noIncludes = false)
+        //{
+        //    if (attendeeType == AttendeeType.Person)
+        //    {
+        //        var attendeeId = await CreateQuery(noTracking, noIncludes)
+        //        .FirstOrDefaultAsync(a => a.SurName!.Equals(surName) && 
+        //        a.GivenName!.Equals(givenName));
+        //        return attendeeId != null ? Mapper.Map(attendee) : null;
+        //    }
+        //    else if (attendeeType == AttendeeType.Company)
+        //    {
+        //        var attendee = await CreateQuery(noTracking, noIncludes)
+        //            .FirstOrDefaultAsync(a => a.CompanyName!.Equals(companyName));
+        //        return attendee != null ? Mapper.Map(attendee) : null;
+        //    }
+        //    // Should not get here
+        //    return null;
+        //}
 
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {

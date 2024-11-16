@@ -78,22 +78,22 @@ namespace WebApp.Controllers
 
                 _uow.Attendees.Add(attendee);
                 await _uow.SaveChangesAsync();
-                //int? attendeeId = null;
-                AttendeeDTO? attendeeDTO = null;
+                int? attendeeId = null;
+               // AttendeeDTO? attendeeDTO = null;
                 if (vm.AttendeeType == AttendeeType.Person)
                 {
-                     attendeeDTO =  await _uow.Attendees.GetAttendeeIdAsync(AttendeeType.Person, vm.SurName, vm.GivenName);
+                     attendeeId =   _uow.Attendees.GetAttendeeId(AttendeeType.Person, vm.SurName, vm.GivenName);
                 }
                 else if(vm.AttendeeType == AttendeeType.Company)
                 {
-                     attendeeDTO = await _uow.Attendees.GetAttendeeIdAsync(AttendeeType.Company, null, null, vm.CompanyName);
+                     attendeeId = _uow.Attendees.GetAttendeeId(AttendeeType.Company, null, null, vm.CompanyName);
                 }
-                if (attendeeDTO?.Id != null)
+                if (attendeeId != null)
                 {
                     var eventAndAttendee = new EventAndAttendeeDTO()
                     {
                         EventId = id,
-                        AttendeeId = attendeeDTO.Id,
+                        AttendeeId = attendeeId.Value,
                     };
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
 
