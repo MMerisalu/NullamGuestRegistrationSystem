@@ -40,7 +40,8 @@
                     @Html.DisplayFor(modelItem => item.LineNumberFormatted)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a style="text-decoration:none" asp-controller="Events" asp-action="ListOfAttendees" asp-route-id="@item.Id">@item.Name</a>
+                    @* @Html.DisplayFor(modelItem => item.Name) *@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EventDateAndTime)

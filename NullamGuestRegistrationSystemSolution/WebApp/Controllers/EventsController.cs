@@ -12,20 +12,23 @@ using System.Drawing.Text;
 using App.Contracts.DAL.IAppRepositories;
 using App.Contracts.DAL;
 using App.DAL.DTO;
+using Microsoft.Extensions.Logging;
+using App.Enum;
 
 namespace WebApp.Controllers
 {
     public class EventsController : Controller
     {
         private readonly IAppUnitOfWork _uow;
-
+        
 
         public EventsController(IAppUnitOfWork uow)
         {
             _uow = uow;
+            
         }
 
-       
+
         // GET: Events
         public async Task<IActionResult> Index()
         {
@@ -194,7 +197,27 @@ namespace WebApp.Controllers
             return eventVms;
         }
 
+        public async Task<IActionResult> ListOfAttendees([FromRoute]int id)
+        {
 
+            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id);
+            var attendeeVms = new List<ListOfAttendeeVM>();
+            int numberOfattendees = attendees.Count();
+            for (int i = 0; i < numberOfattendees; i++)
+            {
+                var vm = new ListOfAttendeeVM()
+                {
+                    
+                    //LineNumber = i + 1,
+                    Name = attendees[i].AttendeeType == AttendeeType.Person ? attendees[i].SurAndGivenName : attendees[i].CompanyName,
+                };
+                attendeeVms.Add(vm);
+                
+            }
+            return View(attendeeVms);
+        }
+
+        
     }
        
     

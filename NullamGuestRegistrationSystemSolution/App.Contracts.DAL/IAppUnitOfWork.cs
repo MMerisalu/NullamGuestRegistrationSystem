@@ -7,6 +7,7 @@ public interface IAppUnitOfWork : IUnitOfWork
 {
     IPaymentMethodRepository PaymentMethods{ get;}
     IEventRepository Events{ get;}
-
+    IAttendeeRepository Attendees { get;}
+    IEventAndAttendeRepository EventsAndAttendes { get;}
     
 }

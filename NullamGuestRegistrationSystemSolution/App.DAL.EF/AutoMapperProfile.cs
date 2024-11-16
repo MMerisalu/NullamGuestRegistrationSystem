@@ -12,7 +12,9 @@ public class AutoMapperProfile: Profile
     {
         CreateMap<PaymentMethod, PaymentMethodDTO>()
                 .ReverseMap();
-        CreateMap<Event, EventDTO>() .ReverseMap();
+        CreateMap<Event, EventDTO>().ReverseMap();
+        CreateMap<Attendee, AttendeeDTO>().ReverseMap();
+        CreateMap<EventAndAttendee, EventAndAttendeeDTO>().ReverseMap();
     }
 
 

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\App.Enum\App.Enum.csproj" />
-    <ProjectReference Include="..\Base.Domain\Base.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -6,7 +6,7 @@ using Base.DAL;
 using Microsoft.EntityFrameworkCore;
 using UoN.ExpressiveAnnotations.Net8.Attributes;
 using UoN.ExpressiveAnnotations.Net8.DependencyInjection;
-//using UoN.ExpressiveAnnotations.Net8.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connect
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IAppUnitOfWork, AppUOW>();
-//builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddExpressiveAnnotations();

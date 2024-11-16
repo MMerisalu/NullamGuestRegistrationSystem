@@ -1,18 +1,16 @@
-﻿
-using App.Enum;
-using Base.Domain;
+﻿using Base.Domain;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using App.Enum;
 
-namespace App.Domain
+namespace App.DAL.DTO
 {
-   
-    public class Attendee : DomainEntityId<int>
+    public class AttendeeDTO : DomainEntityId<int>
     {
         [DisplayName("Osavõtja tüüp")]
         public AttendeeType? AttendeeType { get; set; }
@@ -20,7 +18,7 @@ namespace App.Domain
         #region Person info
 
         [DisplayName("Eesnimi")]
-        public string? SurName { get; set; } 
+        public string? SurName { get; set; }
 
 
         [DisplayName("Perekonnanimi")]
@@ -37,7 +35,7 @@ namespace App.Domain
         [DisplayName("Isikukood")]
         public string? PersonalIdentifier { get; set; }
 
-        
+
         [MaxLength(1000)]
         [DisplayName("Lisainfo")]
         public string? PersonAdditionalInfo { get; set; }
@@ -49,16 +47,16 @@ namespace App.Domain
         [DisplayName("Ettevõtte juriidiline nimi")]
         public string? CompanyName { get; set; }
 
-        
+
         [DisplayName("Ettevõtte registrikood")]
-        public string? RegistryCode { get; set; } 
+        public string? RegistryCode { get; set; }
 
 
         [DisplayName("Ettevõttest tulevate osavõtjate arv")]
         [Range(0, 250)]
         public int? NumberOfPeopleFromCompany { get; set; }
 
-        
+
         [MaxLength(5000)]
         [DisplayName("Lisainfo")]
         public string? CompanyAdditionalInfo { get; set; }
@@ -67,10 +65,6 @@ namespace App.Domain
 
         [DisplayName("Maksemeetod")]
         public int PaymentMethodId { get; set; }
-
-        [DisplayName("Maksemeetod")]
-        public PaymentMethod? PaymentMethod { get; set; }
-
-        public ICollection<EventAndAttendee>? Events { get; set; }
+        
     }
 }
