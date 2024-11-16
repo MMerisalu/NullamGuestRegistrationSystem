@@ -20,22 +20,22 @@ namespace WebApp.Controllers
     public class EventsController : Controller
     {
         private readonly IAppUnitOfWork _uow;
-        
+
 
         public EventsController(IAppUnitOfWork uow)
         {
             _uow = uow;
-            
+
         }
 
 
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            
+
             var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync();
             var events = CreateEventIndexVM(eventsDb);
-            
+
             return View(events);
         }
 
@@ -165,7 +165,7 @@ namespace WebApp.Controllers
             var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
             if (eventDb != null)
             {
-               await _uow.Events.RemoveAsync(eventDb.Id);
+                await _uow.Events.RemoveAsync(eventDb.Id);
             }
 
             await _uow.SaveChangesAsync();
@@ -197,34 +197,28 @@ namespace WebApp.Controllers
             return eventVms;
         }
 
-        public async Task<IActionResult> ListOfAttendees([FromRoute]int id)
+        public async Task<IActionResult> ListOfAttendees([FromRoute] int id)
         {
-
             var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
             var numberOfAttendees = attendees?.Count ?? 0;
             var attendeeVms = new List<ListOfAttendeeVM>();
+
             if (numberOfAttendees > 0)
             {
                 for (int i = 0; i < numberOfAttendees; i++)
                 {
                     var vm = new ListOfAttendeeVM()
                     {
-
                         //LineNumber = i + 1,
-                        Name = attendees[i].AttendeeType == AttendeeType.Person ? attendees[i].SurAndGivenName : attendees[i].CompanyName
+                        Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!,
+                        PersonalIdentifier = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.PersonalIdentifier : "",
+                        RegistryCode = attendees?[i]!.AttendeeType == AttendeeType.Company ? attendees[i]!.RegistryCode : ""
                     };
                     attendeeVms.Add(vm);
 
                 }
             }
-           
-            
-            
             return View(attendeeVms);
         }
-
-        
     }
-       
-    
 }

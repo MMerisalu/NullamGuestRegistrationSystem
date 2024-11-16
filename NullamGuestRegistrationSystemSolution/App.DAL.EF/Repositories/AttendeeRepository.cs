@@ -21,12 +21,12 @@ namespace App.DAL.EF.Repositories
 
         public List<AttendeeDTO?>? GetAllAttendeesOfEventOrderedByName(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            return CreateQuery(noTracking, noIncludes).Where(a => a.Events.Any(e => e.EventId == eventId)).Select(a => Mapper.Map(a)).ToList();
+            return CreateQuery(noTracking, noIncludes).Where(a => a.Events!.Any(e => e.EventId == eventId)).Select(a => Mapper.Map(a)).ToList();
         }
 
         public async Task<List<AttendeeDTO?>>? GetAllAttendeesOfEventOrderedByNameAsync(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            return (await CreateQuery(noTracking, noIncludes).Where(a => a.Events.Any(e => e.EventId == eventId)).Select(a => Mapper.Map(a)).ToListAsync());
+            return (await CreateQuery(noTracking, noIncludes).Where(a => a.Events!.Any(e => e.EventId == eventId)).Select(a => Mapper.Map(a)).ToListAsync());
         }
 
         public IEnumerable<AttendeeDTO?> GetAllAttendeesOrderedByName(bool noTracking = true, bool noIncludes = false)
@@ -71,25 +71,6 @@ namespace App.DAL.EF.Repositories
             // Should not get here
             return null;
         }
-
-        //public async Task<AttendeeDTO?> GetAttendeeIdAsync(AttendeeType attendeeType, string? surName, string? givenName, string? companyName, bool noTracking = true, bool noIncludes = false)
-        //{
-        //    if (attendeeType == AttendeeType.Person)
-        //    {
-        //        var attendeeId = await CreateQuery(noTracking, noIncludes)
-        //        .FirstOrDefaultAsync(a => a.SurName!.Equals(surName) && 
-        //        a.GivenName!.Equals(givenName));
-        //        return attendeeId != null ? Mapper.Map(attendee) : null;
-        //    }
-        //    else if (attendeeType == AttendeeType.Company)
-        //    {
-        //        var attendee = await CreateQuery(noTracking, noIncludes)
-        //            .FirstOrDefaultAsync(a => a.CompanyName!.Equals(companyName));
-        //        return attendee != null ? Mapper.Map(attendee) : null;
-        //    }
-        //    // Should not get here
-        //    return null;
-        //}
 
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {

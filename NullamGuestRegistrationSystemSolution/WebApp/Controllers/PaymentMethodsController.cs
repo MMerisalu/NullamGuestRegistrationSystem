@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         // GET: PaymentMethods
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.PaymentMethods.GetAllAsync());
+            return View(await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync());
         }
 
 
