@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             
-            return View(await _uow.Attendees.GetAllAttendeestOrderedByNameAsync());
+            return View(await _uow.Attendees.GetAllAttendeesOrderedByNameAsync());
         }
 
 
@@ -78,21 +78,22 @@ namespace WebApp.Controllers
 
                 _uow.Attendees.Add(attendee);
                 await _uow.SaveChangesAsync();
-                int? attendeeId = null;
+                //int? attendeeId = null;
+                AttendeeDTO? attendeeDTO = null;
                 if (vm.AttendeeType == AttendeeType.Person)
                 {
-                     attendeeId =  _uow.Attendees.GetAttendeId(AttendeeType.Person, vm.SurName, vm.GivenName);
+                     attendeeDTO =  await _uow.Attendees.GetAttendeeIdAsync(AttendeeType.Person, vm.SurName, vm.GivenName);
                 }
                 else if(vm.AttendeeType == AttendeeType.Company)
                 {
-                     attendeeId = _uow.Attendees.GetAttendeId(AttendeeType.Company, vm.CompanyName);
+                     attendeeDTO = await _uow.Attendees.GetAttendeeIdAsync(AttendeeType.Company, null, null, vm.CompanyName);
                 }
-                if (attendeeId.HasValue)
+                if (attendeeDTO?.Id != null)
                 {
                     var eventAndAttendee = new EventAndAttendeeDTO()
                     {
                         EventId = id,
-                        AttendeeId = attendeeId.Value,
+                        AttendeeId = attendeeDTO.Id,
                     };
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
 
@@ -121,7 +122,7 @@ namespace WebApp.Controllers
             return NotFound();
         }
 
-        var attendee = await _uow.Attendees.GetAttendeByIdAsync(id.Value);
+        var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id.Value);
         if (attendee == null)
         {
             return NotFound();
@@ -149,8 +150,8 @@ namespace WebApp.Controllers
     }
 
            // POST: Attendees/Edit/5
-        //    // To protect from overposting attacks, enable the specific properties you want to bind to.
-        //    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+           // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CreateEditAttendeeVM vm)
@@ -159,7 +160,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            var attendeeDb = await _uow.Attendees.GetAttendeByIdAsync(id);
+            var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
             if (attendeeDb == null)
             {
                 return NotFound();
@@ -218,7 +219,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var attendee = await _uow.Attendees.GetAttendeByIdAsync(id.Value);
+            var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id.Value);
                 
             if (attendee == null)
             {
@@ -233,7 +234,7 @@ namespace WebApp.Controllers
          [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var attendee = await _uow.Attendees.GetAttendeByIdAsync(id);
+            var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id);
             if (attendee != null)
             {
                await _uow.Attendees.RemoveAsync(id);

@@ -200,20 +200,26 @@ namespace WebApp.Controllers
         public async Task<IActionResult> ListOfAttendees([FromRoute]int id)
         {
 
-            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id);
+            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
+            var numberOfAttendees = attendees?.Count ?? 0;
             var attendeeVms = new List<ListOfAttendeeVM>();
-            int numberOfattendees = attendees.Count();
-            for (int i = 0; i < numberOfattendees; i++)
+            if (numberOfAttendees > 0)
             {
-                var vm = new ListOfAttendeeVM()
+                for (int i = 0; i < numberOfAttendees; i++)
                 {
-                    
-                    //LineNumber = i + 1,
-                    Name = attendees[i].AttendeeType == AttendeeType.Person ? attendees[i].SurAndGivenName : attendees[i].CompanyName,
-                };
-                attendeeVms.Add(vm);
-                
+                    var vm = new ListOfAttendeeVM()
+                    {
+
+                        //LineNumber = i + 1,
+                        Name = attendees[i].AttendeeType == AttendeeType.Person ? attendees[i].SurAndGivenName : attendees[i].CompanyName
+                    };
+                    attendeeVms.Add(vm);
+
+                }
             }
+           
+            
+            
             return View(attendeeVms);
         }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<App.Domain.Attendee>
+﻿@model IEnumerable<App.DAL.DTO.AttendeeDTO>
 
 @{
     ViewData["Title"] = "Osavõtja lisamine";
@@ -39,9 +39,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CompanyAdditionalInfo)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.PaymentMethod)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -75,9 +75,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CompanyAdditionalInfo)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.PaymentMethod.Name)
-            </td>
+            </td> *@
             <td>
                 <a style="text-decoration:none" asp-action="Edit" asp-route-id="@item.Id">MUUDA</a> 
                 <a asp-action="Delete" asp-route-id="@item.Id">
