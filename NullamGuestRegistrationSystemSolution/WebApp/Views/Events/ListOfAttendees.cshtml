@@ -17,11 +17,14 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PersonalIdentifier)
+                @Html.DisplayNameFor(model => model.Code)
             </th>
+             @* <th>
+                @Html.DisplayNameFor(model => model.PersonalIdentifier)
+            </th> 
             <th>
                 @Html.DisplayNameFor(model => model.RegistryCode)
-            </th>
+            </th> *@
 
             <th></th>
         </tr>
@@ -33,8 +36,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
 
-                @if (item.AttendeeType == App.Enum.AttendeeType.Person)
+               @*  @if (item.AttendeeType == App.Enum.AttendeeType.Person)
                 {
                     <td>
                         @Html.DisplayFor(modelItem => item.PersonalIdentifier)
@@ -56,7 +62,7 @@
                 {
                     <td>
                     </td>
-                }
+                } *@
 
             </tr>
         }

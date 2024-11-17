@@ -26,7 +26,8 @@ namespace App.DAL.EF.Repositories
 
         public async Task<List<AttendeeDTO?>>? GetAllAttendeesOfEventOrderedByNameAsync(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            return (await CreateQuery(noTracking, noIncludes).Where(a => a.Events!.Any(e => e.EventId == eventId)).Select(a => Mapper.Map(a)).ToListAsync());
+            var result = (await CreateQuery(noTracking, noIncludes).Where(a => a.Events!.Any(e => e.EventId == eventId)).Select(a => Mapper.Map(a)).ToListAsync());
+            return result;
         }
 
         public IEnumerable<AttendeeDTO?> GetAllAttendeesOrderedByName(bool noTracking = true, bool noIncludes = false)

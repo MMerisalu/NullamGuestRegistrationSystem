@@ -207,13 +207,11 @@ namespace WebApp.Controllers
             {
                 for (int i = 0; i < numberOfAttendees; i++)
                 {
-                    var vm = new ListOfAttendeeVM()
-                    {
-                        //LineNumber = i + 1,
-                        Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!,
-                        PersonalIdentifier = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.PersonalIdentifier : "",
-                        RegistryCode = attendees?[i]!.AttendeeType == AttendeeType.Company ? attendees[i]!.RegistryCode : ""
-                    };
+                    var vm = new ListOfAttendeeVM();
+                    vm.Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!;
+                    // vm.PersonalIdentifier = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i].PersonalIdentifier : "";
+                    // vm.RegistryCode = attendees?[i]!.AttendeeType == AttendeeType.Company ? attendees[i]!.RegistryCode : "";
+                    vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i].PersonalIdentifier : attendees?[i]!.RegistryCode;
                     attendeeVms.Add(vm);
 
                 }
