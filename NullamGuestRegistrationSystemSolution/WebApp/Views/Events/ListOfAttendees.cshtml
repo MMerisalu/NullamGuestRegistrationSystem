@@ -19,12 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Code)
             </th>
-             @* <th>
-                @Html.DisplayNameFor(model => model.PersonalIdentifier)
-            </th> 
-            <th>
-                @Html.DisplayNameFor(model => model.RegistryCode)
-            </th> *@
+             <th>
+                @Html.DisplayNameFor(model => model.Id)
+                </th>
 
             <th></th>
         </tr>
@@ -34,10 +31,14 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a style="text-decoration:none" asp-action="Edit" asp-controller="Attendees" asp-route-id="@item.Id">@item.Name</a>
                 </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
                 </td>
 
                @*  @if (item.AttendeeType == App.Enum.AttendeeType.Person)

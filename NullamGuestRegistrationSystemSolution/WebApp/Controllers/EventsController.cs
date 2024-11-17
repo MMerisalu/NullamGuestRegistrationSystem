@@ -212,6 +212,7 @@ namespace WebApp.Controllers
                     // vm.PersonalIdentifier = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i].PersonalIdentifier : "";
                     // vm.RegistryCode = attendees?[i]!.AttendeeType == AttendeeType.Company ? attendees[i]!.RegistryCode : "";
                     vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i].PersonalIdentifier : attendees?[i]!.RegistryCode;
+                    vm.Id = attendees[i].Id;
                     attendeeVms.Add(vm);
 
                 }
