@@ -79,8 +79,7 @@ namespace App.DAL.EF.Repositories
                 var query = base.CreateQuery(noTracking, noIncludes);
                 if (noTracking) query = query.AsNoTracking();
                 if (!noIncludes)
-                    query = query.Include(a => a.Events)
-                        .Include(a => a.PaymentMethod);
+                    query = query.Include(a => a.Events);
                 return query;
             }
         }

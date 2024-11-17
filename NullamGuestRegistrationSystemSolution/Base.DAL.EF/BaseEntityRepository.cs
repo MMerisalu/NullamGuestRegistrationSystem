@@ -161,7 +161,7 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
 
     
 
-    public virtual async Task<TDalEntity> RemoveAsync(TKey id)
+    public virtual async Task<TDalEntity> RemoveAsync(TKey id,bool noTracking = true, bool noIncludes = false)
     {
         var entity = await FirstOrDefaultAsync(id);
         if (entity == null)

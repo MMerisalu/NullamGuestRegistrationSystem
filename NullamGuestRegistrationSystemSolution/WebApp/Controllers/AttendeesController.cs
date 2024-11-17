@@ -98,7 +98,7 @@ namespace WebApp.Controllers
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
                 };
                 await _uow.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(vm);
         }
@@ -206,7 +206,7 @@ namespace WebApp.Controllers
         // GET: Attendees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            //var vm = new DeleteA
+            var vm = new DeleteAttendeeVM();
             if (id == null)
             {
                 return NotFound();
@@ -219,7 +219,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            return View(attendee);
+            return View(vm);
         }
 
         // POST: Attendees/Delete/5
@@ -227,14 +227,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id);
+            var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
             if (attendee != null)
             {
-                await _uow.Attendees.RemoveAsync(id);
+                
+                 await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
             }
 
             await _uow.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task<bool> AttendeeExists(int id)

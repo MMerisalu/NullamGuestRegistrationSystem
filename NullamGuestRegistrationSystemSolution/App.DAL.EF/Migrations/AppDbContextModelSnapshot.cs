@@ -132,7 +132,7 @@ namespace App.DAL.EF.Migrations
                     b.HasOne("App.Domain.PaymentMethod", "PaymentMethod")
                         .WithMany()
                         .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("PaymentMethod");
@@ -143,13 +143,13 @@ namespace App.DAL.EF.Migrations
                     b.HasOne("App.Domain.Attendee", "Attendee")
                         .WithMany("Events")
                         .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("App.Domain.Event", "Event")
                         .WithMany("Attendees")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Attendee");

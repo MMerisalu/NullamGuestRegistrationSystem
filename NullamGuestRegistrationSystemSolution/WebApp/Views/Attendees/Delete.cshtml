@@ -1,4 +1,5 @@
-﻿@model App.Domain.Attendee
+﻿@using WebApp.ViewModels
+@model DeleteAttendeeVM
 
 @{
     ViewData["Title"] = "Delete";
@@ -65,12 +66,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CompanyAdditionalInfo)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaymentMethod)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaymentMethod.Name)
-        </dd>
+        
     </dl>
     
     <form asp-action="Delete">
