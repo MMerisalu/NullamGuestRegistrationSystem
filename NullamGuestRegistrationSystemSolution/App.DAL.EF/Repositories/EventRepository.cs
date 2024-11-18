@@ -59,7 +59,9 @@ namespace App.DAL.EF.Repositories
             return (await CreateQuery(noTracking, noIncludes).CountAsync(a => a.Attendees!.Any(a => a.EventId == eventId)));
         }
 
+       
         protected override IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
+
         {
             var query = base.CreateQuery(noTracking, noIncludes);
             if (noTracking) query = query.AsNoTracking();

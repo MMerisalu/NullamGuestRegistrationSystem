@@ -33,5 +33,6 @@ namespace WebApp.ViewModels
 
         [DisplayName("Osavõtjate arv")]
         public int NumberOfAttendees { get; set; }
+
     }
 }

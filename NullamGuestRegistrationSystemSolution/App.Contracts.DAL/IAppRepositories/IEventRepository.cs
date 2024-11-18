@@ -24,5 +24,6 @@ namespace App.Contracts.DAL.IAppRepositories
         IEnumerable<TEntity?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false);
         Task<int> NumberOfAttendeesPerEventAsync(int eventId, bool noTracking = true, bool noIncludes = false);
         int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false);
+ 
     }
 }
