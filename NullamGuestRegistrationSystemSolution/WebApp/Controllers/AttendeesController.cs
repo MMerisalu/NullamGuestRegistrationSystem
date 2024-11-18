@@ -202,25 +202,7 @@ namespace WebApp.Controllers
 
             return View(vm);
         }
-
-        // GET: Attendees/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            var vm = new DeleteAttendeeVM();
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id.Value);
-
-            if (attendee == null)
-            {
-                return NotFound();
-            }
-
-            return View(vm);
-        }
+                
 
         // POST: Attendees/Delete/5
         [HttpPost, ActionName("Delete")]
