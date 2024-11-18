@@ -149,10 +149,7 @@ namespace WebApp.Controllers
 
         public IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO>? events)
         {
-            if (events == null || !events.Any())
-            {
-                return Enumerable.Empty<IndexEventVM>();
-            }
+            
             var eventVms = new List<IndexEventVM>();
 
             int numberOfEvents = events!.Count();
@@ -177,7 +174,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> ListOfAttendees([FromRoute] int id)
         {
             var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
-            var numberOfAttendees = await _uow.Events.NumberOfAttendeesPerEventAsync(id);
+            var numberOfAttendees = attendees?.Count ?? 0;
             var attendeeVms = new List<ListOfAttendeeVM>();
 
             if (numberOfAttendees > 0)
