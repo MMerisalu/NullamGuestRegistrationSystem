@@ -149,8 +149,13 @@ namespace WebApp.Controllers
 
         public IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO>? events)
         {
+            if (events == null || !events.Any())
+            {
+                return Enumerable.Empty<IndexEventVM>();
+            }
             var eventVms = new List<IndexEventVM>();
-            int numberOfEvents = events!.Count();
+            int numberOfEvents = events.Count();
+            
             for (int i = 0; i < numberOfEvents; i++)
             {
                 var vm = new IndexEventVM()
@@ -160,6 +165,7 @@ namespace WebApp.Controllers
                     Name = events[i].Name,
                     EventDateAndTime = events[i].EventDateAndTime,
                     Location = events[i].Location,
+                    NumberOfAttendees = _uow.Events.GetNumberOfAttendees(events[i].Id),
                     AdditionalInfo = events[i].AdditionalInfo
                 };
                 eventVms.Add(vm);
@@ -170,7 +176,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> ListOfAttendees([FromRoute] int id)
         {
             var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
-            var numberOfAttendees = attendees?.Count ?? 0;
+            var numberOfAttendees = await _uow.Events.GetNumberOfAttendeesAsync(id );
             var attendeeVms = new List<ListOfAttendeeVM>();
 
             if (numberOfAttendees > 0)
@@ -181,6 +187,7 @@ namespace WebApp.Controllers
                     vm.Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!;
                     vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i].PersonalIdentifier : attendees?[i]!.RegistryCode;
                     vm.Id = attendees[i].Id;
+                    
                     attendeeVms.Add(vm);
 
                 }

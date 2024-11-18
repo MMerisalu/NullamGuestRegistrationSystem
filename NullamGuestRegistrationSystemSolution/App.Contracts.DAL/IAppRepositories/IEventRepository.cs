@@ -22,7 +22,11 @@ namespace App.Contracts.DAL.IAppRepositories
         TEntity? GetEventById(int id, bool noTracking = true, bool noIncludes = false);
         Task<IEnumerable<TEntity?>> GetAllEventsDTOOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
         IEnumerable<TEntity?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false);
-
-
+        Task<int> GetNumberOfAttendeesAsync(int eventId, bool noTracking = true, bool noIncludes = false);
+        int GetNumberOfAttendees(int eventId, bool noTracking = true, bool noIncludes = false);
+        Task<IEnumerable<EventDTO?>> GetFutureEventsAsync(bool noTracking = true, bool noIncludes = false);
+        IEnumerable<EventDTO?> GetFutureEvents(bool noTracking = true, bool noIncludes = false);
+        Task<IEnumerable<EventDTO?>> GetPastEventsAsync(bool noTracking = true, bool noIncludes = false);
+        IEnumerable<EventDTO?> GetPastEvents(bool noTracking = true, bool noIncludes = false);
     }
 }

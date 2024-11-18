@@ -49,6 +49,52 @@ namespace App.DAL.EF.Repositories
             return Mapper.Map(await base.CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(e => e.Id.Equals(id)));
         }
 
+        public IEnumerable<EventDTO?> GetFutureEvents(bool noTracking = true, bool noIncludes = false)
+        {
+            var dateTime = DateTime.Now;
+            return CreateQuery(noTracking)
+                .Select(e => Mapper.Map(e))
+                .Where(e => e.EventDateAndTime >= dateTime)
+                .ToList();
+        }
+
+        public async Task<IEnumerable<EventDTO?>> GetFutureEventsAsync(bool noTracking = true, bool noIncludes = false)
+        {
+            var dateTime = DateTime.Now;
+            return await CreateQuery(noTracking)
+                .Select(e => Mapper.Map(e))
+                .Where(e => e.EventDateAndTime >= dateTime)
+                .ToListAsync();
+        }
+
+        public int GetNumberOfAttendees(int eventId, bool noTracking = true, bool noIncludes = false)
+        {
+            return CreateQuery(noTracking, noIncludes).Count(e => e.Attendees!.Any(e => e.EventId == eventId));
+        }
+
+        public async Task<int> GetNumberOfAttendeesAsync(int eventId, bool noTracking = true, bool noIncludes = false)
+        {
+            return (await CreateQuery(noTracking, noIncludes).CountAsync(e => e.Attendees!.Any(e => e.EventId == eventId)));
+        }
+
+        public IEnumerable<EventDTO?> GetPastEvents(bool noTracking = true, bool noIncludes = false)
+        {
+            var dateTime = DateTime.Now;
+            return CreateQuery(noTracking)
+                .Select(e => Mapper.Map(e))
+                .Where(e => e.EventDateAndTime < dateTime)
+                .ToList();
+        }
+
+        public async Task<IEnumerable<EventDTO?>> GetPastEventsAsync(bool noTracking = true, bool noIncludes = false)
+        {
+            var dateTime = DateTime.Now;
+            return await CreateQuery(noTracking)
+                .Select(e => Mapper.Map(e))
+                .Where(e => e.EventDateAndTime < dateTime)
+                .ToListAsync();
+        }
+
         protected IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {
             var query = base.CreateQuery(noTracking, noIncludes);

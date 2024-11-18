@@ -32,5 +32,9 @@ namespace WebApp.ViewModels
         public string? AdditionalInfo { get; set; }
 
         
+        [DisplayName("Osalejate arv")]
+        public int? NumberOfAttendees { get; set; }
+
+
     }
 }

@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Üritused";
+    var dateTime = DateTime.Now.ToLocalTime();
 }
 
 <h1>Üritused</h1>
@@ -26,9 +27,9 @@
                 @Html.DisplayNameFor(model => model.Location)
             </th>
 
-            @* <th>
-                @Html.DisplayNameFor(model => model.AdditionalInfo)
-            </th>  *@
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfAttendees)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -41,7 +42,7 @@
                 </td>
                 <td>
                     <a style="text-decoration:none" asp-controller="Events" asp-action="ListOfAttendees" asp-route-id="@item.Id">@item.Name</a>
-                    @* @Html.DisplayFor(modelItem => item.Name) *@
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EventDateAndTime)
@@ -50,23 +51,36 @@
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
                 <td>
-                    <a style="text-decoration:none" asp-controller="Attendees" asp-action="Create" asp-route-id="@item.Id">OSAVÕTJAD</a>
+                    @Html.DisplayFor(modelItem => item.NumberOfAttendees)
                 </td>
-                @* <td>
-                    @Html.DisplayFor(modelItem => item.AdditionalInfo)
-                </td>  *@
                 <td>
-                    <form method="post" asp-controller="Events" asp-action="Delete" asp-route-id="@item.Id">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-link text-danger" aria-label="Delete">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                            </svg>
-                        </button>
-                    </form> 
-                    @* <a style="text-decoration:none" asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id">MUUDA</a> *@
+                    <a style="text-decoration:none" asp-controller="Attendees" asp-action="Create" asp-route-id="@item.Id">OSAVÕTJAD</a>
+
                 </td>
+                <td>
+                    @if (dateTime <= item.EventDateAndTime)
+                    {
+                        
+                        <form method="post" asp-controller="Events" asp-action="Delete" asp-route-id="@item.Id">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link text-danger" aria-label="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                </svg>
+                            </button>
+                        </form>
+                        
+                    }
+                    else
+                    {
+                        
+                    }
+
+
+
+
+
             </tr>
         }
     </tbody>
