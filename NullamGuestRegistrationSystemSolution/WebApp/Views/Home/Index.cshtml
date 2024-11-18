@@ -2,7 +2,7 @@
 @model IEnumerable<IndexEventVM>
 
 @{
-    ViewData["Title"] = "Üritused";
+    ViewData["Title"] = "Avaleht";
 }
 
 <h1>Üritused</h1>
@@ -25,10 +25,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Location)
             </th>
-
-            @* <th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfAttendees)
+            </th>  
+            <th>
                 @Html.DisplayNameFor(model => model.AdditionalInfo)
-            </th>  *@
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -41,7 +43,6 @@
                 </td>
                 <td>
                     <a style="text-decoration:none" asp-controller="Events" asp-action="ListOfAttendees" asp-route-id="@item.Id">@item.Name</a>
-                    @* @Html.DisplayFor(modelItem => item.Name) *@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EventDateAndTime)
@@ -50,11 +51,14 @@
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfAttendees)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdditionalInfo)
+                </td>
+                <td>
                     <a style="text-decoration:none" asp-controller="Attendees" asp-action="Create" asp-route-id="@item.Id">OSAVÕTJAD</a>
                 </td>
-                @* <td>
-                    @Html.DisplayFor(modelItem => item.AdditionalInfo)
-                </td>  *@
                 <td>
                     <form method="post" asp-controller="Events" asp-action="Delete" asp-route-id="@item.Id">
                         @Html.AntiForgeryToken()

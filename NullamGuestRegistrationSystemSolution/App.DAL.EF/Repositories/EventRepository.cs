@@ -49,7 +49,17 @@ namespace App.DAL.EF.Repositories
             return Mapper.Map(await base.CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(e => e.Id.Equals(id)));
         }
 
-        protected IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
+        public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
+        {
+            return CreateQuery(noTracking, noIncludes).Count(a => a.Attendees!.Any(a => a.EventId == eventId));
+        }
+
+        public async Task<int> NumberOfAttendeesPerEventAsync(int eventId, bool noTracking = true, bool noIncludes = false)
+        {
+            return (await CreateQuery(noTracking, noIncludes).CountAsync(a => a.Attendees!.Any(a => a.EventId == eventId)));
+        }
+
+        protected override IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {
             var query = base.CreateQuery(noTracking, noIncludes);
             if (noTracking) query = query.AsNoTracking();

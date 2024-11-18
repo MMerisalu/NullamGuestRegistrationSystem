@@ -151,17 +151,18 @@ namespace WebApp.Controllers
         {
             var eventVms = new List<IndexEventVM>();
             int numberOfEvents = events!.Count();
+            var numberOfAttendeesPerEvent = 0;
             for (int i = 0; i < numberOfEvents; i++)
             {
-                var vm = new IndexEventVM()
-                {
-                    Id = events![i].Id,
-                    LineNumber = i + 1,
-                    Name = events[i].Name,
-                    EventDateAndTime = events[i].EventDateAndTime,
-                    Location = events[i].Location,
-                    AdditionalInfo = events[i].AdditionalInfo
-                };
+                var vm = new IndexEventVM();
+                vm.Id = events![i].Id;
+                vm.LineNumber = i + 1;
+                vm.Name = events[i].Name;
+                vm.EventDateAndTime = events[i].EventDateAndTime;
+                vm.Location = events[i].Location;
+                numberOfAttendeesPerEvent = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
+                vm.NumberOfAttendees = numberOfAttendeesPerEvent;
+                vm.AdditionalInfo = events[i].AdditionalInfo;
                 eventVms.Add(vm);
             }
             return eventVms;

@@ -31,6 +31,7 @@ namespace WebApp.ViewModels
         [DisplayName("Lisainfo")]
         public string? AdditionalInfo { get; set; }
 
-        
+        [DisplayName("Osavõtjate arv")]
+        public int NumberOfAttendees { get; set; }
     }
 }
