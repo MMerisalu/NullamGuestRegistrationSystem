@@ -51,12 +51,14 @@ namespace App.DAL.EF.Repositories
 
         public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            return CreateQuery(noTracking, noIncludes).Count(a => a.Attendees!.Any(a => a.EventId == eventId));
+            
+            var result = CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees).Count(a => a.EventId == eventId);
+            return result;
         }
 
         public async Task<int> NumberOfAttendeesPerEventAsync(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            return (await CreateQuery(noTracking, noIncludes).CountAsync(a => a.Attendees!.Any(a => a.EventId == eventId)));
+            return (await CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees).CountAsync(a  => a.EventId == eventId));
         }
 
        
