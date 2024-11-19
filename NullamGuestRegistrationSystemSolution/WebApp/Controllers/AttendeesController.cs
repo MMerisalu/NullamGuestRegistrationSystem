@@ -88,16 +88,24 @@ namespace WebApp.Controllers
                 {
                     attendeeId = _uow.Attendees.GetAttendeeId(AttendeeType.Company, null, null, vm.CompanyName);
                 }
+                var eventDb = await _uow.Events.GetEventByIdAsync(id);
                 if (attendeeId != null)
                 {
                     var eventAndAttendee = new EventAndAttendeeDTO()
                     {
                         EventId = id,
                         AttendeeId = attendeeId.Value,
+
                     };
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
                 };
                 await _uow.SaveChangesAsync();
+                if (eventDb != null)
+                {
+                    eventDb.NumberOfAttendees += 1;
+                    _uow.Events.Update(eventDb);
+                    await _uow.SaveChangesAsync();
+                }
                 return RedirectToAction("Index", "Home");
             }
             return View(vm);
@@ -197,12 +205,12 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(vm);
         }
-                
+
 
         // POST: Attendees/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -212,8 +220,8 @@ namespace WebApp.Controllers
             var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
             if (attendee != null)
             {
-                
-                 await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
+
+                await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
             }
 
             await _uow.SaveChangesAsync();
