@@ -22,9 +22,17 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             var eventsController = new EventsController(_uow);
             var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync();
             var events = eventsController.CreateEventIndexVM(eventsDb);
+            var eventsLoaded = 0;
+            if (eventsLoaded > 1 )
+            {
+                 events = eventsController.UpdateEventIndexVM(eventsDb);
+            }
+            
+            
             return View(events);
         }
 
@@ -39,6 +47,6 @@ namespace WebApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        
+       
     }
 }

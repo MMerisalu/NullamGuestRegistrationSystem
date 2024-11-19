@@ -147,30 +147,7 @@ namespace WebApp.Controllers
             return await _uow.Events.ExistsAsync(id);
         }
 
-        public IEnumerable<IndexEventVM> CreateEventIndexVM(List<EventDTO>? events)
-        {
-            
-            var eventVms = new List<IndexEventVM>();
-
-            int numberOfEvents = events!.Count();
-            var numberOfAttendeesPerEvent = 0;
-            for (int i = 0; i < numberOfEvents; i++)
-            {
-                var vm = new IndexEventVM();
-                vm.Id = events![i].Id;
-                vm.LineNumber = i + 1;
-                vm.Name = events[i].Name;
-                vm.EventDateAndTime = events[i].EventDateAndTime;
-                vm.Location = events[i].Location;
-                numberOfAttendeesPerEvent = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
-                vm.NumberOfAttendees = numberOfAttendeesPerEvent;
-                vm.AdditionalInfo = events[i].AdditionalInfo;
-
-                eventVms.Add(vm);
-            }
-            return eventVms;
-        }
-
+        
         public async Task<IActionResult> ListOfAttendees([FromRoute] int id)
         {
             var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
@@ -192,5 +169,10 @@ namespace WebApp.Controllers
             }
             return View(attendeeVms);
         }
+
+       
+           
+
+
     }
 }
