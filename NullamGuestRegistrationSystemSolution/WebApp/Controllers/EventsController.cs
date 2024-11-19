@@ -151,7 +151,7 @@ namespace WebApp.Controllers
         {
             var eventVms = new List<IndexEventVM>();
             int numberOfEvents = events!.Count();
-            var numberOfAttendeesPerEvent = 0;
+            
             for (int i = 0; i < numberOfEvents; i++)
             {
                 var vm = new IndexEventVM();
