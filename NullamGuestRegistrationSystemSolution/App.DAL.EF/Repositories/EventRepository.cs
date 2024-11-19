@@ -1,6 +1,7 @@
 ﻿using App.Contracts.DAL.IAppRepositories;
 using App.DAL.DTO;
 using App.Domain;
+using App.Enum;
 using Base.Contracts;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
@@ -51,17 +52,23 @@ namespace App.DAL.EF.Repositories
 
         public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            
-          return CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees).Count(a => a.EventId == eventId);
-          
-        }
+            int currentNumberOfAttendees = 0;
 
-        public async Task<int> NumberOfAttendeesPerEventAsync(int eventId, bool noTracking = true, bool noIncludes = false)
-        {
-            return (await CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees).CountAsync(a  => a.EventId == eventId));
+            var attendees = RepoDbContext.Attendees.Where(a => a.Events.All(a => a.EventId == eventId)).ToList();
+            foreach (var attendee in attendees)
+            {
+                if (attendee.AttendeeType == AttendeeType.Person)
+                {
+                    currentNumberOfAttendees++;
+                }
+                else if (attendee.AttendeeType == AttendeeType.Company)
+                {
+                    currentNumberOfAttendees += attendee.NumberOfPeopleFromCompany!.Value;
+                }
+            }
+            return currentNumberOfAttendees;
         }
-
-       
+        
         protected override IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
 
         {

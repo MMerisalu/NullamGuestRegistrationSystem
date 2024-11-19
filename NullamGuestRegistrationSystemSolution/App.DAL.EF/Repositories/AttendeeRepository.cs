@@ -73,6 +73,27 @@ namespace App.DAL.EF.Repositories
             return null;
         }
 
+        
+
+        //public async Task<int> NumberOfAttendeesPerEventAsync(int eventId, AttendeeType? attendeeType = null, bool noTracking = true, bool noIncludes = false)
+        //{
+        //    int currentNumberOfAttendees = 0;
+
+        //    var attendees = CreateQuery(noTracking, noIncludes).Where(a => a.Events.All(a => a.EventId == eventId)).ToList();
+        //    foreach (var attendee in attendees)
+        //    {
+        //        if (attendee.AttendeeType == AttendeeType.Person)
+        //        {
+        //            currentNumberOfAttendees++;
+        //        }
+        //        else if (attendee.AttendeeType == AttendeeType.Company)
+        //        {
+        //            currentNumberOfAttendees += attendee.NumberOfPeopleFromCompany!.Value;
+        //        }
+        //    }
+        //    return currentNumberOfAttendees;
+        //}
+
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {
             {

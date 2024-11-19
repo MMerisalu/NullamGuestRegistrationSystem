@@ -88,7 +88,7 @@ namespace WebApp.Controllers
                 {
                     attendeeId = _uow.Attendees.GetAttendeeId(AttendeeType.Company, null, null, vm.CompanyName);
                 }
-                var eventDb = await _uow.Events.GetEventByIdAsync(id);
+                
                 if (attendeeId != null)
                 {
                     var eventAndAttendee = new EventAndAttendeeDTO()
@@ -100,12 +100,9 @@ namespace WebApp.Controllers
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
                 };
                 await _uow.SaveChangesAsync();
-                if (eventDb != null)
-                {
-                    eventDb.NumberOfAttendees += 1;
-                    _uow.Events.Update(eventDb);
-                    await _uow.SaveChangesAsync();
-                }
+
+                
+
                 return RedirectToAction("Index", "Home");
             }
             return View(vm);

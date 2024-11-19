@@ -1,4 +1,5 @@
 ﻿using App.DAL.DTO;
+using App.Enum;
 using Base.Contracts.DAL;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace App.Contracts.DAL.IAppRepositories
         TEntity? GetEventById(int id, bool noTracking = true, bool noIncludes = false);
         Task<IEnumerable<TEntity?>> GetAllEventsDTOOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
         IEnumerable<TEntity?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false);
-        Task<int> NumberOfAttendeesPerEventAsync(int eventId, bool noTracking = true, bool noIncludes = false);
         int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false);
- 
+
+
     }
 }

@@ -25,6 +25,6 @@ namespace App.Contracts.DAL.IAppRepositories
         int? GetAttendeeId(AttendeeType attendeeType,string? surName = null, string? givenName = null, string? companyName = null, bool noTracking = true, bool noIncludes = false);
         Task<TEntity?> GetAttendeeByIdAsync(int id, bool noTracking = true, bool noIncludes = false);
         TEntity? GetAttendeeById(int id, bool noTracking = true, bool noIncludes = false);
-
+        
     }
 }
