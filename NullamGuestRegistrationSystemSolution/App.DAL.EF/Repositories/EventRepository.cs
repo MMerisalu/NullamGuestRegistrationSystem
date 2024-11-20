@@ -20,6 +20,18 @@ namespace App.DAL.EF.Repositories
         {
         }
 
+        public IEnumerable<int>? GetAllAttendeesForAnEvent(int eventId, bool noTracking = true, bool noIncludes = false)
+        {
+            var attendees = CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees.Where(a => a.EventId.Equals(eventId))).Select(a => a.Id).ToList();
+            return attendees;
+        }
+
+        //public async Task<IEnumerable<int>>? GetAllAttendeesForAnEventAsync(int eventId, bool noTracking = true, bool noIncludes = false)
+        //{
+        //    var attendees = CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees.Where(a => a.EventId.Equals(eventId))).Select(a => a.Id).ToList();
+        //    return attendees;
+        //}
+
         public IEnumerable<EventDTO?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
            return CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToList();

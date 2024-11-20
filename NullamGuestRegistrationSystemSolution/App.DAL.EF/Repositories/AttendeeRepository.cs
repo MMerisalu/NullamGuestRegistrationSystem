@@ -32,9 +32,10 @@ namespace App.DAL.EF.Repositories
 
         public IEnumerable<AttendeeDTO?> GetAllAttendeesOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
-            return CreateQuery(noTracking, noIncludes)
+            var result = CreateQuery(noTracking, noIncludes)
                 .OrderBy(a => a.GivenName).ThenBy(a => a.SurName).
                 OrderBy(a => a.CompanyName).Select(a => Mapper.Map(a)).ToList();
+            return result ;
         }
 
         public async Task<IEnumerable<AttendeeDTO?>> GetAllAttendeesOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
@@ -73,7 +74,41 @@ namespace App.DAL.EF.Repositories
             return null;
         }
 
-        
+        public bool? IsAttendeeAlreadyRegistered(AttendeeType attendeeType, string? personalIdentifier = null, string? companyName = null, string? registeryCode = null, bool noTracking = true, bool noIncludes = false)
+        {
+            bool isRegistered = false;
+            if (attendeeType == AttendeeType.Person)
+            {
+                isRegistered = CreateQuery(noTracking, noIncludes).Any(a => a.PersonalIdentifier!.Equals(personalIdentifier));
+                return isRegistered;
+            }
+            else if (attendeeType == AttendeeType.Company)
+            {
+                isRegistered = CreateQuery(noTracking, noIncludes).Any(a => a.CompanyName!.Equals(companyName) && a.RegistryCode!.Equals(registeryCode));
+                return isRegistered;
+            }
+            // Should not get here
+            return null;
+        }
+
+        public async Task<bool?> IsAttendeeAlreadyRegisteredAsync(AttendeeType attendeeType, string? personalIdentifier = null, string? companyName = null, string? registeryCode = null, bool noTracking = true, bool noIncludes = false)
+        {
+            bool isRegistered = false;
+            if (attendeeType == AttendeeType.Person)
+            {
+                isRegistered = await CreateQuery(noTracking, noIncludes).AnyAsync(a => a.PersonalIdentifier!.Equals(personalIdentifier));
+                return isRegistered;
+            }
+            else if (attendeeType == AttendeeType.Company)
+            {
+                isRegistered = await CreateQuery(noTracking, noIncludes).AnyAsync(a => a.CompanyName!.Equals(companyName) && a.RegistryCode!.Equals(registeryCode));
+                return isRegistered;
+            }
+            // Should not get here
+            return null;
+        }
+
+
 
         //public async Task<int> NumberOfAttendeesPerEventAsync(int eventId, AttendeeType? attendeeType = null, bool noTracking = true, bool noIncludes = false)
         //{

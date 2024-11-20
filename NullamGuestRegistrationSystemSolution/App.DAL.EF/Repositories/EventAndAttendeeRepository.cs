@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace App.DAL.EF.Repositories
 {
-    public class EventAndAttendeeRepository : BaseEntityRepository<EventAndAttendee, EventAndAttendeeDTO, int, AppDbContext>, IEventAndAttendeRepository
+    public class EventAndAttendeeRepository : BaseEntityRepository<EventAndAttendee, EventAndAttendeeDTO, int, AppDbContext>, IEventAndAttendeeRepository
     {
         public EventAndAttendeeRepository(AppDbContext dbContext, IMapper<EventAndAttendee, EventAndAttendeeDTO> mapper) : base(dbContext, mapper)
         {

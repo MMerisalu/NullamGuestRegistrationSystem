@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Contracts.DAL.IAppRepositories
 {
-    public interface IEventAndAttendeRepository : IEntityRepository<EventAndAttendeeDTO, int>
+    public interface IEventAndAttendeeRepository : IEntityRepository<EventAndAttendeeDTO, int>
     {
     }
 }

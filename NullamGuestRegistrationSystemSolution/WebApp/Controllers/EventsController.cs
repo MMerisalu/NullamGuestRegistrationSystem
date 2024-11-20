@@ -14,6 +14,7 @@ using App.Contracts.DAL;
 using App.DAL.DTO;
 using Microsoft.Extensions.Logging;
 using App.Enum;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApp.Controllers
 {
@@ -130,11 +131,25 @@ namespace WebApp.Controllers
         
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
             var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
+            var eventAndAttendeeIds = _uow.Events.GetAllAttendeesForAnEvent(id);
             if (eventDb != null)
             {
-
-                await _uow.Events.RemoveAsync(eventDb.Id, noIncludes: true);
+                
+                if (eventAndAttendeeIds.IsNullOrEmpty())
+                {
+                    await _uow.Events.RemoveAsync(eventDb.Id, noIncludes: true);
+                }
+                else
+                {
+                    foreach (var eventAndAttendeeId in eventAndAttendeeIds!)
+                    {
+                        await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendeeId, noIncludes: true );
+                    }
+                    await _uow.SaveChangesAsync();
+                    await _uow.Events.RemoveAsync(eventDb.Id, noIncludes: true);
+                }
             }
 
             await _uow.SaveChangesAsync();

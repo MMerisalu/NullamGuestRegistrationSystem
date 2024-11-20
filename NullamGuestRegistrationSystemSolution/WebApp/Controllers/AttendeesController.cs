@@ -75,7 +75,23 @@ namespace WebApp.Controllers
                 }
 
                 attendee.PaymentMethodId = vm.PaymentMethodId;
-
+                var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(vm.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                if (isRegistered.Value == true)
+                {
+                    if (vm.AttendeeType == AttendeeType.Person)
+                    {
+                        ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
+                        
+                        return View(vm);
+                    }
+                    else if (vm.AttendeeType == AttendeeType.Company)
+                    {
+                        ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                        ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                        return View(vm);
+                    }
+                }
+                
                 _uow.Attendees.Add(attendee);
                 await _uow.SaveChangesAsync();
                 int? attendeeId = null;

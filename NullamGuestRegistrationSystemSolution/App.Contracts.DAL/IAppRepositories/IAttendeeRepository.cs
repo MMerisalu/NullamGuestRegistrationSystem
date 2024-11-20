@@ -25,6 +25,8 @@ namespace App.Contracts.DAL.IAppRepositories
         int? GetAttendeeId(AttendeeType attendeeType,string? surName = null, string? givenName = null, string? companyName = null, bool noTracking = true, bool noIncludes = false);
         Task<TEntity?> GetAttendeeByIdAsync(int id, bool noTracking = true, bool noIncludes = false);
         TEntity? GetAttendeeById(int id, bool noTracking = true, bool noIncludes = false);
+        Task<bool?> IsAttendeeAlreadyRegisteredAsync(AttendeeType attendeeType, string? personalIdentifier = null, string? companyName = null, string? registeryCode = null, bool noTracking = true, bool noIncludes = false);
+        bool? IsAttendeeAlreadyRegistered(AttendeeType attendeeType, string? personalIdentifier = null, string? companyName = null, string? registeryCode = null, bool noTracking = true, bool noIncludes = false);
         
     }
 }
