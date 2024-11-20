@@ -188,9 +188,5 @@ namespace WebApp.Controllers
             return View(attendeeVms);
         }
 
-       
-           
-
-
     }
 }

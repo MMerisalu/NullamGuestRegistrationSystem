@@ -54,7 +54,7 @@ namespace App.DAL.EF.Repositories
         {
             int currentNumberOfAttendees = 0;
 
-            var attendees = RepoDbContext.Attendees.Where(a => a.Events.All(a => a.EventId == eventId)).ToList();
+            var attendees = RepoDbContext.Attendees.Select(a => a ).Where(a => a.Events.Any(e => e.EventId == eventId )).ToList();
             foreach (var attendee in attendees)
             {
                 if (attendee.AttendeeType == AttendeeType.Person)
