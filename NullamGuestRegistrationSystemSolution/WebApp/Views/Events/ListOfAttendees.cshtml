@@ -39,6 +39,9 @@
                     @Html.DisplayFor(modelItem => item.Code)
                 </td>
                 <td>
+                    <a style="text-decoration:none" asp-controller="Attendees" asp-action="AddAttendeeToAnotherEvent" asp-route-id="@item.Id">Lisa osavõtja teisele üritusele</a>
+                </td>
+                <td>
                     <form method="post" asp-controller="Attendees" asp-action="Delete" asp-route-id="@item.Id">
 
                         <link class="link-danger" />

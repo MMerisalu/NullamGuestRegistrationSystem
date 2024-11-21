@@ -296,6 +296,14 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> AddAttendeeToAnotherEvent([FromRoute] int id)
+        {
+            var vm = new AddAttendeeToAnotherEventVM();
+            return View(vm);
+        }
+
         private async Task<bool> AttendeeExists(int id)
         {
             return await _uow.Attendees.ExistsAsync(id);
