@@ -193,11 +193,11 @@ namespace WebApp.Controllers
                 {
                     var vm = new ListOfAttendeeVM();
                     vm.Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!;
-                    vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i].PersonalIdentifier : attendees?[i]!.RegistryCode;
-                    vm.Id = attendees[i].Id;
+                    vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.PersonalIdentifier : attendees?[i]!.RegistryCode!;
+                    vm.Id = attendees![i]!.Id;
+                    vm.NumberOfAttendees = attendees[i].AttendeeType == AttendeeType.Company ? attendees[i].NumberOfPeopleFromCompany.Value : 1;
                     
                     attendeeVms.Add(vm);
-
                 }
             }
             return View(attendeeVms);

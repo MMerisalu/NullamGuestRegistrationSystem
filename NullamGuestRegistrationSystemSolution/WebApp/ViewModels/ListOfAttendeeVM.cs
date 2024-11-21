@@ -12,12 +12,9 @@ namespace WebApp.ViewModels
         public string Name { get; set; } = default!;
 
 
-        //[DisplayName("Isikukood")]
-        //public string? PersonalIdentifier { get; set; }
+        [DisplayName("Osavõtjate arv")]
+        public int NumberOfAttendees { get; set; }
 
-
-        //[DisplayName("Ettevõtte registrikood")]
-        //public string? RegistryCode { get; set; }
 
         [DisplayName("Isikukood / registrikood ")]
         public string Code { get; set; } = default!;
