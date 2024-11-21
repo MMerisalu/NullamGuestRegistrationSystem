@@ -1,5 +1,4 @@
 ﻿using App.Enum;
-using App.Enum;
 using Base.Domain;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel;
@@ -8,13 +7,9 @@ using UoN.ExpressiveAnnotations.Net8.Attributes;
 
 namespace WebApp.ViewModels
 {
-    
-
-    public class CreateEditAttendeeVM: DomainEntityId<int>
+    public class EditAttendeeVM : DomainEntityId<int>
     {
-
         [DisplayName("Osavõtja tüüp")]
-        [Required(ErrorMessage = "Osavõtja tüübi valimine on kohustuslik!")]
         [EnumDataType(typeof(AttendeeType))]
         public AttendeeType? AttendeeType { get; set; }
 
@@ -24,14 +19,12 @@ namespace WebApp.ViewModels
         [DisplayName("Eesnimi")]
         public string? SurName { get; set; }
 
-        
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Person")]
         [MaxLength(64, ErrorMessage = "Väljale perekonnanimi sisestava teksti pikkus on maksimaalselt 64 tähemärki!")]
         [StringLength(64, MinimumLength = 1)]
         [DisplayName("Perekonnanimi")]
         public string? GivenName { get; set; }
 
-        
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Person")]
         [RegularExpression("^[0-9]{11,11}$", ErrorMessage = "Eesti isikukood pikkuseks on 11 numbrit! " +
             "Palun sisestage uus isikukood!")]
@@ -50,7 +43,6 @@ namespace WebApp.ViewModels
         [DisplayName("Ettevõtte juurdiline nimi")]
         public string? CompanyName { get; set; }
 
-        //[Required(ErrorMessage = "Väli ettevõtte registrikood on kohustuslik")]
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
         [RegularExpression("^[0-9]{8,8}$", ErrorMessage = "Ettevõtte registrikoodi pikkuseks on 8 numbrit! " +
             "Palun sisestage uus registrikood!")]
@@ -59,9 +51,8 @@ namespace WebApp.ViewModels
         public string? RegistryCode { get; set; }
 
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
-        
-        [DisplayName("Ettevõttest tulevate osavõtjate arv")]
 
+        [DisplayName("Ettevõttest tulevate osavõtjate arv")]
 
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
         [RegularExpression("^(?:[1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|250)$", ErrorMessage = "Ettevõttest tulevate isikute arv võib olla 1 kuni 250. Palun sisestage ettevõttest tulevate isikute arv uuesti.")]
@@ -69,9 +60,9 @@ namespace WebApp.ViewModels
 
         [MaxLength(5000)]
         [DisplayName("Lisainfo")]
+
         public string? CompanyAdditionalInfo { get; set; }
         [DisplayName("Maksemeetod")]
-
 
         [Required(ErrorMessage = "Maksemeetodi valimine on kohustuslik!")]
         public int PaymentMethodId { get; set; }

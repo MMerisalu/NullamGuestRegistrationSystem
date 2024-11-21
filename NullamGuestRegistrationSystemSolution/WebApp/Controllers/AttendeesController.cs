@@ -34,7 +34,7 @@ namespace WebApp.Controllers
         // GET: Attendees/Create
         public async Task<IActionResult> Create()
         {
-            var vm = new CreateEditAttendeeVM();
+            var vm = new CreateAttendeeVM();
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
             vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
             return View(vm);
@@ -45,7 +45,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost()]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateEditAttendeeVM vm, [FromRoute] int id)
+        public async Task<IActionResult> Create(CreateAttendeeVM vm, [FromRoute] int id)
         {
             var attendee = new AttendeeDTO();
 
@@ -94,7 +94,7 @@ namespace WebApp.Controllers
                         return View(vm);
                     }
                 }
-                
+
                 _uow.Attendees.Add(attendee);
                 await _uow.SaveChangesAsync();
                 int? attendeeId = null;
@@ -107,7 +107,7 @@ namespace WebApp.Controllers
                 {
                     attendeeId = _uow.Attendees.GetAttendeeId(AttendeeType.Company, null, null, vm.CompanyName);
                 }
-                
+
                 if (attendeeId != null)
                 {
                     var eventAndAttendee = new EventAndAttendeeDTO()
@@ -120,17 +120,18 @@ namespace WebApp.Controllers
                 };
                 await _uow.SaveChangesAsync();
 
-                
+
 
                 return RedirectToAction("Index", "Home");
             }
             return View(vm);
         }
 
+
         // GET: Attendees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var vm = new CreateEditAttendeeVM();
+            var vm = new EditAttendeeVM();
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
             vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
 
@@ -166,12 +167,13 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
+
         // POST: Attendees/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CreateEditAttendeeVM vm)
+        public async Task<IActionResult> Edit(int id, EditAttendeeVM vm)
         {
             if (id != vm.Id)
             {
@@ -192,7 +194,7 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    if (vm.AttendeeType == AttendeeType.Person)
+                    if (attendeeDb.AttendeeType!.Value == AttendeeType.Person)
                     {
                         attendeeDb.SurName = vm.SurName;
                         attendeeDb.GivenName = vm.GivenName;
@@ -200,13 +202,50 @@ namespace WebApp.Controllers
                         attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
 
                     }
-                    else if (vm.AttendeeType == AttendeeType.Company)
+                    else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                     {
                         attendeeDb.CompanyName = vm.CompanyName;
                         attendeeDb.RegistryCode = vm.RegistryCode;
-                        attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany;
+                        attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
                         attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
                     }
+
+                    var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                    if (isRegistered.Value == true)
+                    {
+                        if (vm.AttendeeType == AttendeeType.Person)
+                        {
+                            ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
+                            var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
+                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                            return View(vm);
+                        }
+                        else if (vm.AttendeeType == AttendeeType.Company)
+                        {
+                            ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                            ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                            var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
+                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                            return View(vm);
+                        }
+                    }
+
+                    if (attendeeDb.AttendeeType == AttendeeType.Person)
+                    {
+                        attendeeDb.SurName = vm.SurName;
+                        attendeeDb.GivenName = vm.GivenName;
+                        attendeeDb.PersonalIdentifier = vm.PersonalIdentifier;
+                        attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
+                        attendeeDb.PaymentMethodId = vm.PaymentMethodId;
+                    }
+                    else if (attendeeDb.AttendeeType == AttendeeType.Company)
+                    {
+                        attendeeDb.CompanyName = vm.CompanyName;
+                        attendeeDb.RegistryCode = vm.RegistryCode;
+                        attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
+                        attendeeDb.PaymentMethodId = vm.PaymentMethodId;
+                    }
+
                     _uow.Attendees.Update(attendeeDb);
                     await _uow.SaveChangesAsync();
                 }

@@ -32,9 +32,8 @@
                 <td>
                     <a style="text-decoration:none" asp-action="Edit" asp-controller="Attendees" asp-route-id="@item.Id">@item.Name</a>
                 </td>
-                
                 <td>
-                     @Html.DisplayFor(modelItem => item.NumberOfAttendees)
+                    @Html.DisplayFor(modelItem => item.NumberOfAttendees)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Code)
