@@ -45,6 +45,12 @@ namespace App.DAL.EF.Repositories
                OrderBy(a => a.CompanyName).Select(a => Mapper.Map(a)).ToListAsync());
         }
 
+        public IEnumerable<int>? GetAllEventsForAnAttendee(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            var results = CreateQuery(noTracking, noIncludes).SelectMany(a => a.Events!.Where(a => a.AttendeeId == attendeeId).Select(a => a.Id).ToList());
+            return results;
+        }
+
         public AttendeeDTO? GetAttendeeById(int id, bool noTracking = true, bool noIncludes = false)
         {
             return Mapper.Map(CreateQuery(noTracking, noIncludes).FirstOrDefault(a => a.Id == id));
@@ -106,6 +112,18 @@ namespace App.DAL.EF.Repositories
             }
             // Should not get here
             return null;
+        }
+
+        public bool IsAttendeeAttendingAnyEvents(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            var result = CreateQuery(noTracking, noIncludes).Any(a => a.Events!.Any(a => a.AttendeeId == attendeeId));
+            return result;
+        }
+
+        public async Task<bool> IsAttendeeAttendingAnyEventsAsync(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            var result = await CreateQuery(noTracking, noIncludes).AnyAsync(a => a.Events!.Any(a => a.AttendeeId == attendeeId));
+            return result;
         }
 
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)

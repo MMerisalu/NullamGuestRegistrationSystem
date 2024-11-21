@@ -273,10 +273,23 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
-            if (attendee != null)
+            var hasEvents = await _uow.Attendees.IsAttendeeAttendingAnyEventsAsync(attendee!.Id);
+            if (hasEvents)
             {
+                var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
+                var eventAndAttendeeIds = _uow.Attendees.GetAllEventsForAnAttendee(attendee.Id);
+                foreach (var eventAndAttendeeId in eventAndAttendeeIds!)
+                {
+                    await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendeeId);
+                }
+            }
 
-                await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
+            else
+            {
+                if (attendee != null)
+                {
+                    await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
+                }
             }
 
             await _uow.SaveChangesAsync();
