@@ -338,7 +338,7 @@ namespace WebApp.Controllers
             };
              _uow.EventsAndAttendes.Add(eventAndAttendee);
             await _uow.SaveChangesAsync();
-            return View(vm);
+            return RedirectToAction("Index", "Home");
           }
 
             
