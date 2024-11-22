@@ -14,7 +14,7 @@
             @if(Model.AttendeeType!.Value == AttendeeType.Company) {
                 <div class="form-group form-check" id="is_number_of_attendees_changed_div">
                     <label asp-for="IsNumberOfPeopleFromCompanyChanged" class="form-check-label" style="display:block">
-                        <input asp-for="IsNumberOfPeopleFromCompanyChanged" style="display:block" class="form-check-input" />  @Html.DisplayNameFor(model => model.IsNumberOfPeopleFromCompanyChanged)
+                        <input asp-for="IsNumberOfPeopleFromCompanyChanged" style="display:block" class="form-check-input" onchange="ShowHide(this.checked)" />  @Html.DisplayNameFor(model => model.IsNumberOfPeopleFromCompanyChanged)
                     </label>
                 </div>
 
@@ -64,15 +64,21 @@
         function BackToHomePage() {
             window.location.href = '@Url.Action("Index", "Home")';
         }
-        // function ShowHide(value) {
-        //     const companyDiv = document.getElementById("company_fields");
-        //     const personDiv = document.getElementById("person_fields");
-        //     const personStyleDisplay = value == 'Person' ? "block" : "none";
-        //     const companyStyleDisplay = value == 'Company' ? "block" : "none";
-        //     companyDiv.style.display = companyStyleDisplay;
-        //     personDiv.style.display = personStyleDisplay;
-        // }
-        //
+         function ShowHide(value) {
+             const number_of_people_from_company_div = document.getElementById("number_of_people_from_company_div");
+             console.log(number_of_people_from_company_div);
+             console.log(value, typeof value);
+            if(value === true) {
+                number_of_people_from_company_div.style.display = 'block';
+                console.log("test");
+            }
+            else {
+                number_of_people_from_company_div.style.display = 'none';
+            }
+
+            
+         }
+       
 
     </script>
 }

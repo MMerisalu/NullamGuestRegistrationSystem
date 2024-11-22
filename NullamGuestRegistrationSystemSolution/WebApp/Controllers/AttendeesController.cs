@@ -307,8 +307,6 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-
-
             var vm = new AddAttendeeToAnotherEventVM();
             vm.AttendeeType = attendeeDb.AttendeeType!.Value;
             if (vm.AttendeeType.Value == AttendeeType.Company)
@@ -316,6 +314,35 @@ namespace WebApp.Controllers
             vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             return View(vm);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAttendeeToAnotherEvent(AddAttendeeToAnotherEventVM vm, [FromRoute] int id)
+        {
+            var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
+            if (attendeeDb == null)
+            {
+                return NotFound();
+            }
+
+            if (attendeeDb.AttendeeType == AttendeeType.Company &&
+                vm.NumberOfPeopleFromCompany != attendeeDb.NumberOfPeopleFromCompany)
+            {
+                attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
+            }
+
+            var eventAndAttendee = new EventAndAttendeeDTO()
+            {
+                AttendeeId = attendeeDb.Id,
+                EventId = vm.EventId,
+            };
+             _uow.EventsAndAttendes.Add(eventAndAttendee);
+            await _uow.SaveChangesAsync();
+            return View(vm);
+          }
+
+            
+
 
         private async Task<bool> AttendeeExists(int id)
         {

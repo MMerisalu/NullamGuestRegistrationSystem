@@ -15,7 +15,7 @@ namespace WebApp.ViewModels
         [DisplayName("Osavõtjate arvu muutmine?")]
         public bool IsNumberOfPeopleFromCompanyChanged { get; set; }
 
-        public int NumberOfPeopleFromCompany { get; set; }
+        public int? NumberOfPeopleFromCompany { get; set; }
 
         [DisplayName("Üritus")]
 
