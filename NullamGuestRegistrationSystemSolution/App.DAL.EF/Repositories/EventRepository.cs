@@ -26,11 +26,7 @@ namespace App.DAL.EF.Repositories
             return attendees;
         }
 
-        //public async Task<IEnumerable<int>>? GetAllAttendeesForAnEventAsync(int eventId, bool noTracking = true, bool noIncludes = false)
-        //{
-        //    var attendees = CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees.Where(a => a.EventId.Equals(eventId))).Select(a => a.Id).ToList();
-        //    return attendees;
-        //}
+        
 
         public IEnumerable<EventDTO?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
@@ -50,6 +46,34 @@ namespace App.DAL.EF.Repositories
         public async Task<List<EventDTO?>> GetAllEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
         {
             return (await CreateQuery(noTracking, noIncludes).OrderBy(e => e.Name).Select(e => Mapper.Map(e)).ToListAsync());
+        }
+
+        public IEnumerable<EventDTO?> GetAllFutureEventsOrderedByTimeAndName(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            var currentDateTime = DateTime.Now;
+            var futureEvents = CreateQuery(noTracking, noIncludes).OrderBy(e => e.EventDateAndTime.Date)
+                    .ThenBy(e => e.EventDateAndTime.Hour)
+                    .ThenBy(e => e.EventDateAndTime.Minute)
+                    .ThenBy(e => e.Name).Select(e => e)
+                .Where(e => (e.EventDateAndTime >= currentDateTime) && 
+                    !e.Attendees!.Any(e => e.AttendeeId == attendeeId))
+                .ToList();
+            return futureEvents.Select(e => Mapper.Map(e));
+        }
+
+        public async Task<IEnumerable<EventDTO?>> GetAllFutureEventsrderedByTimeAndNameAsync(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            var currentDateTime = DateTime.Now;
+            var futureEvents = await CreateQuery(noTracking, noIncludes)
+                .OrderBy(e => e.EventDateAndTime.Date)
+                    .ThenBy(e => e.EventDateAndTime.Hour)
+                    .ThenBy(e => e.EventDateAndTime.Minute)
+                    .ThenBy(e => e.Name).Select(e => e)
+                .Where(e => (e.EventDateAndTime >= currentDateTime) 
+                && !e.Attendees!.Any(e => e.AttendeeId == attendeeId))
+                .ToListAsync();
+            
+            return futureEvents.Select(e => Mapper.Map(e));
         }
 
         public EventDTO? GetEventById(int id, bool noTracking = true, bool noIncludes = false)

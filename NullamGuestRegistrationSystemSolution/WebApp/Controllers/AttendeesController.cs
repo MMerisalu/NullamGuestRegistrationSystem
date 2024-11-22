@@ -300,7 +300,20 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAttendeeToAnotherEvent([FromRoute] int id)
         {
+           
+            var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
+            if (attendeeDb == null)
+            {
+                return NotFound();
+            }
+
+
+
             var vm = new AddAttendeeToAnotherEventVM();
+            vm.AttendeeType = attendeeDb.AttendeeType!.Value;
+            if (vm.AttendeeType.Value == AttendeeType.Company)
+                vm.NumberOfPeopleFromCompany = attendeeDb.NumberOfPeopleFromCompany!.Value;
+            vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             return View(vm);
         }
 

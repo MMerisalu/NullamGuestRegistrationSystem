@@ -26,5 +26,7 @@ namespace App.DAL.DTO
         public string? AdditionalInfo { get; set; }
 
         public int NumberOfAttendees { get; set; }
+
+        public string? EventDateTimeAndName => $"{EventDateAndTime:g} - {Name}";
     }
 }
