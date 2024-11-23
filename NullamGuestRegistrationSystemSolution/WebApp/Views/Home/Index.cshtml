@@ -56,6 +56,7 @@
                     @Html.DisplayFor(modelItem => item.AdditionalInfo)
                 </td>
                 <td>
+                    <a style="text-decoration:none" asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id">Muuda</a> |
                     <a style="text-decoration:none" asp-controller="Attendees" asp-action="Create" asp-route-id="@item.Id">OSAVÕTJAD</a>
 
                 </td>
