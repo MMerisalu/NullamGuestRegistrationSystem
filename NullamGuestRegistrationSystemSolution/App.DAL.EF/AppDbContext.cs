@@ -24,18 +24,8 @@ public class AppDbContext : DbContext
         base.OnModelCreating(builder);
         foreach (var relationship in builder.Model.GetEntityTypes()
                      .SelectMany(e => e.GetForeignKeys()))
-            relationship.DeleteBehavior = DeleteBehavior.Cascade;
-       // builder.Entity<EventAndAttendee>()
-       //.HasOne(ea => ea.Event)  // Each EventAndAttendee is related to one Event
-       //.WithMany(e => e.Attendees)  // An Event has many EventAndAttendees (representing its Attendees)
-       //.HasForeignKey(ea => ea.EventId)  // The foreign key in EventAndAttendee that references Event
-       //.OnDelete(DeleteBehavior.Restrict);  // Don't cascade delete from Event to EventAndAttendee
-
-       // builder.Entity<EventAndAttendee>()
-       //     .HasOne(ea => ea.Attendee)  // Each EventAndAttendee is related to one Attendee
-       //     .WithMany(a => a.Events)  // An Attendee has many EventAndAttendees (representing its Events)
-       //     .HasForeignKey(ea => ea.AttendeeId)  // The foreign key in EventAndAttendee that references Attendee
-       //     .OnDelete(DeleteBehavior.Cascade);  // Cascade delete from Attendee to EventAndAttendee
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+       
     }
 
 }

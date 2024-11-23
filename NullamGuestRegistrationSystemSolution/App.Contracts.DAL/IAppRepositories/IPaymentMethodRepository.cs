@@ -17,4 +17,5 @@ public interface IPaymentMethodRepositoryCustom<TEntity>
     IEnumerable<TEntity?> GetAllPaymentMethodsOrderedByName(bool noTracking = true, bool noIncludes = false);
     Task<TEntity?> GetPaymentMethodByIdAsync(int id,bool noTracking = true, bool noIncludes = false);
     TEntity? GetPaymentMethodById(int id, bool noTracking = true, bool noIncludes = false);
+    
 }

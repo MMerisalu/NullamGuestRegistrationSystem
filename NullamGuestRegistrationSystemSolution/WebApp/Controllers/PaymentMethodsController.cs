@@ -119,37 +119,49 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // GET: PaymentMethods/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            var vm = new DeletePaymentMethodVM();
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: PaymentMethods/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    var vm = new DeletePaymentMethodVM();
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var paymentMethod = await _uow.PaymentMethods.FirstOrDefaultAsync(id.Value);
+        //    var paymentMethod = await _uow.PaymentMethods.FirstOrDefaultAsync(id.Value);
 
 
-           if (paymentMethod == null)
-            {
-                return NotFound();
-            }
-           vm.Id = paymentMethod.Id;
-           vm.Name = paymentMethod.Name;
+        //   if (paymentMethod == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //   vm.Id = paymentMethod.Id;
+        //   vm.Name = paymentMethod.Name;
 
-            return View(vm);
-        }
+        //    return View(vm);
+        //}
 
         //// POST: PaymentMethods/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _uow.PaymentMethods.RemoveAsync(id);
+            var result = await _uow.Attendees.IsConnectedToAnyPaymentMethodsAsync(id);
+            if (result == true)
+            {
+                return Content("Antud olemit ei saa kustutada, kuna see on seotud teiste andmebaasi olemitega.");
 
-            await _uow.SaveChangesAsync();
+            }
+            else
+            {
+                await _uow.PaymentMethods.RemoveAsync(id);
+                await _uow.SaveChangesAsync();
+
+            }
+
             return RedirectToAction(nameof(Index));
+
+
         }
 
         private bool PaymentMethodExists(int id)

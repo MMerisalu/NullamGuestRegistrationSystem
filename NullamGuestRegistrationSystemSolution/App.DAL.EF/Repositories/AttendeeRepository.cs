@@ -126,6 +126,16 @@ namespace App.DAL.EF.Repositories
             return result;
         }
 
+        public bool IsConnectedToAnyPaymentMethods(int paymentMethodId, bool noTracking = true, bool noIncludes = false)
+        {
+            return CreateQuery(noTracking, noIncludes).Any(a => a.PaymentMethodId == paymentMethodId);
+        }
+
+        public async Task<bool> IsConnectedToAnyPaymentMethodsAsync(int paymentMethodId, bool noTracking = true, bool noIncludes = false)
+        {
+            return await CreateQuery(noTracking, noIncludes).AnyAsync(a => a.PaymentMethodId == paymentMethodId);
+        }
+
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {
             {

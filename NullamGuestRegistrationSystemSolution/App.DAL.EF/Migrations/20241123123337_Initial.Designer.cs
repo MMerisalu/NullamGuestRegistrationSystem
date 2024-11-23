@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241117212240_Initial")]
+    [Migration("20241123123337_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -135,7 +135,7 @@ namespace App.DAL.EF.Migrations
                     b.HasOne("App.Domain.PaymentMethod", "PaymentMethod")
                         .WithMany()
                         .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("PaymentMethod");
@@ -146,13 +146,13 @@ namespace App.DAL.EF.Migrations
                     b.HasOne("App.Domain.Attendee", "Attendee")
                         .WithMany("Events")
                         .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("App.Domain.Event", "Event")
                         .WithMany("Attendees")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Attendee");

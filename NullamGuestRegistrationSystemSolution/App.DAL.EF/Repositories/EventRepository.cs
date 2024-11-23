@@ -86,6 +86,12 @@ namespace App.DAL.EF.Repositories
             return Mapper.Map(await base.CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(e => e.Id.Equals(id)));
         }
 
+        
+        public Task<bool> IsConnectedToAnyPaymentMethodsAsync(int paymentMethodId, bool noTracking = true, bool noIncludes = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
             int currentNumberOfAttendees = 0;

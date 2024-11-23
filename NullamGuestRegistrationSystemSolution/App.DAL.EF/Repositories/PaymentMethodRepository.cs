@@ -37,6 +37,8 @@ public class PaymentMethodRepository : BaseEntityRepository<PaymentMethod,Paymen
         
     }
 
+    
+
     protected override IQueryable<PaymentMethod> CreateQuery(bool noTracking = true, bool noIncludes = false)
     {
         
