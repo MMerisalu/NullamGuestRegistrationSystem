@@ -277,11 +277,9 @@ namespace WebApp.Controllers
             if (hasEvents)
             {
                 var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
-                var eventAndAttendeeIds = _uow.Attendees.GetAllEventsForAnAttendee(attendee.Id);
-                foreach (var eventAndAttendeeId in eventAndAttendeeIds!)
-                {
-                    await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendeeId);
-                }
+                var eventAndAttendeeId = _uow.EventsAndAttendes.GetEventAndAttendeeId(eventDb.Id, id);
+                await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendeeId);
+                await _uow.SaveChangesAsync();
             }
 
             else

@@ -3,6 +3,7 @@ using App.DAL.DTO;
 using App.Domain;
 using Base.Contracts;
 using Base.DAL.EF;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,12 @@ namespace App.DAL.EF.Repositories
         public EventAndAttendeeRepository(AppDbContext dbContext, IMapper<EventAndAttendee, EventAndAttendeeDTO> mapper) : base(dbContext, mapper)
         {
         }
+
+        public int GetEventAndAttendeeId(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            return CreateQuery(noTracking, noIncludes).FirstOrDefault(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId).Id;
+        }
+
+        
     }
 }
