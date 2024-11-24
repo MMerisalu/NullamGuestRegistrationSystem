@@ -271,23 +271,17 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id, int eventId)
         {
             var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
+            
+            var eventDb = await _uow.Events.GetEventByIdAsync(eventId);
+            var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb!.Id, id);
+            await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee!.Id);
+            await _uow.SaveChangesAsync();
             var hasEvents = await _uow.Attendees.IsAttendeeAttendingAnyEventsAsync(attendee!.Id);
-            if (hasEvents)
+            if (!hasEvents && attendee != null)
             {
-                var eventDb = await _uow.Events.GetEventByIdAsync(eventId);
-                var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb!.Id, id);
-                await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id);
-                await _uow.SaveChangesAsync();
+                await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
             }
-
-            else
-            {
-                if (attendee != null)
-                {
-                    await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
-                }
-            }
-
+                
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
