@@ -31,5 +31,9 @@ namespace App.Contracts.DAL.IAppRepositories
         IEnumerable<int>? GetAllEventsForAnAttendee(int attendeeId, bool noTracking = true, bool noIncludes = false);
         Task<bool> IsConnectedToAnyPaymentMethodsAsync(int paymentMethodId, bool noTracking = true, bool noIncludes = false);
         bool IsConnectedToAnyPaymentMethods(int paymentMethodId, bool noTracking = true, bool noIncludes = false);
+        Task<int> NumberOfEventsForAttendeeAsync(int attendeeId, bool noTracking = true, bool noIncludes = false);
+       int NumberOfEventsForAttendee(int attendeeId, bool noTracking = true, bool noIncludes = false);
+
+
     }
 }

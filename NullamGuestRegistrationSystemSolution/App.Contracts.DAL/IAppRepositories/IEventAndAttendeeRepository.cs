@@ -16,9 +16,8 @@ namespace App.Contracts.DAL.IAppRepositories
 
     public interface IEventAndAttendeeRepositoryCustom<TEntity>
     {
-        
-        
-        int GetEventAndAttendeeId(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false);
-        
+        Task <TEntity?> GetEventAndAttendeeDTOAsync(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false);
+        TEntity? GetEventAndAttendeeDTO(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false);
+
     }
 }

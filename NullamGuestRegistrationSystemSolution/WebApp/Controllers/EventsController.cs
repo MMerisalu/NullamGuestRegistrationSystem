@@ -119,43 +119,57 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(vm);
         }
 
-       
+
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
 
             var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
-            var eventAndAttendeeIds = _uow.Events.GetAllAttendeesForAnEvent(id);
+
+            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id);
             if (eventDb != null)
             {
-                
-                if (eventAndAttendeeIds.IsNullOrEmpty())
+
+                if (attendees.IsNullOrEmpty())
                 {
                     await _uow.Events.RemoveAsync(eventDb.Id, noIncludes: true);
                 }
+
                 else
                 {
-                    foreach (var eventAndAttendeeId in eventAndAttendeeIds!)
+                    foreach (var attendee in attendees!)
                     {
-                        await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendeeId, noIncludes: true );
+                        var numberOfEvents = await _uow.Attendees.NumberOfEventsForAttendeeAsync(attendee!.Id);
+                        if (numberOfEvents > 1)
+                        {
+                            var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb.Id, attendee.Id);
+                            await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id, noIncludes: true);
+                            await _uow.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
+                            await _uow.SaveChangesAsync();
+                        }
                     }
-                    await _uow.SaveChangesAsync();
+
                     await _uow.Events.RemoveAsync(eventDb.Id, noIncludes: true);
+                    await _uow.SaveChangesAsync();
+
                 }
             }
 
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
-
 
         private async Task<bool> EventExists(int id)
         {
@@ -166,7 +180,7 @@ namespace WebApp.Controllers
         {
             var eventVms = new List<IndexEventVM>();
             int numberOfEvents = events!.Count();
-            
+
             for (int i = 0; i < numberOfEvents; i++)
             {
                 var vm = new IndexEventVM();
@@ -175,7 +189,7 @@ namespace WebApp.Controllers
                 vm.Name = events[i].Name;
                 vm.EventDateAndTime = events[i].EventDateAndTime;
                 vm.Location = events[i].Location;
-                vm.NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id); 
+                vm.NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
                 vm.AdditionalInfo = events[i].AdditionalInfo;
                 eventVms.Add(vm);
             }
@@ -195,8 +209,9 @@ namespace WebApp.Controllers
                     vm.Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!;
                     vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees?[i].PersonalIdentifier : attendees[i].RegistryCode;
                     vm.Id = attendees![i]!.Id;
+                    vm.EventId = id;
                     vm.NumberOfAttendees = attendees?[i]!.AttendeeType == AttendeeType.Company ? attendees[i]!.NumberOfPeopleFromCompany!.Value : 1;
-                    
+
                     attendeeVms.Add(vm);
                 }
             }

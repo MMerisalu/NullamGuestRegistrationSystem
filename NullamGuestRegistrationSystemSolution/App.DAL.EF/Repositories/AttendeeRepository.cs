@@ -136,6 +136,16 @@ namespace App.DAL.EF.Repositories
             return await CreateQuery(noTracking, noIncludes).AnyAsync(a => a.PaymentMethodId == paymentMethodId);
         }
 
+        public int NumberOfEventsForAttendee(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            return CreateQuery(noTracking, noIncludes).SelectMany(e => e.Events).Count();
+        }
+
+        public async Task<int> NumberOfEventsForAttendeeAsync(int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+           return await CreateQuery(noTracking, noIncludes).SelectMany(e => e.Events).CountAsync();
+        }
+
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)
         {
             {

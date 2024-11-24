@@ -24,7 +24,9 @@ namespace App.Contracts.DAL.IAppRepositories
         Task<IEnumerable<TEntity?>> GetAllEventsDTOOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
         IEnumerable<TEntity?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false);
         int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false);
-        IEnumerable<int>? GetAllAttendeesForAnEvent(int eventId, bool noTracking = true, bool noIncludes = false);
+        
+       
+        
         Task<IEnumerable<TEntity?>> GetAllFutureEventsrderedByTimeAndNameAsync(int attendeeId , bool noTracking = true, bool noIncludes = false);
         IEnumerable<TEntity?> GetAllFutureEventsOrderedByTimeAndName(int attendeeId,bool noTracking = true, bool noIncludes = false);
         

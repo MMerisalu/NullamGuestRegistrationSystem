@@ -18,11 +18,15 @@ namespace App.DAL.EF.Repositories
         {
         }
 
-        public int GetEventAndAttendeeId(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false)
+        public EventAndAttendeeDTO? GetEventAndAttendeeDTO(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false)
         {
-            return CreateQuery(noTracking, noIncludes).FirstOrDefault(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId).Id;
+            return Mapper.Map(CreateQuery(noTracking, noIncludes).FirstOrDefault(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId));
         }
 
-        
+        public async Task<EventAndAttendeeDTO?> GetEventAndAttendeeDTOAsync(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false)
+        {
+            var result = Mapper.Map(await CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId));
+            return result;
+        }
     }
 }

@@ -20,12 +20,6 @@ namespace App.DAL.EF.Repositories
         {
         }
 
-        public IEnumerable<int>? GetAllAttendeesForAnEvent(int eventId, bool noTracking = true, bool noIncludes = false)
-        {
-            var attendees = CreateQuery(noTracking, noIncludes).SelectMany(a => a.Attendees.Where(a => a.EventId.Equals(eventId))).Select(a => a.Id).ToList();
-            return attendees;
-        }
-
         
 
         public IEnumerable<EventDTO?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false)
@@ -83,15 +77,12 @@ namespace App.DAL.EF.Repositories
 
         public async Task<EventDTO?> GetEventByIdAsync(int id, bool noTracking = true, bool noIncludes = false)
         {
-            return Mapper.Map(await base.CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(e => e.Id.Equals(id)));
+            var result = Mapper.Map(await base.CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(e => e.Id.Equals(id)));
+            return result;
         }
 
         
-        public Task<bool> IsConnectedToAnyPaymentMethodsAsync(int paymentMethodId, bool noTracking = true, bool noIncludes = false)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
             int currentNumberOfAttendees = 0;
@@ -125,5 +116,7 @@ namespace App.DAL.EF.Repositories
                 
             return query;
         }
+
+       
     }
 }

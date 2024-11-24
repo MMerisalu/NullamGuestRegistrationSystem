@@ -1,5 +1,6 @@
 ﻿using App.Enum;
 using Base.Domain;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
 namespace WebApp.ViewModels
@@ -18,5 +19,8 @@ namespace WebApp.ViewModels
 
         [DisplayName("Isikukood / registrikood ")]
         public string Code { get; set; } = default!;
+
+        
+        public int EventId { get; set; }
     }
 }
