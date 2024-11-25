@@ -16,5 +16,7 @@ namespace App.Domain
         public int EventId { get; set; }
 
         public Event? Event { get; set; }
+
+        public int NumberOfPeopleFromCompany { get; set; }
     }
 }

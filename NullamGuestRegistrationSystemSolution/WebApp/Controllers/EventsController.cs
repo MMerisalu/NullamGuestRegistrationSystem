@@ -190,7 +190,11 @@ namespace WebApp.Controllers
                 vm.Name = events[i].Name;
                 vm.EventDateAndTime = events[i].EventDateAndTime;
                 vm.Location = events[i].Location;
-                vm.NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
+                vm.NumberOfAttendeesPerEvent = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
+                foreach (var numberOfAttendees in vm.NumberOfAttendeesPerEvent)
+                {
+                    vm.NumberOfAttendees = numberOfAttendees;
+                }
                 vm.AdditionalInfo = events[i].AdditionalInfo;
                 eventVms.Add(vm);
             }

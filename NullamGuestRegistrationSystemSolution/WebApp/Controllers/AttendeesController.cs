@@ -322,14 +322,21 @@ namespace WebApp.Controllers
             if (attendeeDb.AttendeeType == AttendeeType.Company &&
                 vm.NumberOfPeopleFromCompany != attendeeDb.NumberOfPeopleFromCompany)
             {
-                attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
+                attendeeDb.NumberOfPeopleFromCompany += vm.NumberOfPeopleFromCompany!.Value;
             }
 
-            var eventAndAttendee = new EventAndAttendeeDTO()
-            {
-                AttendeeId = attendeeDb.Id,
-                EventId = vm.EventId,
-            };
+            //var eventAndAttendee = new EventAndAttendeeDTO()
+            //{
+            //    AttendeeId = attendeeDb.Id,
+            //    EventId = vm.EventId,
+            //    NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value
+            //};
+
+            var eventAndAttendee = new EventAndAttendeeDTO();
+            eventAndAttendee.AttendeeId = attendeeDb.Id;
+            eventAndAttendee.EventId = vm.EventId;
+            
+
              _uow.EventsAndAttendes.Add(eventAndAttendee);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
