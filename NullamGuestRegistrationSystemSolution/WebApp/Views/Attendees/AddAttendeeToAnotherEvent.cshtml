@@ -11,7 +11,8 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            @if(Model.AttendeeType!.Value == AttendeeType.Company) {
+            @if (Model.AttendeeType!.Value == AttendeeType.Company)
+            {
                 <div class="form-group form-check" id="is_number_of_attendees_changed_div">
                     <label asp-for="IsNumberOfPeopleFromCompanyChanged" class="form-check-label" style="display:block">
                         <input asp-for="IsNumberOfPeopleFromCompanyChanged" style="display:block" class="form-check-input" onchange="ShowHide(this.checked)" />  @Html.DisplayNameFor(model => model.IsNumberOfPeopleFromCompanyChanged)
@@ -24,23 +25,21 @@
                     <span asp-validation-for="NumberOfPeopleFromCompany" class="text-danger"></span>
                 </div>
             }
-            
 
-            
             <div class="form-group">
                 <label asp-for="EventId" class="control-label"></label>
-                
                 <select name="EventId" asp-for="EventId" class="form-control" asp-items="Model.Events">
-                    @if (Model.Events == null || !Model.Events.Any()) {
+                    @if (Model.Events == null || !Model.Events.Any())
+                    {
                         <option value="">Tulevasi üritusi pole</option>
                     }
-                    else {
+                    else
+                    {
                         <option value="">Palun valige</option>
                     }
-                    
                 </select>
                 <span asp-validation-for="EventId" class="text-danger"></span>
-            </div> 
+            </div>
             <br />
 
             <div class="form-group">
@@ -76,9 +75,7 @@
                 number_of_people_from_company_div.style.display = 'none';
             }
 
-            
          }
-       
 
     </script>
 }

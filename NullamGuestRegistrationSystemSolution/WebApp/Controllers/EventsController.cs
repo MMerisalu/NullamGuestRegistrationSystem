@@ -131,7 +131,6 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
             var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
 
             var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id);
@@ -148,10 +147,12 @@ namespace WebApp.Controllers
                     foreach (var attendee in attendees!)
                     {
                         var numberOfEvents = await _uow.Attendees.NumberOfEventsForAttendeeAsync(attendee!.Id);
-                        if (numberOfEvents > 1)
+                        if (numberOfEvents == 1)
                         {
                             var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb.Id, attendee.Id);
                             await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id, noIncludes: true);
+                            await _uow.SaveChangesAsync();
+                            await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
                             await _uow.SaveChangesAsync();
                         }
                         else

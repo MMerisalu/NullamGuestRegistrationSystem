@@ -138,12 +138,12 @@ namespace App.DAL.EF.Repositories
 
         public int NumberOfEventsForAttendee(int attendeeId, bool noTracking = true, bool noIncludes = false)
         {
-            return CreateQuery(noTracking, noIncludes).SelectMany(e => e.Events).Count();
+            return CreateQuery(noTracking, noIncludes).SelectMany(e => e.Events!).Where(e => e.AttendeeId == attendeeId).Count();
         }
 
         public async Task<int> NumberOfEventsForAttendeeAsync(int attendeeId, bool noTracking = true, bool noIncludes = false)
         {
-           return await CreateQuery(noTracking, noIncludes).SelectMany(e => e.Events).CountAsync();
+           return await CreateQuery(noTracking, noIncludes).SelectMany(e => e.Events!).Where(e => e.AttendeeId == attendeeId).CountAsync();
         }
 
         protected override IQueryable<Attendee> CreateQuery(bool noTracking = true, bool noIncludes = false)
