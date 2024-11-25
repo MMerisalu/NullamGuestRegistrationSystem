@@ -34,6 +34,5 @@ namespace App.Contracts.DAL.IAppRepositories
         Task<int> NumberOfEventsForAttendeeAsync(int attendeeId, bool noTracking = true, bool noIncludes = false);
        int NumberOfEventsForAttendee(int attendeeId, bool noTracking = true, bool noIncludes = false);
 
-
     }
 }

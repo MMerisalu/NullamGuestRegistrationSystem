@@ -20,7 +20,6 @@ namespace WebApp.ViewModels
         [DisplayName("Isikukood / registrikood ")]
         public string Code { get; set; } = default!;
 
-        
         public int EventId { get; set; }
     }
 }

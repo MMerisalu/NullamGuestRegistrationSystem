@@ -21,7 +21,6 @@ namespace App.DAL.EF.Repositories
         }
 
         
-
         public IEnumerable<EventDTO?> GetAllEventsDTOOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
            return CreateQuery(noTracking, noIncludes).Select(e => Mapper.Map(e)).ToList();
@@ -81,7 +80,6 @@ namespace App.DAL.EF.Repositories
             return result;
         }
 
-        
        
         public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
@@ -115,8 +113,6 @@ namespace App.DAL.EF.Repositories
             query = query.Include(a => a.Attendees);
                 
             return query;
-        }
-
-       
+        } 
     }
 }

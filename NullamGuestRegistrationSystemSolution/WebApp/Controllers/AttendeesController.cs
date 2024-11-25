@@ -192,6 +192,7 @@ namespace WebApp.Controllers
             {
                 try
                 {
+                    vm.AttendeeType = attendeeDb.AttendeeType;
                     if (attendeeDb.AttendeeType!.Value == AttendeeType.Person)
                     {
                         attendeeDb.SurName = vm.SurName;
@@ -208,17 +209,19 @@ namespace WebApp.Controllers
                         attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
                     }
 
-                    var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                    attendeeDb.PaymentMethodId = vm.PaymentMethodId;
+                    var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, attendeeDb.PersonalIdentifier, attendeeDb.CompanyName, attendeeDb.RegistryCode);
                     if (isRegistered.Value == true)
                     {
-                        if (vm.AttendeeType == AttendeeType.Person)
-                        {
+    
+                        if (attendeeDb.AttendeeType.Value == AttendeeType.Person)
+                       {
                             ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
                             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
                             vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
                             return View(vm);
                         }
-                        else if (vm.AttendeeType == AttendeeType.Company)
+                        else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                         {
                             ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
                             ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
@@ -227,6 +230,7 @@ namespace WebApp.Controllers
                             return View(vm);
                         }
                     }
+
 
                     if (attendeeDb.AttendeeType == AttendeeType.Person)
                     {
