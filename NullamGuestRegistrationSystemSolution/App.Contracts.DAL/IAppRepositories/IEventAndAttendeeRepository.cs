@@ -18,5 +18,7 @@ namespace App.Contracts.DAL.IAppRepositories
     {
         Task <TEntity?> GetEventAndAttendeeDTOAsync(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false);
         TEntity? GetEventAndAttendeeDTO(int eventId, int attendeeId, bool noTracking = true, bool noIncludes = false);
+        Task<IEnumerable<AttendeeDetailDTO?>> GetAllAttendeeDetailsDTOsByEventIdAsync(int eventId, bool noTracking = true, bool noIncludes = false);
+        IEnumerable<AttendeeDetailDTO?> GetAllAttendeeDetailsDTOsByEventId(int eventId, bool noTracking = true, bool noIncludes = false);
     }
 }

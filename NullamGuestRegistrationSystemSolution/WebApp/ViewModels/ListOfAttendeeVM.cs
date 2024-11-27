@@ -14,7 +14,7 @@ namespace WebApp.ViewModels
 
 
         [DisplayName("Osavõtjate arv")]
-        public int NumberOfAttendees { get; set; }
+        public int NumberOfPeople{ get; set; }
 
 
         [DisplayName("Isikukood / registrikood ")]

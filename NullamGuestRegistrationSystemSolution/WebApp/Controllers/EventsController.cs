@@ -133,7 +133,7 @@ namespace WebApp.Controllers
         {
             var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
 
-            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id);
+            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
             if (eventDb != null)
             {
 
@@ -149,9 +149,11 @@ namespace WebApp.Controllers
                         var numberOfEvents = await _uow.Attendees.NumberOfEventsForAttendeeAsync(attendee!.Id);
 
                         var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb.Id, attendee.Id);
-                        await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id!, noIncludes: true);
-                        await _uow.SaveChangesAsync();
-
+                        if (eventAndAttendee != null)
+                        {
+                            await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id!, noIncludes: true);
+                            await _uow.SaveChangesAsync();
+                        }
                         if (numberOfEvents == 1)
                         {
                             await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
@@ -196,20 +198,20 @@ namespace WebApp.Controllers
         }
         public async Task<IActionResult> ListOfAttendees([FromRoute] int id)
         {
-            var attendees = await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id)!;
-            var numberOfAttendees = attendees?.Count ?? 0;
+            var attendees = await _uow.EventsAndAttendes.GetAllAttendeeDetailsDTOsByEventIdAsync(id, true, noIncludes: false);
+            var numberOfAttendees = attendees?.Sum(x => x!.NumberOfPeople) ?? 0;
             var attendeeVms = new List<ListOfAttendeeVM>();
 
             if (numberOfAttendees > 0)
             {
-                for (int i = 0; i < numberOfAttendees; i++)
+                foreach (var attendee in attendees!)
                 {
                     var vm = new ListOfAttendeeVM();
-                    vm.Name = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees[i]!.SurAndGivenName : attendees?[i]!.CompanyName!;
-                    vm.Code = attendees?[i]!.AttendeeType == AttendeeType.Person ? attendees?[i].PersonalIdentifier : attendees[i].RegistryCode;
-                    vm.Id = attendees![i]!.Id;
+                    vm.Name = attendee!.Name!;
+                    vm.Code = attendee!.Code!;
+                    vm.Id = attendee!.Id;
                     vm.EventId = id;
-                    vm.NumberOfAttendees = attendees?[i]!.AttendeeType == AttendeeType.Company ? attendees[i]!.NumberOfPeopleFromCompany!.Value : 1;
+                    vm.NumberOfPeople = attendee.NumberOfPeople;
 
                     attendeeVms.Add(vm);
                 }
