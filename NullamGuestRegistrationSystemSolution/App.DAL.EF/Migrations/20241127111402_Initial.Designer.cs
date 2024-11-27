@@ -11,11 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:NullamGuestRegistrationSystemSolution/App.DAL.EF/Migrations/20241125154210_Initial.Designer.cs
-    [Migration("20241125154210_Initial")]
-========
     [Migration("20241127111402_Initial")]
->>>>>>>> adding_attendees_to_different_events:NullamGuestRegistrationSystemSolution/App.DAL.EF/Migrations/20241127111402_Initial.Designer.cs
     partial class Initial
     {
         /// <inheritdoc />
@@ -109,11 +105,7 @@ namespace App.DAL.EF.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("INTEGER");
 
-<<<<<<<< HEAD:NullamGuestRegistrationSystemSolution/App.DAL.EF/Migrations/20241125154210_Initial.Designer.cs
-                    b.Property<int>("NumberOfPeopleFromCompany")
-========
                     b.Property<int>("NumberOfPeople")
->>>>>>>> adding_attendees_to_different_events:NullamGuestRegistrationSystemSolution/App.DAL.EF/Migrations/20241127111402_Initial.Designer.cs
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

@@ -147,13 +147,12 @@ namespace WebApp.Controllers
                     foreach (var attendee in attendees!)
                     {
                         var numberOfEvents = await _uow.Attendees.NumberOfEventsForAttendeeAsync(attendee!.Id);
-                        if (numberOfEvents > 1)
-                        {
-                            var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb.Id, attendee.Id);
-                            await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id, noIncludes: true);
-                            await _uow.SaveChangesAsync();
-                        }
-                        else
+
+                        var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb.Id, attendee.Id);
+                        await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee.Id!, noIncludes: true);
+                        await _uow.SaveChangesAsync();
+
+                        if (numberOfEvents == 1)
                         {
                             await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
                             await _uow.SaveChangesAsync();
@@ -188,11 +187,8 @@ namespace WebApp.Controllers
                 vm.Name = events[i].Name;
                 vm.EventDateAndTime = events[i].EventDateAndTime;
                 vm.Location = events[i].Location;
-                vm.NumberOfAttendeesPerEvent = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
-                foreach (var numberOfAttendees in vm.NumberOfAttendeesPerEvent)
-                {
-                    vm.NumberOfAttendees = numberOfAttendees;
-                }
+                vm.NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(events[i].Id);
+
                 vm.AdditionalInfo = events[i].AdditionalInfo;
                 eventVms.Add(vm);
             }

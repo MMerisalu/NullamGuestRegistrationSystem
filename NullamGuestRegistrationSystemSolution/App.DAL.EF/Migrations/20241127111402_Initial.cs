@@ -76,11 +76,7 @@ namespace App.DAL.EF.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     AttendeeId = table.Column<int>(type: "INTEGER", nullable: false),
                     EventId = table.Column<int>(type: "INTEGER", nullable: false),
-<<<<<<<< HEAD:NullamGuestRegistrationSystemSolution/App.DAL.EF/Migrations/20241125154210_Initial.cs
-                    NumberOfPeopleFromCompany = table.Column<int>(type: "INTEGER", nullable: false)
-========
                     NumberOfPeople = table.Column<int>(type: "INTEGER", nullable: false)
->>>>>>>> adding_attendees_to_different_events:NullamGuestRegistrationSystemSolution/App.DAL.EF/Migrations/20241127111402_Initial.cs
                 },
                 constraints: table =>
                 {
