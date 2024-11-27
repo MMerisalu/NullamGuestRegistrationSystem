@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241123123337_Initial")]
+    [Migration("20241127111402_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -103,6 +103,9 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("EventId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumberOfPeople")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

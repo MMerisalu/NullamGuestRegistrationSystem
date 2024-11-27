@@ -75,7 +75,8 @@ namespace App.DAL.EF.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AttendeeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    EventId = table.Column<int>(type: "INTEGER", nullable: false)
+                    EventId = table.Column<int>(type: "INTEGER", nullable: false),
+                    NumberOfPeople = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

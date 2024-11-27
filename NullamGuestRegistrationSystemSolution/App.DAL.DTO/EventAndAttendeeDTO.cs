@@ -11,7 +11,7 @@ namespace App.DAL.DTO
     {
         public int AttendeeId { get; set; }
         public int EventId { get; set; }
+        public int NumberOfPeople { get; set; }
 
-       
     }
 }

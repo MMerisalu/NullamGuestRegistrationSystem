@@ -114,6 +114,7 @@ namespace WebApp.Controllers
                     {
                         EventId = id,
                         AttendeeId = attendeeId.Value,
+                        NumberOfPeople = vm.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.Value : 1
 
                     };
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
@@ -329,6 +330,7 @@ namespace WebApp.Controllers
             {
                 AttendeeId = attendeeDb.Id,
                 EventId = vm.EventId,
+                NumberOfPeople = attendeeDb.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.Value : 1
             };
              _uow.EventsAndAttendes.Add(eventAndAttendee);
             await _uow.SaveChangesAsync();

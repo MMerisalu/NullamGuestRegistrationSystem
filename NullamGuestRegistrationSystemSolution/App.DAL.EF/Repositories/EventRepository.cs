@@ -81,23 +81,15 @@ namespace App.DAL.EF.Repositories
         }
 
        
-        public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
+        
+           public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            int currentNumberOfAttendees = 0;
+            var result = RepoDbContext.Events.Where(e => e.Id == eventId)
+                                       .SelectMany(x => x.Attendees!)
+                                       .Sum(x => x.NumberOfPeople);
 
-            var attendees = RepoDbContext.Attendees.Select(a => a ).Where(a => a.Events.Any(e => e.EventId == eventId )).ToList();
-            foreach (var attendee in attendees)
-            {
-                if (attendee.AttendeeType == AttendeeType.Person)
-                {
-                    currentNumberOfAttendees++;
-                }
-                else if (attendee.AttendeeType == AttendeeType.Company)
-                {
-                    currentNumberOfAttendees += attendee.NumberOfPeopleFromCompany!.Value;
-                }
-            }
-            return currentNumberOfAttendees;
+            return result;
+        
         }
         
         protected override IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)
