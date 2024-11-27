@@ -81,104 +81,16 @@ namespace App.DAL.EF.Repositories
             return result;
         }
 
-
-        public int[]? NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
+       
+        
+           public int NumberOfAttendeesPerEvent(int eventId, bool noTracking = true, bool noIncludes = false)
         {
-            int currentNumberOfAttendees = 0;
-            bool companyHasAttendeesInDifferentEvents = false;
-            int[] numberOfAttendeesForEachEvent;
-            companyHasAttendeesInDifferentEvents = RepoDbContext.EventsAndAttendees
-                .Any(ea => ea.EventId == eventId);
-            if (companyHasAttendeesInDifferentEvents == false)
-            {
-                numberOfAttendeesForEachEvent = new int[1];
-                var attendees = RepoDbContext.Attendees.Select(a => a)
-                        .Where(a => a.Events!.Any(e => e.EventId == eventId)).ToList();
-                if (attendees.IsNullOrEmpty())
-                {
-                    currentNumberOfAttendees = 0;
-                    numberOfAttendeesForEachEvent[0] = currentNumberOfAttendees;
-                    return numberOfAttendeesForEachEvent;
-                }
-                else if (!attendees.IsNullOrEmpty())
-                {
-                    numberOfAttendeesForEachEvent = new int[attendees.Count];
-                    foreach (var attendee in attendees)
-                    {
-                        if (attendee.AttendeeType == AttendeeType.Person)
-                        {
-                            currentNumberOfAttendees++;
-                        }
-                        else if (attendee.AttendeeType == AttendeeType.Company)
-                        {
-                            currentNumberOfAttendees = attendee.NumberOfPeopleFromCompany!.Value;
-                        }
-                    }
-                    numberOfAttendeesForEachEvent[0] = currentNumberOfAttendees;
-                    return numberOfAttendeesForEachEvent;
-                }
+            var result = RepoDbContext.Events.Where(e => e.Id == eventId)
+                                       .SelectMany(x => x.Attendees!)
+                                       .Sum(x => x.NumberOfPeople);
 
-
-
-            }
-            else
-            {
-
-                var attendees = RepoDbContext.Attendees.SelectMany(ea => ea.Events)
-                   .Where(ea => ea.EventId == eventId).ToList();
-                var numberOfExtraEventsTheCompanyIsAttending = attendees.Count();
-                numberOfAttendeesForEachEvent = new int[numberOfExtraEventsTheCompanyIsAttending];
-
-                for (int i = 0; i < numberOfExtraEventsTheCompanyIsAttending; i++)
-                {
-                    numberOfAttendeesForEachEvent[i] = attendees[i].NumberOfPeopleFromCompany;
-                }
-                return numberOfAttendeesForEachEvent;
-            }
-            // Should not get here
-            return null;
-        }
-            
-
-
-
-        public async Task<int[]?> NumberOfAttendeesPerEventAsync(int eventId, bool noTracking = true, bool noIncludes = false)
-        {
-            int currentNumberOfAttendees = 0;
-            bool companyHasAttendeesInDifferentEvents = false;
-            int[] numberOfAttendeesForEachEvent = [];
-            companyHasAttendeesInDifferentEvents = await RepoDbContext.EventsAndAttendees
-                .AnyAsync(ea => ea.EventId == eventId);
-            if (companyHasAttendeesInDifferentEvents == false)
-            {
-                var attendees = RepoDbContext.Attendees.Select(a => a)
-                    .Where(a => a.Events!.Any(e => e.EventId == eventId)).ToList();
-                foreach (var attendee in attendees)
-                {
-                    if (attendee.AttendeeType == AttendeeType.Person)
-                    {
-                        currentNumberOfAttendees++;
-                    }
-                    else if (attendee.AttendeeType == AttendeeType.Company)
-                    {
-                        currentNumberOfAttendees = attendee.NumberOfPeopleFromCompany!.Value;
-                    }
-                }
-                numberOfAttendeesForEachEvent[0] = currentNumberOfAttendees;
-                return numberOfAttendeesForEachEvent;
-            }
-            else
-            {
-
-                var attendees = RepoDbContext.Attendees.SelectMany(ea => ea.Events).Where(ea => ea.EventId == eventId).ToList();
-                var numberOfExtraEventsTheCompanyIsAttending = attendees.Count();
-
-                for (int i = 0; i < numberOfExtraEventsTheCompanyIsAttending; i++)
-                {
-                    numberOfAttendeesForEachEvent[i] = attendees[i].NumberOfPeopleFromCompany;
-                }
-                return numberOfAttendeesForEachEvent;
-            }
+            return result;
+        
         }
 
         protected override IQueryable<Event> CreateQuery(bool noTracking = true, bool noIncludes = false)

@@ -114,6 +114,7 @@ namespace WebApp.Controllers
                     {
                         EventId = id,
                         AttendeeId = attendeeId.Value,
+                        NumberOfPeople = vm.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.Value : 1
 
                     };
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
@@ -325,18 +326,12 @@ namespace WebApp.Controllers
                 attendeeDb.NumberOfPeopleFromCompany += vm.NumberOfPeopleFromCompany!.Value;
             }
 
-            //var eventAndAttendee = new EventAndAttendeeDTO()
-            //{
-            //    AttendeeId = attendeeDb.Id,
-            //    EventId = vm.EventId,
-            //    NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value
-            //};
-
-            var eventAndAttendee = new EventAndAttendeeDTO();
-            eventAndAttendee.AttendeeId = attendeeDb.Id;
-            eventAndAttendee.EventId = vm.EventId;
-            
-
+            var eventAndAttendee = new EventAndAttendeeDTO()
+            {
+                AttendeeId = attendeeDb.Id,
+                EventId = vm.EventId,
+                NumberOfPeople = attendeeDb.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.Value : 1
+            };
              _uow.EventsAndAttendes.Add(eventAndAttendee);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");

@@ -102,7 +102,7 @@ namespace App.DAL.EF.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("NumberOfPeopleFromCompany")
+                    b.Property<int>("NumberOfPeople")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
