@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Avaleht";
+    var dateTime = DateTime.Now;
 }
 
 <h1>Üritused</h1>
@@ -55,12 +56,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.AdditionalInfo)
                 </td>
-                <td>
-                    <a style="text-decoration:none" asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id">Muuda</a> |
-                    <a style="text-decoration:none" asp-controller="Attendees" asp-action="Create" asp-route-id="@item.Id">OSAVÕTJAD</a>
+                @if (item.EventDateAndTime >= dateTime)
+                {
+                    <td>
+                        <a style="text-decoration:none" asp-controller="Events" asp-action="Edit" asp-route-id="@item.Id">Muuda</a> |
+                        <a style="text-decoration:none" asp-controller="Attendees" asp-action="Create" asp-route-id="@item.Id">OSAVÕTJAD</a>
 
-                </td>
-                <td>
+                    </td>
+                     <td>
  
                         <form method="post" asp-controller="Events" asp-action="Delete" asp-route-id="@item.Id">
                             @Html.AntiForgeryToken()
@@ -71,6 +74,14 @@
                                 </svg>
                             </button>
                         </form>
+                        </td>
+                }
+                else {
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                }
+               
 
             </tr>
         }
