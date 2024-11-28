@@ -24,7 +24,7 @@ namespace WebApp.Controllers
         {
 
             var eventsController = new EventsController(_uow);
-            var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync();
+            var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync(showPastEvents: true);
             var events = eventsController.CreateEventIndexVM(eventsDb);
           
             

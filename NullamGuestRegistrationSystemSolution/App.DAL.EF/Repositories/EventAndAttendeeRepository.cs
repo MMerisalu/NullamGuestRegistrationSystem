@@ -20,6 +20,7 @@ namespace App.DAL.EF.Repositories
 
         public IEnumerable<AttendeeDetailDTO?> GetAllAttendeeDetailsDTOsByEventId(int eventId, bool noTracking = true, bool noIncludes = false)
         {
+            // Using projection 
             var result = CreateQuery(noTracking, noIncludes)
                                 .Include(a => a.Attendee)
                                 .Where(a => a.EventId == eventId)

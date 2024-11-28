@@ -32,8 +32,13 @@ namespace WebApp.Controllers
 
 
         // GET: Attendees/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create([FromRoute] int id)
         {
+            var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
+            if (eventDb == null)
+            {
+                return NotFound();
+            }
             var vm = new CreateAttendeeVM();
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
             vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
@@ -47,6 +52,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAttendeeVM vm, [FromRoute] int id)
         {
+            
             var attendee = new AttendeeDTO();
 
             if (!ModelState.IsValid)
@@ -295,7 +301,7 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAttendeeToAnotherEvent([FromRoute] int id)
         {
-           
+            
             var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
             if (attendeeDb == null)
             {
@@ -306,7 +312,7 @@ namespace WebApp.Controllers
             vm.AttendeeType = attendeeDb.AttendeeType!.Value;
             if (vm.AttendeeType.Value == AttendeeType.Company)
                 vm.NumberOfPeopleFromCompany = attendeeDb.NumberOfPeopleFromCompany!.Value;
-            vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
+            vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             return View(vm);
         }
 
@@ -314,6 +320,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAttendeeToAnotherEvent(AddAttendeeToAnotherEventVM vm, [FromRoute] int id)
         {
+            
             var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
             if (attendeeDb == null)
             {

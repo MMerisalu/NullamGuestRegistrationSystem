@@ -68,7 +68,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var eventdb = await _uow.Events.FirstOrDefaultAsync(id.Value);
+            var eventdb = await _uow.Events.GetEventByIdAsync(id.Value);
             if (eventdb == null)
             {
                 return NotFound();
