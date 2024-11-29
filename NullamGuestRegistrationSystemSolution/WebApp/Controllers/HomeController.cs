@@ -11,53 +11,26 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAppUnitOfWork _uow;
-        
+
 
         public HomeController(ILogger<HomeController> logger, IAppUnitOfWork uow)
         {
             _logger = logger;
             _uow = uow;
-            
+
         }
 
         public async Task<IActionResult> Index()
         {
-            var futureEventsDb = await _uow.Events.GetAllFutureEventsOrderedByNameAsync();
-            var pastEventsDb = await _uow.Events.GetAllPastEventsOrderedByNameAsync();
 
-            var futureEvents = futureEventsDb.Select(e => new IndexEventVM
-            {
-                LineNumber = 0, 
-                Name = e.Name,
-                EventDateAndTime = e.EventDateAndTime,
-                Location = e.Location,
-                AdditionalInfo = e.AdditionalInfo,
-                NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(e.Id)
-            }).ToList();
+            var eventsController = new EventsController(_uow);
+            var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync(showPastEvents: true);
+            var events = eventsController.CreateEventIndexVM(eventsDb);
 
-            var pastEvents = pastEventsDb.Select(e => new IndexEventVM
-            {
-                LineNumber = 0, 
-                Name = e.Name,
-                EventDateAndTime = e.EventDateAndTime,
-                Location = e.Location,
-                AdditionalInfo = e.AdditionalInfo,
-                NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(e.Id)
-            }).ToList();
 
-            
-            for (int i = 0; i < futureEvents.Count; i++) futureEvents[i].LineNumber = i + 1;
-            for (int i = 0; i < pastEvents.Count; i++) pastEvents[i].LineNumber = i + 1;
 
-            var model = new EventIndexVM
-            {
-                FutureEvents = futureEvents,
-                PastEvents = pastEvents
-            };
-
-            return View(model);
+            return View(events);
         }
-
 
         public IActionResult Privacy()
         {
@@ -70,6 +43,6 @@ namespace WebApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-       
+
     }
 }
