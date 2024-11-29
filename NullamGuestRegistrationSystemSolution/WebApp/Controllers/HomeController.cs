@@ -27,7 +27,7 @@ namespace WebApp.Controllers
 
             var futureEvents = futureEventsDb.Select(e => new IndexEventVM
             {
-                LineNumber = 0, // Placeholder, calculate later
+                LineNumber = 0, 
                 Name = e.Name,
                 EventDateAndTime = e.EventDateAndTime,
                 Location = e.Location,
@@ -37,7 +37,7 @@ namespace WebApp.Controllers
 
             var pastEvents = pastEventsDb.Select(e => new IndexEventVM
             {
-                LineNumber = 0, // Placeholder, calculate later
+                LineNumber = 0, 
                 Name = e.Name,
                 EventDateAndTime = e.EventDateAndTime,
                 Location = e.Location,
@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(e.Id)
             }).ToList();
 
-            // Assign line numbers for ordering
+            
             for (int i = 0; i < futureEvents.Count; i++) futureEvents[i].LineNumber = i + 1;
             for (int i = 0; i < pastEvents.Count; i++) pastEvents[i].LineNumber = i + 1;
 
