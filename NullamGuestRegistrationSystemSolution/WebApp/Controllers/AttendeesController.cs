@@ -326,6 +326,10 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+            if (!ModelState.IsValid)
+            {
+                
+            }
 
             if (attendeeDb.AttendeeType == AttendeeType.Company &&
                 vm.NumberOfPeopleFromCompany != attendeeDb.NumberOfPeopleFromCompany)
