@@ -22,15 +22,42 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var futureEventsDb = await _uow.Events.GetAllFutureEventsOrderedByNameAsync();
+            var pastEventsDb = await _uow.Events.GetAllPastEventsOrderedByNameAsync();
 
-            var eventsController = new EventsController(_uow);
-            var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync(showPastEvents: true);
-            var events = eventsController.CreateEventIndexVM(eventsDb);
-          
-            
-            
-            return View(events);
+            var futureEvents = futureEventsDb.Select(e => new IndexEventVM
+            {
+                LineNumber = 0, // Placeholder, calculate later
+                Name = e.Name,
+                EventDateAndTime = e.EventDateAndTime,
+                Location = e.Location,
+                AdditionalInfo = e.AdditionalInfo,
+                NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(e.Id)
+            }).ToList();
+
+            var pastEvents = pastEventsDb.Select(e => new IndexEventVM
+            {
+                LineNumber = 0, // Placeholder, calculate later
+                Name = e.Name,
+                EventDateAndTime = e.EventDateAndTime,
+                Location = e.Location,
+                AdditionalInfo = e.AdditionalInfo,
+                NumberOfAttendees = _uow.Events.NumberOfAttendeesPerEvent(e.Id)
+            }).ToList();
+
+            // Assign line numbers for ordering
+            for (int i = 0; i < futureEvents.Count; i++) futureEvents[i].LineNumber = i + 1;
+            for (int i = 0; i < pastEvents.Count; i++) pastEvents[i].LineNumber = i + 1;
+
+            var model = new EventIndexVM
+            {
+                FutureEvents = futureEvents,
+                PastEvents = pastEvents
+            };
+
+            return View(model);
         }
+
 
         public IActionResult Privacy()
         {
