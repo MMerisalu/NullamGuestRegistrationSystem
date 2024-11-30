@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
-using App.Domain;
+
 using WebApp.ViewModels;
 using System.Drawing.Text;
 using App.Contracts.DAL.IAppRepositories;
@@ -211,6 +211,7 @@ namespace WebApp.Controllers
                     vm.Code = attendee!.Code!;
                     vm.Id = attendee!.Id;
                     vm.EventId = id;
+                    vm.AttendeeId = attendee!.AttendeeId;
                     vm.NumberOfPeople = attendee.NumberOfPeople;
 
                     attendeeVms.Add(vm);

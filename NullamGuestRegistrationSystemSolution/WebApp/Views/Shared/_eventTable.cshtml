@@ -1,25 +1,11 @@
-﻿ @using WebApp.ViewModels
-@model ListOfEventVM
+﻿@using WebApp.ViewModels
+@model IEnumerable<IndexEventVM>
 
-
-
-<p>
-    <a style="text-decoration:none" asp-controller="Events" asp-action="Create">Lisa uus üritus</a>
-</p>
-<h1>Tulevased üritused</h1>
-@await Html.PartialAsync("_eventTable", Model.FutureEvents)
-<h1>Möödunud üritused</h1>
-@await Html.PartialAsync("_eventTable", Model.PastEvents)
-@*@{
-    ViewData["Title"] = "Avaleht";
+@{
     var dateTime = DateTime.Now;
 }
 
-<h1>Üritused</h1>
 
-<p>
-    <a style="text-decoration:none" asp-controller="Events" asp-action="Create">Lisa uus üritus</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -97,4 +83,3 @@
         }
     </tbody>
 </table>
- *@

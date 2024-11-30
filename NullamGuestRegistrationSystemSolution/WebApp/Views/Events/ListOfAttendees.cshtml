@@ -30,7 +30,7 @@
         {
             <tr>
                 <td>
-                    <a style="text-decoration:none" asp-action="Edit" asp-controller="Attendees" asp-route-id="@item.Id">@item.Name</a>
+                    <a style="text-decoration:none" asp-action="Edit" asp-controller="Attendees" asp-route-id="@item.AttendeeId">@item.Name</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.NumberOfPeople)
@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.Code)
                 </td>
                 <td>
-                    <a style="text-decoration:none" asp-controller="Attendees" asp-action="AddAttendeeToAnotherEvent" asp-route-id="@item.Id">Lisa osavõtja teisele üritusele</a>
+                    <a style="text-decoration:none" asp-controller="Attendees" asp-action="AddAttendeeToAnotherEvent" asp-route-id="@item.AttendeeId">Lisa osavõtja teisele üritusele</a>
                 </td>
                 <td>
                     <form method="post" asp-controller="Attendees" asp-action="Delete" asp-route-id="@item.Id" asp-route-eventId="@item.EventId">

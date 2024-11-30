@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
-using App.Domain;
+
 using WebApp.ViewModels;
 using App.DAL.EF.Repositories;
 using App.Contracts.DAL.IAppRepositories;

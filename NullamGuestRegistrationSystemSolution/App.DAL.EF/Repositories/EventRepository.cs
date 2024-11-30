@@ -81,9 +81,22 @@ namespace App.DAL.EF.Repositories
         public IEnumerable<EventDTO?> GetAllFutureEventsOrderedByName(bool noTracking = true, bool noIncludes = false)
         {
             var currentDateTime = DateTime.Now;
-            var futureEvents = CreateQuery(noTracking, noIncludes)
+            var futureEvents = CreateQuery(noTracking, false)
                 .OrderBy(e => e.Name)
-                .Where(e => (e.EventDateAndTime >= currentDateTime)).Select(e => Mapper.Map(e)).ToList();
+                .Where(e => (e.EventDateAndTime >= currentDateTime))
+                                //.Select(e => Mapper.Map(e))
+                                .Select(e => new EventDTO
+                                {
+                                    Id = e.Id,
+                                    Name = e.Name,
+                                    Location = e.Location,
+                                    EventDateAndTime = e.EventDateAndTime,
+                                    AdditionalInfo = e.AdditionalInfo,
+                                    // move this expression to mapper maybe?
+                                    NumberOfAttendees = e.Attendees!.Sum(a => a.NumberOfPeople),
+                                })
+
+                .ToList();
             return futureEvents;
         }
         
@@ -118,7 +131,7 @@ namespace App.DAL.EF.Repositories
                     .ThenBy(e => e.EventDateAndTime.Hour)
                     .ThenBy(e => e.EventDateAndTime.Minute)
                     .ThenBy(e => e.Name)
-                .Where(e => (e.EventDateAndTime >= currentDateTime)).Select(e => Mapper.Map(e)).ToListAsync();
+                .Where(e => (e.EventDateAndTime >= currentDateTime) && !e.Attendees!.Any(e => e.AttendeeId == attendeeId)).Select(e => Mapper.Map(e)).ToListAsync();
             return futureEvents;
         }
 
@@ -137,9 +150,22 @@ namespace App.DAL.EF.Repositories
         public async Task<IEnumerable<EventDTO?>> GetAllPastEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
         {
             var currentDateTime = DateTime.Now;
-            var pastEvents = await CreateQuery(noTracking, noIncludes)
+            var pastEventsQuery = CreateQuery(noTracking, false)
                 .OrderBy(e => e.Name)
-                .Where(e => (e.EventDateAndTime < currentDateTime)).Select(e => Mapper.Map(e)).ToListAsync();
+                .Where(e => (e.EventDateAndTime < currentDateTime))
+                .Select(e => new EventDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Location = e.Location,
+                    EventDateAndTime = e.EventDateAndTime,
+                    AdditionalInfo = e.AdditionalInfo,
+                    // move this expression to mapper maybe?
+                    NumberOfAttendees = e.Attendees!.Sum(a => a.NumberOfPeople),
+                });
+            var sql = pastEventsQuery.ToString();
+            var pastEvents = await pastEventsQuery
+                .ToListAsync();
             return pastEvents;
         }
 

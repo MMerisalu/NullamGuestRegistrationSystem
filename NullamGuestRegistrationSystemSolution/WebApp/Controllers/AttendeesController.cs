@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
-using App.Domain;
+
 using WebApp.ViewModels;
 using App.Contracts.DAL;
 using App.DAL.DTO;
@@ -32,6 +32,11 @@ namespace WebApp.Controllers
 
 
         // GET: Attendees/Create
+        /// <summary>
+        /// Create a new Attendee (if not exists) and add them to this event
+        /// </summary>
+        /// <param name="id">EventId for the Event to add the Attendee to</param>
+        /// <returns></returns>
         public async Task<IActionResult> Create([FromRoute] int id)
         {
             var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
@@ -41,7 +46,7 @@ namespace WebApp.Controllers
             }
             var vm = new CreateAttendeeVM();
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
             return View(vm);
         }
 
@@ -58,7 +63,7 @@ namespace WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
                 return View(vm);
             }
 
@@ -88,7 +93,7 @@ namespace WebApp.Controllers
                     {
                         ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
                         var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                        vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                        vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
                         return View(vm);
                     }
                     else if (vm.AttendeeType == AttendeeType.Company)
@@ -96,7 +101,7 @@ namespace WebApp.Controllers
                         ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
                         ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
                         var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                        vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                        vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
                         return View(vm);
                     }
                 }
@@ -138,7 +143,7 @@ namespace WebApp.Controllers
         {
             var vm = new EditAttendeeVM();
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
 
             if (id == null)
             {
@@ -192,7 +197,7 @@ namespace WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
                 return View(vm);
             }
             if (ModelState.IsValid)
@@ -225,7 +230,7 @@ namespace WebApp.Controllers
                        {
                             ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
                             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
                             return View(vm);
                         }
                         else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
@@ -233,7 +238,7 @@ namespace WebApp.Controllers
                             ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
                             ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
                             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethod.Id), nameof(PaymentMethod.Name));
+                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
                             return View(vm);
                         }
                     }
@@ -312,7 +317,7 @@ namespace WebApp.Controllers
             vm.AttendeeType = attendeeDb.AttendeeType!.Value;
             if (vm.AttendeeType.Value == AttendeeType.Company)
                 vm.NumberOfPeopleFromCompany = attendeeDb.NumberOfPeopleFromCompany!.Value;
-            vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
+            vm.Events = new SelectList( await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             return View(vm);
         }
 
@@ -328,7 +333,7 @@ namespace WebApp.Controllers
             }
             if (!ModelState.IsValid)
             {
-                
+                vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsOrderedByNameAsync(), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             }
 
             if (attendeeDb.AttendeeType == AttendeeType.Company &&

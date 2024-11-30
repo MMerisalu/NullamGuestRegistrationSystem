@@ -23,13 +23,52 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var eventsController = new EventsController(_uow);
-            var eventsDb = await _uow.Events.GetAllEventsOrderedByNameAsync(showPastEvents: true);
-            var events = eventsController.CreateEventIndexVM(eventsDb);
+            var vm = new ListOfEventVM();
 
+            var pastEventsDb = await _uow.Events.GetAllPastEventsOrderedByNameAsync();
+            var futureEventDb = await _uow.Events.GetAllFutureEventsOrderedByNameAsync();
 
+            if (pastEventsDb != null)
+            {
+                var index = 0;
+                foreach (var item in pastEventsDb)
+                {
+                    vm.PastEvents.Add(new IndexEventVM()
+                    {
+                        LineNumber = ++index,
+                        Name = item.Name,
+                        Location = item.Location,
+                        EventDateAndTime = item.EventDateAndTime,
+                        NumberOfAttendeesPerEvent = item.NumberOfAttendees,
+                        NumberOfAttendees = item.NumberOfAttendees,
+                        AdditionalInfo = item.AdditionalInfo,
+                        Id = item.Id
+                    });
+                }
 
-            return View(events);
+            }
+
+            if (futureEventDb != null)
+            {
+                var index = 0;
+                foreach (var item in futureEventDb)
+                {
+                    vm.FutureEvents.Add(new IndexEventVM()
+                    {
+                        LineNumber = ++index,
+                        Name = item.Name,
+                        Location = item.Location,
+                        EventDateAndTime = item.EventDateAndTime,
+                        NumberOfAttendeesPerEvent = item.NumberOfAttendees,
+                        NumberOfAttendees = item.NumberOfAttendees,
+                        AdditionalInfo = item.AdditionalInfo,
+                        Id = item.Id
+                    });
+                }
+
+            }
+
+            return View(vm);
         }
 
         public IActionResult Privacy()

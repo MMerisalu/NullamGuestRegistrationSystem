@@ -7,6 +7,7 @@ namespace WebApp.ViewModels
 {
     public class ListOfAttendeeVM : DomainEntityId<int>
     {
+        public int AttendeeId { get; set; }
         public AttendeeType? AttendeeType { get; set; }
 
         [DisplayName("Osavõtja")]
