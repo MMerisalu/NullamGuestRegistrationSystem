@@ -57,7 +57,7 @@ namespace WebApp.ViewModels
 
 
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
-        [RegularExpression("^(?:[1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|250)$", ErrorMessage = "Ettevõttest tulevate isikute arv võib olla 1 kuni 250. Palun sisestage ettevõttest tulevate isikute arv uuesti.")]
+        [Range(1, 250, ErrorMessage = "Ettevõtest tulevate osavõtjate arv jääb vahemikku 1 kuni 250! Palun sisestage ettevõttest tulevate isikute arv uuesti.")]
         public int? NumberOfPeopleFromCompany { get; set; }
 
         [MaxLength(5000)]

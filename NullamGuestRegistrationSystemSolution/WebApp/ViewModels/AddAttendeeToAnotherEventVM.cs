@@ -17,7 +17,7 @@ namespace WebApp.ViewModels
         [DisplayName("Osavõtjate arvu muutmine?")]
         public bool IsNumberOfPeopleFromCompanyChanged { get; set; }
 
-
+        [Range(1,250, ErrorMessage = "Ettevõtest tulevate osavõtjate arv jääb vahemikku 1 kuni 250! Palun sisestage ettevõttest tulevate isikute arv uuesti.")]
         [DisplayName("Ettevõtest tulevate osavõtjate arv")]
         public int? NumberOfPeopleFromCompany { get; set; }
 
