@@ -7,9 +7,9 @@
     <a style="text-decoration:none" asp-controller="Events" asp-action="Create">Lisa uus üritus</a>
 </p>
 <h1>Tulevased üritused</h1>
-@await Html.PartialAsync("_eventTable", Model.FutureEvents)
-<h1>Möödunud üritused</h1>
-@await Html.PartialAsync("_eventTable", Model.PastEvents)
+@await Html.PartialAsync("_EventTable", Model.FutureEvents)
+<h1>Toimunud üritused</h1>
+@await Html.PartialAsync("_EventTable", Model.PastEvents)
 @*@{
     ViewData["Title"] = "Avaleht";
     var dateTime = DateTime.Now;
