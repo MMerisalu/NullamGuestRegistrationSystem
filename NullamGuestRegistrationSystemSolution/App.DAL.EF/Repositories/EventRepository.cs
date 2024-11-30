@@ -83,19 +83,8 @@ namespace App.DAL.EF.Repositories
             var currentDateTime = DateTime.Now;
             var futureEvents = CreateQuery(noTracking, false)
                 .OrderBy(e => e.Name)
-                .Where(e => (e.EventDateAndTime >= currentDateTime))
-                                //.Select(e => Mapper.Map(e))
-                                .Select(e => new EventDTO
-                                {
-                                    Id = e.Id,
-                                    Name = e.Name,
-                                    Location = e.Location,
-                                    EventDateAndTime = e.EventDateAndTime,
-                                    AdditionalInfo = e.AdditionalInfo,
-                                    // move this expression to mapper maybe?
-                                    NumberOfAttendees = e.Attendees!.Sum(a => a.NumberOfPeople),
-                                })
-
+                .Where(e => e.EventDateAndTime >= currentDateTime)
+                .Select(e => Mapper.Map(e))
                 .ToList();
             return futureEvents;
         }
@@ -150,21 +139,10 @@ namespace App.DAL.EF.Repositories
         public async Task<IEnumerable<EventDTO?>> GetAllPastEventsOrderedByNameAsync(bool noTracking = true, bool noIncludes = false)
         {
             var currentDateTime = DateTime.Now;
-            var pastEventsQuery = CreateQuery(noTracking, false)
+            var pastEvents = await CreateQuery(noTracking, false)
                 .OrderBy(e => e.Name)
-                .Where(e => (e.EventDateAndTime < currentDateTime))
-                .Select(e => new EventDTO
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Location = e.Location,
-                    EventDateAndTime = e.EventDateAndTime,
-                    AdditionalInfo = e.AdditionalInfo,
-                    // move this expression to mapper maybe?
-                    NumberOfAttendees = e.Attendees!.Sum(a => a.NumberOfPeople),
-                });
-            var sql = pastEventsQuery.ToString();
-            var pastEvents = await pastEventsQuery
+                .Where(e => e.EventDateAndTime < currentDateTime)
+                .Select(e => Mapper.Map(e))
                 .ToListAsync();
             return pastEvents;
         }
