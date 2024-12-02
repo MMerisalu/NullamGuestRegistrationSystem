@@ -157,6 +157,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            vm.EventId = eventId;
             vm.Id = attendee.Id;
             vm.AttendeeType = attendee.AttendeeType;
             if (vm.AttendeeType == AttendeeType.Person)
@@ -255,9 +256,8 @@ namespace WebApp.Controllers
                         if (eventAndAttendeeDb != null)
                         {
                             eventAndAttendeeDb.NumberOfPeople = vm.NumberOfPeopleFromCompany!.Value;
-                            _uow.EventsAndAttendes.Update(eventAndAttendeeDb);
-
-
+                            var result = _uow.EventsAndAttendes.Update(eventAndAttendeeDb);
+                            await _uow.SaveChangesAsync();
                         }
 
                         attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;

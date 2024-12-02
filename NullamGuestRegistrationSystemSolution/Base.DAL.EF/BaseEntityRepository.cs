@@ -61,7 +61,8 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
         // Hack: remove the previous tracking!
         RepoDbContext.ChangeTracker.Clear();
 
-        return Mapper.Map(RepoDbSet.Update(Mapper.Map(entity)!).Entity)!;
+        var dbEntity = Mapper.Map(entity);
+        return Mapper.Map(RepoDbSet.Update(dbEntity).Entity)!;
     }
 
     public virtual TDalEntity Remove(TDalEntity entity)

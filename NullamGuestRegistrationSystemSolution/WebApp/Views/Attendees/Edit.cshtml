@@ -81,7 +81,8 @@
             </div>
             <br />
 
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id" asp-route-Id="@Model.Id" />
+            <input type="hidden" asp-for="EventId" asp-route-eventId="@Model.EventId" />
             <div class="form-group">
                 <input type="submit" value="Salvesta" class="btn btn-primary" />
             </div>
