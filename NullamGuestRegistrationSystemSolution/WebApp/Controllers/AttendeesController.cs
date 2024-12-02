@@ -11,6 +11,7 @@ using WebApp.ViewModels;
 using App.Contracts.DAL;
 using App.DAL.DTO;
 using App.Enum;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApp.Controllers
 {
@@ -139,7 +140,7 @@ namespace WebApp.Controllers
 
 
         // GET: Attendees/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int eventId)
         {
             var vm = new EditAttendeeVM();
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
@@ -209,59 +210,63 @@ namespace WebApp.Controllers
                     {
                         attendeeDb.SurName = vm.SurName;
                         attendeeDb.GivenName = vm.GivenName;
-                        attendeeDb.PersonalIdentifier = vm.PersonalIdentifier;
-                        attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
+                        if (!vm.PersonalIdentifier.IsNullOrEmpty() && vm.PersonalIdentifier != attendeeDb.PersonalIdentifier)
+                        {
+                            var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                            if (isRegistered.Value == true)
+                            {
+                                ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
+                                var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
+                                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
+                                return View(vm);
+                            }
+                            attendeeDb.PersonalIdentifier = vm.PersonalIdentifier;
+                            attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
 
+                        }
+                       
+                        
+
+
+
+
+                        
                     }
                     else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                     {
+
                         attendeeDb.CompanyName = vm.CompanyName;
                         attendeeDb.RegistryCode = vm.RegistryCode;
-                        attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
-                        attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
-                    }
-
-                    attendeeDb.PaymentMethodId = vm.PaymentMethodId;
-                    var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, attendeeDb.PersonalIdentifier, attendeeDb.CompanyName, attendeeDb.RegistryCode);
-                    if (isRegistered.Value == true)
-                    {
-    
-                        if (attendeeDb.AttendeeType.Value == AttendeeType.Person)
-                       {
-                            ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
-                            var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
-                            return View(vm);
-                        }
-                        else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
+                        if (!vm.CompanyName.IsNullOrEmpty() && !vm.CompanyName.Equals(attendeeDb.CompanyName) && !vm.RegistryCode.IsNullOrEmpty() && !vm.RegistryCode.Equals(attendeeDb.RegistryCode))
                         {
-                            ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
-                            ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
-                            var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                            vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
-                            return View(vm);
+                            var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                            if (isRegistered.Value == true)
+                            {
+                                ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                                ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                                var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
+                                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
+                                return View(vm);
+                            }
                         }
-                    }
+
+                        attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
+                        var eventAndAttendeeDb = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(vm.EventId, vm.Id, noIncludes: true);
+                        if (eventAndAttendeeDb != null)
+                        {
+                            eventAndAttendeeDb.NumberOfPeople = vm.NumberOfPeopleFromCompany!.Value;
+                            _uow.EventsAndAttendes.Update(eventAndAttendeeDb);
 
 
-                    if (attendeeDb.AttendeeType == AttendeeType.Person)
-                    {
-                        attendeeDb.SurName = vm.SurName;
-                        attendeeDb.GivenName = vm.GivenName;
-                        attendeeDb.PersonalIdentifier = vm.PersonalIdentifier;
-                        attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
-                        attendeeDb.PaymentMethodId = vm.PaymentMethodId;
-                    }
-                    else if (attendeeDb.AttendeeType == AttendeeType.Company)
-                    {
-                        attendeeDb.CompanyName = vm.CompanyName;
-                        attendeeDb.RegistryCode = vm.RegistryCode;
+                        }
+
                         attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
-                        attendeeDb.PaymentMethodId = vm.PaymentMethodId;
                     }
-
+                    attendeeDb.PaymentMethodId = vm.PaymentMethodId;
                     _uow.Attendees.Update(attendeeDb);
+
                     await _uow.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {

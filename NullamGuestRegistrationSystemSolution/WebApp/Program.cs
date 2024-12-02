@@ -34,9 +34,31 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == 404)
+    {
+        context.Response.Clear(); // Clear any existing response
+        context.Response.StatusCode = 404; // Ensure the status code is 404
+
+        // Set the content type
+        context.Response.ContentType = "text/html";
+
+        // Serve the custom 404 HTML template
+        await context.Response.SendFileAsync("wwwroot/index.html");
+    }
+});
+
+
+
+
+
 
 app.UseRouting();
 

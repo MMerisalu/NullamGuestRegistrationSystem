@@ -9,6 +9,7 @@ namespace WebApp.ViewModels
 {
     public class EditAttendeeVM : DomainEntityId<int>
     {
+        public int EventId { get; set; }
         [DisplayName("Osavõtja tüüp")]
         [EnumDataType(typeof(AttendeeType))]
         public AttendeeType? AttendeeType { get; set; }
