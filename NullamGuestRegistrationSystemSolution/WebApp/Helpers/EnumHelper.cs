@@ -10,7 +10,7 @@ namespace WebApp.Helpers
 {
     public static class EnumExtensions
     {
-        // <summary>
+        /// <summary>
         /// Method that retrieves the name specified in the Display attribute for an enum value.
         /// </summary>
         /// <param name="enumValue">The enum value for which the Display name is requested.</param>
@@ -18,7 +18,7 @@ namespace WebApp.Helpers
         public static string GetDisplayName(this Enum enumValue)
         {
             var displayAttribute = enumValue.GetType()
-                                            .GetField(enumValue.ToString())
+                                            .GetField(enumValue.ToString())?
                                             .GetCustomAttribute<DisplayAttribute>();
 
             return displayAttribute?.Name ?? enumValue.ToString();

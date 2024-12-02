@@ -36,7 +36,7 @@ namespace WebApp.Controllers
                     vm.PastEvents.Add(new IndexEventVM()
                     {
                         LineNumber = ++index,
-                        Name = item.Name,
+                        Name = item!.Name,
                         Location = item.Location,
                         EventDateAndTime = item.EventDateAndTime,
                         NumberOfAttendeesPerEvent = item.NumberOfAttendees,
@@ -56,7 +56,7 @@ namespace WebApp.Controllers
                     vm.FutureEvents.Add(new IndexEventVM()
                     {
                         LineNumber = ++index,
-                        Name = item.Name,
+                        Name = item!.Name,
                         Location = item.Location,
                         EventDateAndTime = item.EventDateAndTime,
                         NumberOfAttendeesPerEvent = item.NumberOfAttendees,

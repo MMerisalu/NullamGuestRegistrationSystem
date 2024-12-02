@@ -59,10 +59,10 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
     {
        
         // Hack: remove the previous tracking!
+        //       this means that saveChanges must be called every time an entity is updated.
         RepoDbContext.ChangeTracker.Clear();
 
-        var dbEntity = Mapper.Map(entity);
-        return Mapper.Map(RepoDbSet.Update(dbEntity).Entity)!;
+        return Mapper.Map(RepoDbSet.Update(Mapper.Map(entity)!).Entity)!;
     }
 
     public virtual TDalEntity Remove(TDalEntity entity)

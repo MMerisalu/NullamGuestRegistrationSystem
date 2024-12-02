@@ -126,7 +126,7 @@ namespace WebApp.Controllers
                     {
                         EventId = id,
                         AttendeeId = attendeeId.Value,
-                        NumberOfPeople = vm.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.Value : 1
+                        NumberOfPeople = vm.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.GetValueOrDefault(1) : 1
 
                     };
                     _uow.EventsAndAttendes.Add(eventAndAttendee);
@@ -238,7 +238,7 @@ namespace WebApp.Controllers
 
                         attendeeDb.CompanyName = vm.CompanyName;
                         attendeeDb.RegistryCode = vm.RegistryCode;
-                        if (!vm.CompanyName.IsNullOrEmpty() && !vm.CompanyName.Equals(attendeeDb.CompanyName) && !vm.RegistryCode.IsNullOrEmpty() && !vm.RegistryCode.Equals(attendeeDb.RegistryCode))
+                        if (!vm.CompanyName.IsNullOrEmpty() && !vm.CompanyName!.Equals(attendeeDb.CompanyName) && !vm.RegistryCode.IsNullOrEmpty() && !vm.RegistryCode!.Equals(attendeeDb.RegistryCode))
                         {
                             var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
                             if (isRegistered.Value == true)
@@ -351,7 +351,7 @@ namespace WebApp.Controllers
             {
                 AttendeeId = attendeeDb.Id,
                 EventId = vm.EventId,
-                NumberOfPeople = attendeeDb.AttendeeType.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.Value : 1
+                NumberOfPeople = attendeeDb.AttendeeType!.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.GetValueOrDefault(1) : 1
             };
              _uow.EventsAndAttendes.Add(eventAndAttendee);
             await _uow.SaveChangesAsync();
