@@ -22,5 +22,7 @@ namespace WebApp.ViewModels
         public string Code { get; set; } = default!;
 
         public int EventId { get; set; }
+
+        public DateTime EventDateAndTime { get; set; }
     }
 }

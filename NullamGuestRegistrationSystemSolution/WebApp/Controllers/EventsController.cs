@@ -201,6 +201,7 @@ namespace WebApp.Controllers
             var attendees = await _uow.EventsAndAttendes.GetAllAttendeeDetailsDTOsByEventIdAsync(id, true, noIncludes: false);
             var numberOfAttendees = attendees?.Sum(x => x!.NumberOfPeople) ?? 0;
             var attendeeVms = new List<ListOfAttendeeVM>();
+            var eventDb = await _uow.Events.GetEventByIdAsync(id);
 
             if (numberOfAttendees > 0)
             {
@@ -210,6 +211,10 @@ namespace WebApp.Controllers
                     vm.Name = attendee!.Name!;
                     vm.Code = attendee!.Code!;
                     vm.Id = attendee!.Id;
+                    if (eventDb != null) 
+                    {
+                        vm.EventDateAndTime = eventDb.EventDateAndTime;
+                    }
                     vm.EventId = id;
                     vm.AttendeeId = attendee!.AttendeeId;
                     vm.NumberOfPeople = attendee.NumberOfPeople;
