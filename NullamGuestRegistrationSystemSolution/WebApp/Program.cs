@@ -19,8 +19,12 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connect
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IAppUnitOfWork, AppUOW>();
-
-
+builder.Services.AddCors(n => n.AddPolicy(name: "NullamPolicy", p =>
+{
+    p.WithOrigins("https://localhost:3000", "http://localhost:3000")
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+}));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddExpressiveAnnotations();
 RequiredIfAttribute.DefaultErrorMessage = "Väli {0} on kohustuslik!";
@@ -55,11 +59,7 @@ app.Use(async (context, next) =>
     }
 });
 
-
-
-
-
-
+app.UseCors("NullamPolicy");
 app.UseRouting();
 
 app.UseAuthorization();
