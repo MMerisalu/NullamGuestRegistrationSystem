@@ -50,32 +50,24 @@ export abstract class BaseEntityService<TEntity extends IBaseEntity> extends Bas
   }
  
 
-  /*async create(body: IVehicleFormData | IScheduleFormData| ICommentFormData | IRideTimeFormData): Promise<number | undefined> {
+  async create(body: IPaymentMethodCreateEditData): Promise<number | undefined> {
     console.log('body', body)
     try {
-      let user = IdentityService.getCurrentUser();
-      if (user) {
+    
+      
         console.log('this.axios', this.axios.defaults.baseURL)
-        let response = await this.axios.post(`/`, body,
-          {
-            headers: {
-              'Authorization': 'Bearer ' + user.token
-            }
-          });
+        let response = await this.axios.post(`/`, body);
         console.log('response.status:', response.status)
         if (response.status === 201) {
           return response.status
         }
-      }
-      else {
-        throw Error("User is not logged in");
-      }
-      return undefined;
+      
+     
     } catch (e) {
       console.log('Details -  error: ', (e as Error).message);
       return undefined;
     }
-  } */
+  } 
   /* async edit(id: string, body: IVehicleFormData| IScheduleFormData | ICommentFormData): Promise<number | undefined> {
     console.log('body', body)
     try {

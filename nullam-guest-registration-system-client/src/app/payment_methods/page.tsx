@@ -35,9 +35,9 @@ const PaymentMethods = () => {
 
   return (
     <>
-      <h1>Payment Methods</h1>
+      <h1>Maksemeetodid</h1>
       <p>
-        <Link href="/payment_methods/create/">Loo Uus</Link>
+        <Link style={{textDecoration:"none"}} href="/payment_methods/create/">Lisa uus maksemeetod</Link>
       </p>
       <table className="table">
         <thead>
