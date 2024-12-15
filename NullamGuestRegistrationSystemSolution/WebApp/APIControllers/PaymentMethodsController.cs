@@ -10,6 +10,7 @@ using App.Domain;
 using Base.Contracts.DAL;
 using App.Contracts.DAL;
 using App.DAL.DTO;
+using System.Diagnostics.Metrics;
 
 namespace WebApp.APIControllers
 {
@@ -30,8 +31,22 @@ namespace WebApp.APIControllers
         {
             return Ok(await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync());
         }
+        // GET: api/Countries/5
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<PaymentMethodDTO?>> GetPaymentMethod(int id)
+        {
 
-        
+            var paymentMethod = await _uow.PaymentMethods.FirstOrDefaultAsync(id);
+
+            if (paymentMethod == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(paymentMethod);
+        }
+
+
 
         // PUT: api/PaymentMethods/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

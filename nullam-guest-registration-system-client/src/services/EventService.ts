@@ -36,10 +36,7 @@ export class EventService extends BaseEntityService<IEvent> {
     
       }
     
-    formatEventDateTime(params:string) : string {
-        return format(params,"dd.MM.yyyy HH:mm" )
-
-    }
+    
 }
     
    
