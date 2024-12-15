@@ -1,64 +1,74 @@
 "use client";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import IPaymentMethod from "../domain/IPaymentMethod";
-import { PaymentMethodService } from "@/services/PaymentMethodService";
+import Link from "next/link";
+import IEvent from "../domain/IEvent";
+import { EventService } from "@/services/EventService";
+import {format} from 'date-fns'
 
-const paymentMethodService = new PaymentMethodService();
+const eventService = new EventService();
 
-const PaymentMethods = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
+const Events = () => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [events, setEvents] = useState<IEvent[]>([]);
 
-  // Function to fetch payment methods
-  const fetchPaymentMethods = async () => {
+ // Function to fetch events
+ const fetchEvents = async () => {
     try {
-      const response = await paymentMethodService.getAll();
+      const response = await eventService.getAllEventsWithFormattedData();
       console.log(response);
-      setPaymentMethods(response || []);
+      setEvents(response || []);
     } catch (error) {
-      console.error("Failed to fetch payment methods:", error);
-      setPaymentMethods([]);
+      console.error("Failed to fetch events:", error);
+      setEvents([]);
     } finally {
       setIsLoading(false);
     }
   };
+  
+ // UseEffect to call the fetch function on component mount
+   useEffect(() => {
+     fetchEvents();
+   }, []);
+ 
+   if (isLoading) {
+     return <p>...laadimine</p>;
+   } 
 
-  // UseEffect to call the fetch function on component mount
-  useEffect(() => {
-    fetchPaymentMethods();
-  }, []);
-
-  if (isLoading) {
-    return <p>...laadimine</p>;
-  }
-
-  return (
+   return (
     <>
-      <h1>Maksemeetodid</h1>
+      <h1>Üritused</h1>
       <p>
-        <Link style={{textDecoration:"none"}} href="/payment_methods/create/">Lisa uus maksemeetod</Link>
+        <Link style={{textDecoration:"none"}} href="/events/create/">Lisa uus üritus</Link>
       </p>
       <table className="table">
         <thead>
           <tr>
-            <th>Maksemeetodi nimetus</th>
+            <th></th>
+            <th>Ürituse nimi</th>
+            <th>Toimumisaeg</th>
+            <th>Koht</th>
+            <th>Osavõtjate arv</th>
+            <th>Lisainfo</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {paymentMethods.map((item) => (
+          {events.map((item) => (
             <tr key={item.id}>
+              <td>{item.lineNumber}</td>
               <td>{item.name}</td>
+              <td>{item.eventDateAndTime}</td>
+              <td>{item.location}</td>
+              <td>{item.numberOfAttendees}</td>
+              <td>{item.additionalInfo}</td>
               <td>
-                <Link href={`/payment_methods/edit/${item.id}`}>Muuda</Link>
+                <Link href={`/events/edit/${item.id}`}>Muuda</Link>
               </td>
               <td>
                 <form
-                  onSubmit={() => {
-                    
-                    paymentMethodService.delete(item.id).then(() => {
-                      fetchPaymentMethods();
+                  onSubmit={() => {  
+                    eventService.delete(item.id).then(() => {
+                      fetchEvents();
                     });
                   }}
                 >
@@ -87,6 +97,6 @@ const PaymentMethods = () => {
       </table>
     </>
   );
-};
 
-export default PaymentMethods;
+};
+export default Events

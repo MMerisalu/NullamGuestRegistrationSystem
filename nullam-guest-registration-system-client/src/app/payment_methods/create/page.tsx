@@ -1,6 +1,6 @@
 'use client'
 import {useFormik} from "formik"
-import Button from "@/components/Button";
+import BackToButton from "@/components/BackToButton";
 import React from "react";
 import paymentMethodCreateEditSchema from "@/schemas/paymentMethodCreateEdit";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
@@ -12,8 +12,6 @@ const create = () => {
     initialValues: {
       name: "",  
     },
-
-    
 
     validationSchema: paymentMethodCreateEditSchema,
 
@@ -50,7 +48,7 @@ const create = () => {
       </div>
       <br />
       <div>
-       <Button to="/payment_methods">Tagasi</Button>  
+       <BackToButton to="/payment_methods">Tagasi</BackToButton>  
       </div>
     </> 
   );
