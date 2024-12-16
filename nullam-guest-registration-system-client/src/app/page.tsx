@@ -43,7 +43,7 @@ export default function Home() {
     <>
       <h1>Üritused</h1>
       <p>
-        <Link style={{textDecoration:"none"}} href="/events/create/">Lisa uus üritus</Link>
+        <Link style={{textDecoration:"none"}} href="/nullam_events/Create/">Lisa uus üritus</Link>
       </p>
       <table className="table">
         <thead>
@@ -58,9 +58,9 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {events.map((item) => (
+          {events.map((item, index) => (
             <tr key={item.id}>
-              <td>{item.lineNumber}</td>
+              <td>{index + 1}.</td>
               <td>{item.name}</td>
               <td>{item.eventDateAndTime}</td>
               <td>{item.location}</td>

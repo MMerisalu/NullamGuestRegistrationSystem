@@ -17,7 +17,7 @@ const Header = () => {
                             <a className="nav-link text-dark">AVALEHT</a>
                         </li>
                         <li  className="nav-item">
-                            <a className="nav-link text-dark" href="/Events/Create">ÜRITUSE LISAMINE</a>
+                            <a className="nav-link text-dark" href="/nullam_events/Create">ÜRITUSE LISAMINE</a>
                         </li> 
                         <li  className="nav-item">
                             <Link href="/payment_methods" className="nav-link text-dark">MAKSEMEETODID</Link>

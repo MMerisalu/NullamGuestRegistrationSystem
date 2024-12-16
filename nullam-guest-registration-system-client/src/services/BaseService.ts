@@ -1,17 +1,19 @@
 import Axios, { AxiosInstance } from 'axios';
 
- abstract class BaseService {
+abstract class BaseService
+{
     private static hostBaseURL = "https://localhost:7272/api/";
 
-    protected axios: AxiosInstance; 
+    protected axios: AxiosInstance;
 
-    constructor (baseUrl: string){
+    constructor(baseUrl: string)
+    {
         this.axios = Axios.create(
             {
                 baseURL: BaseService.hostBaseURL + baseUrl,
                 headers: {
-                common: {
-                    'Content-Type': 'application/json'
+                    common: {
+                        'Content-Type': 'application/json'
                     }
                 }
             }
