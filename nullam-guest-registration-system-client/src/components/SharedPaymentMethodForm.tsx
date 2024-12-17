@@ -1,7 +1,7 @@
 "use client";
 import IPaymentMethod from "@/app/domain/IPaymentMethod";
 import BackToButton from "@/components/BackToButton";
-import paymentMethodCreateEditSchema from "@/schemas/paymentMethodCreateEdit";
+import paymentMethodCreateEditSchema from "@/schemas/paymentMethodCreateEditSchema";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
 import { SharedProps } from "@/types";
 import { useFormik } from "formik";

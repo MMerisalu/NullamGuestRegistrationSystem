@@ -31,7 +31,20 @@ namespace WebApp.APIControllers
             return Ok(await _uow.Events.GetAllEventsDTOOrderedByNameAsync());
         }
 
-        
+        // GET: api/PaymentMethods/5
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<PaymentMethodDTO?>> GetEvent(int id)
+        {
+
+            var eventDb = await _uow.Events.FirstOrDefaultAsync(id);
+
+            if (eventDb == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(eventDb);
+        }
 
         // PUT: api/Events/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

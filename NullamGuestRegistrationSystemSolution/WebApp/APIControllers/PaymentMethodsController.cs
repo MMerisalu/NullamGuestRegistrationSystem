@@ -31,7 +31,7 @@ namespace WebApp.APIControllers
         {
             return Ok(await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync());
         }
-        // GET: api/Countries/5
+        // GET: api/PaymentMethods/5
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PaymentMethodDTO?>> GetPaymentMethod(int id)
         {
