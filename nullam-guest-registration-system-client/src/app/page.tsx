@@ -61,7 +61,7 @@ export default function Home() {
           {events.map((item, index) => (
             <tr key={item.id}>
               <td>{index + 1}.</td>
-              <td>{item.name}</td>
+              <td><Link href={`/nullam_events/list_of_attendees/${item.id}`}>{item.name}</Link></td>
               <td>{item.eventDateAndTime}</td>
               <td>{item.location}</td>
               <td>{item.numberOfAttendees}</td>

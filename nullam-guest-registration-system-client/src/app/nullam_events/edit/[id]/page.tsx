@@ -67,6 +67,7 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
                 <input
                   className="form-control"
                   type="text"
+                  name="name"
                   placeholder="Sisestage ürituse nimetus"
                   value={values.name}
                   onChange={handleChange}
