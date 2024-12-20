@@ -31,9 +31,9 @@ namespace WebApp.APIControllers
             return Ok(await _uow.Events.GetAllEventsDTOOrderedByNameAsync());
         }
 
-        // GET: api/PaymentMethods/5
+        // GET: api/Events/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<PaymentMethodDTO?>> GetEvent(int id)
+        public async Task<ActionResult<EventDTO?>> GetEvent(int id)
         {
 
             var eventDb = await _uow.Events.FirstOrDefaultAsync(id);
@@ -114,6 +114,25 @@ namespace WebApp.APIControllers
             await _uow.SaveChangesAsync();
 
             return NoContent();
+        }
+
+
+        // GET: api/Events/ListOfAttendees/5
+        [HttpGet("ListOfAttendees/{id}")]
+        
+        public async Task<ActionResult<AttendeeDetailDTO?>> GetAttendeesByEventId(int id)
+        {
+
+            var eventDb = await _uow.Events.FirstOrDefaultAsync(id);
+           
+            if (eventDb == null)
+            {
+                return NotFound();
+            }
+            var attendees = await _uow.EventsAndAttendes.GetAllAttendeeDetailsDTOsByEventIdAsync(id, true, noIncludes: false);
+            
+
+            return Ok(attendees);
         }
 
         private bool EventExists(int id)
