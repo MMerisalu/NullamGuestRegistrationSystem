@@ -2,6 +2,7 @@ import IEvent from "@/app/domain/IEvent";
 import axios from "axios";
 import { BaseEntityService } from "./BaseEntityService";
 import { format } from "date-fns";
+import IAttendeeDetails from "@/app/domain/IAttendeeDetail";
 
 export class EventService extends BaseEntityService<IEvent> {
   constructor() {
@@ -25,5 +26,19 @@ export class EventService extends BaseEntityService<IEvent> {
       console.log("error: ", (e as Error).message);
       return undefined;
     }
+  }
+
+  async getAttendeesByEventId(id? : string | number) : Promise<IAttendeeDetails[] | undefined> {
+    try {
+      const response = await this.axios.get<IAttendeeDetails[]>(`/ListOfAttendees/${id}`);
+      console.log("response", response);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (e) {
+      console.log("error: ", (e as Error).message);
+      return undefined;
+    }
+
   }
 }
