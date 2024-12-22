@@ -31,6 +31,8 @@ namespace WebApp.APIControllers
         {
             return Ok(await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync());
         }
+
+
         // GET: api/PaymentMethods/5
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PaymentMethodDTO?>> GetPaymentMethod(int id)
@@ -45,7 +47,6 @@ namespace WebApp.APIControllers
 
             return Ok(paymentMethod);
         }
-
 
 
         // PUT: api/PaymentMethods/5
@@ -85,6 +86,7 @@ namespace WebApp.APIControllers
             return NoContent();
         }
 
+
         // POST: api/PaymentMethods
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -100,6 +102,7 @@ namespace WebApp.APIControllers
             return CreatedAtAction("GetPaymentMethod", new { id = paymentMethodDTO.Id }, paymentMethodDTO);
         }
 
+
         // DELETE: api/PaymentMethods/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaymentMethod(int id)
@@ -110,6 +113,11 @@ namespace WebApp.APIControllers
                 return NotFound();
             }
 
+            var isUsed = await _uow.Attendees.AnyAsync(p => p!.PaymentMethodId == paymentMethod.Id);
+            if (isUsed) 
+            {
+                return BadRequest("Olemit ei saa kustutada, kuna see on seotud teiste olemitega!");
+            }
             await _uow.PaymentMethods.RemoveAsync(paymentMethod.Id);
             await _uow.SaveChangesAsync();
 

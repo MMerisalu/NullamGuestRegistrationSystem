@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.DAL.EF;
-
 using WebApp.ViewModels;
 using App.Contracts.DAL;
 using App.DAL.DTO;
@@ -58,7 +57,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAttendeeVM vm, [FromRoute] int id)
         {
-            
+
             var attendee = new AttendeeDTO();
 
             if (!ModelState.IsValid)
@@ -225,13 +224,7 @@ namespace WebApp.Controllers
                             attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
 
                         }
-                       
-                        
 
-
-
-
-                        
                     }
                     else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                     {
@@ -292,7 +285,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id, int eventId)
         {
             var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
-            
+
             var eventDb = await _uow.Events.GetEventByIdAsync(eventId);
             var eventAndAttendee = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(eventDb!.Id, id);
             await _uow.EventsAndAttendes.RemoveAsync(eventAndAttendee!.Id);
@@ -302,7 +295,7 @@ namespace WebApp.Controllers
             {
                 await _uow.Attendees.RemoveAsync(attendee.Id, noIncludes: true);
             }
-                
+
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
@@ -311,7 +304,7 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAttendeeToAnotherEvent([FromRoute] int id)
         {
-            
+
             var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id, noIncludes: true);
             if (attendeeDb == null)
             {
@@ -322,7 +315,7 @@ namespace WebApp.Controllers
             vm.AttendeeType = attendeeDb.AttendeeType!.Value;
             if (vm.AttendeeType.Value == AttendeeType.Company)
                 vm.NumberOfPeopleFromCompany = attendeeDb.NumberOfPeopleFromCompany!.Value;
-            vm.Events = new SelectList( await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
+            vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(attendeeDb.Id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             return View(vm);
         }
 
@@ -330,7 +323,7 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAttendeeToAnotherEvent(AddAttendeeToAnotherEventVM vm, [FromRoute] int id)
         {
-            
+
             var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
             if (attendeeDb == null)
             {
@@ -353,10 +346,10 @@ namespace WebApp.Controllers
                 EventId = vm.EventId,
                 NumberOfPeople = attendeeDb.AttendeeType!.Value == AttendeeType.Company ? vm.NumberOfPeopleFromCompany.GetValueOrDefault(1) : 1
             };
-             _uow.EventsAndAttendes.Add(eventAndAttendee);
+            _uow.EventsAndAttendes.Add(eventAndAttendee);
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
-          }
+        }
         private async Task<bool> AttendeeExists(int id)
         {
             return await _uow.Attendees.ExistsAsync(id);

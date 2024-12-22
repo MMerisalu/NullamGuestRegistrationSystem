@@ -2,12 +2,8 @@
 import IAttendeeDetails from "@/app/domain/IAttendeeDetail";
 import { EventService } from "@/services/EventService";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 
-interface IProps {
-  id: string;
-}
 
 const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -56,7 +52,7 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
                 <td>
                   <Link
                     style={{textDecoration: "none"}}
-                    href="/Attendees/Edit/1?eventId=2"
+                    href={`/attendees/edit/${item.attendeeId}/${item.id}`}
                   >
                     {item.name}
                   </Link>
@@ -65,8 +61,7 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
                 <td>{item.code}</td>
                 <td>
                   <Link
-                     style={{textDecoration: "none"}}
-                    href="/Attendees/AddAttendeeToAnotherEvent/1"
+                     style={{textDecoration: "none"}} href={`/attendees/add_attendee_to_another_event/${item.id}`}
                   >
                     Lisa osavõtja teisele üritusele
                   </Link>
