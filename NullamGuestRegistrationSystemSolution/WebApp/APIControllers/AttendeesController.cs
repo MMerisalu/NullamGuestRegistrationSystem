@@ -48,8 +48,9 @@ namespace WebApp.APIControllers
 
         // PUT: api/Attendees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAttendee(int id, AttendeeDTO attendee, int eventId)
+        [HttpPut("{id}/{eventId}")]
+        
+        public async Task<IActionResult> PutAttendee(int id, AttendeeDTO attendee, [FromRoute]int eventId)
         {
             if (id != attendee.Id)
             {
@@ -289,7 +290,7 @@ namespace WebApp.APIControllers
 
 
         // DELETE: Events/1/Attendees/Delete/5
-        [HttpDelete("/{id}/{eventId}")]
+        [HttpDelete("{id}/{eventId}")]
         
         public async Task<IActionResult> DeleteAttendee(int eventId,int id )
         {
