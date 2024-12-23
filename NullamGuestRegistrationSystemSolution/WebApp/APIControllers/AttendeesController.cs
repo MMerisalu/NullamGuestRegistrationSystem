@@ -336,7 +336,7 @@ namespace WebApp.APIControllers
 
         [HttpPost("AddAttendeeToAnotherEvent/{id}")]
 
-        public async Task<ActionResult<AttendeeDetailDTO?>> AddAttendeeToAnotherEvent(int id, AttendeeDetailDTO attendeeDetails)
+        public async Task<ActionResult<AttendeeDetailDTO?>> AddAttendeeToAnotherEventApi(int id, AttendeeDetailDTO attendeeDetails)
         {
             var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
             if (attendeeDb == null)
