@@ -3,6 +3,7 @@ import axios from "axios";
 import { BaseEntityService } from "./BaseEntityService";
 import { format } from "date-fns";
 import IAttendeeDetails from "@/app/domain/IAttendeeDetail";
+import { number, string } from "yup";
 
 export class EventService extends BaseEntityService<IEvent> {
   constructor() {
@@ -40,5 +41,9 @@ export class EventService extends BaseEntityService<IEvent> {
       return undefined;
     }
 
+
   }
+
+
+ 
 }

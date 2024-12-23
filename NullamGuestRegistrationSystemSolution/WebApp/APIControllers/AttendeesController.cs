@@ -293,7 +293,7 @@ namespace WebApp.APIControllers
         // DELETE: Events/1/Attendees/Delete/5
         [HttpDelete("{id}/{eventId}")]
         
-        public async Task<IActionResult> DeleteAttendee(int eventId,int id )
+        public async Task<IActionResult> DeleteAttendee(int id, int eventId )
         {
             var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, true);
             if (attendee == null)

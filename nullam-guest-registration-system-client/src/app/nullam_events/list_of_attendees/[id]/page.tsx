@@ -1,17 +1,20 @@
 "use client"
 import IAttendeeDetails from "@/app/domain/IAttendeeDetail";
+import { AttendeeService } from "@/services/AttendeeService";
 import { EventService } from "@/services/EventService";
 import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
 
 
+const service = new EventService();
+const attendeeService = new AttendeeService();
 const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { id } = use(props.params);
   const [attendees, setAttendees] = useState<IAttendeeDetails[]>();
   const fetchAttendees = async() => {
 
-    const service = new EventService();
+    
     try {
       const response = await service.getAttendeesByEventId(id);
       console.log(response);
@@ -67,7 +70,10 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
                   </Link>
                 </td>
                 <td>
-                  <form method="post" action="/Attendees/Delete/1?eventId=2">
+                  <form method="post" onSubmit={() => {
+                    attendeeService.deleteAttendee(item.eventId, item.id)
+                    .then(() => fetchAttendees());
+                  } }>
                     <link className="link-danger" />
                     <button type="submit" className="btn btn-link">
                       <svg
