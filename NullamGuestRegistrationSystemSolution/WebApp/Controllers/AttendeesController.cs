@@ -331,7 +331,7 @@ namespace WebApp.Controllers
             }
             if (!ModelState.IsValid)
             {
-                vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsOrderedByNameAsync(), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
+                vm.Events = new SelectList(await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(id), nameof(EventDTO.Id), nameof(EventDTO.EventDateTimeAndName));
             }
 
             if (attendeeDb.AttendeeType == AttendeeType.Company &&
