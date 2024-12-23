@@ -11,6 +11,7 @@ using App.Contracts.DAL;
 using App.DAL.DTO;
 using App.Enum;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApp.APIControllers
 {
@@ -195,10 +196,10 @@ namespace WebApp.APIControllers
 
         // POST: api/Attendees
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<AttendeeDTO>> PostAttendee(AttendeeDTO attendee, [FromRoute] int eventId)
+        [HttpPost("{id}")]
+        public async Task<ActionResult<AttendeeDTO>> PostAttendee(AttendeeDTO attendee, [FromRoute] int id)
         {
-            var eventDb = await _uow.Events.GetEventByIdAsync(eventId);
+            var eventDb = await _uow.Events.GetEventByIdAsync(id);
             if (eventDb == null)
             { return NotFound("Kirjet ei leitud!");
             }
@@ -278,7 +279,7 @@ namespace WebApp.APIControllers
             }
             var eventAndAttendee = new EventAndAttendeeDTO
             {
-                EventId = eventId,
+                EventId = id,
                 AttendeeId = attendee.Id,
                 NumberOfPeople = attendee.NumberOfPeopleFromCompany!.Value
             };
@@ -332,5 +333,37 @@ namespace WebApp.APIControllers
         {
             return _uow.Attendees.Any(e => e!.Id == id);
         }
+
+        [HttpPost("AddAttendeeToAnotherEvent/{id}")]
+
+        public async Task<ActionResult<AttendeeDetailDTO?>> AddAttendeeToAnotherEvent(int id, AttendeeDetailDTO attendeeDetails)
+        {
+            var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
+            if (attendeeDb == null)
+            {
+                return NotFound();
+            }
+            
+
+            if (attendeeDb.AttendeeType == AttendeeType.Company &&
+                attendeeDetails.NumberOfPeople != attendeeDb.NumberOfPeopleFromCompany)
+            {
+                attendeeDb.NumberOfPeopleFromCompany += attendeeDetails.NumberOfPeople;
+            }
+
+            var eventAndAttendee = new EventAndAttendeeDTO()
+            {
+                AttendeeId = attendeeDb.Id,
+                EventId = attendeeDetails.EventId,
+                NumberOfPeople = attendeeDb.AttendeeType!.Value == AttendeeType.Company ? attendeeDetails.NumberOfPeople : 1
+            };
+            _uow.EventsAndAttendes.Add(eventAndAttendee);
+            await _uow.SaveChangesAsync();
+
+
+
+            return Ok(attendeeDetails);
+        }
+
     }
 }
