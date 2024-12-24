@@ -134,6 +134,7 @@ namespace WebApp.APIControllers
 
             return Ok(attendees);
         }
+        
 
         private bool EventExists(int id)
         {

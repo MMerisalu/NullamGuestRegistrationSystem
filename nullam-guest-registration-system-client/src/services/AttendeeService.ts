@@ -26,4 +26,6 @@ export class AttendeeService extends BaseEntityService<IAttendee> {
               return undefined;
           } 
       }
+
+     
 }

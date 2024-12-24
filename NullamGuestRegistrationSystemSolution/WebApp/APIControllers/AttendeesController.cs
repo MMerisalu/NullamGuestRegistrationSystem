@@ -361,9 +361,15 @@ namespace WebApp.APIControllers
             await _uow.SaveChangesAsync();
 
 
-
             return Ok(attendeeDetails);
         }
 
+        [HttpGet("GetFutureEvents/{id}")]
+        public async Task<ActionResult<IEnumerable<EventDTO?>>> GetAllFutureEventsForAnAttendeeOrderByTimeAndName(int id)
+        {
+
+            var events = await _uow.Events.GetAllFutureEventsOrderedByTimeAndNameAsync(id);
+            return Ok(events);
+        }
     }
 }

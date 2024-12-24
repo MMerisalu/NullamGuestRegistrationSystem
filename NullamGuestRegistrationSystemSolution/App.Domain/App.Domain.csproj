@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\App.Enum\App.Enum.csproj" />
-    <ProjectReference Include="..\App.Validators\App.Validators.csproj" />
     <ProjectReference Include="..\Base.Domain\Base.Domain.csproj" />
   </ItemGroup>
 

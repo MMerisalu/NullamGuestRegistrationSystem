@@ -350,6 +350,8 @@ namespace WebApp.Controllers
             await _uow.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        
         private async Task<bool> AttendeeExists(int id)
         {
             return await _uow.Attendees.ExistsAsync(id);
