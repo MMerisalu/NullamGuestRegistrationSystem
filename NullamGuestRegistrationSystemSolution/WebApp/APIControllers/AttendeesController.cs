@@ -336,7 +336,7 @@ namespace WebApp.APIControllers
 
         [HttpPost("AddAttendeeToAnotherEvent/{id}")]
 
-        public async Task<ActionResult<AttendeeDetailDTO?>> AddAttendeeToAnotherEventApi(int id, AttendeeDetailDTO attendeeDetails)
+        public async Task<ActionResult> AddAttendeeToAnotherEventApi(int id, AttendeeDetailDTO attendeeDetails)
         {
             var attendeeDb = await _uow.Attendees.GetAttendeeByIdAsync(id);
             if (attendeeDb == null)
@@ -361,10 +361,10 @@ namespace WebApp.APIControllers
             await _uow.SaveChangesAsync();
 
 
-            return Ok(attendeeDetails);
+            return NoContent();
         }
 
-        [HttpGet("GetFutureEvents/{id}")]
+        [HttpGet("getFutureEvents/{id}")]
         public async Task<ActionResult<IEnumerable<EventDTO?>>> GetAllFutureEventsForAnAttendeeOrderByTimeAndName(int id)
         {
 

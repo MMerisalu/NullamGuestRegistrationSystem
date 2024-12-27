@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import React from "react";
 import { EventService } from "@/services/EventService";
-import eventCreateEditSchema from "@/schemas/eventCreateEditSchema";
+import eventCreateEditSchema from "@/schemas/EVENTCREATEEDITSCHEMA";
 import BackToButton from "@/components/BackToButton";
 
 const service = new EventService();
@@ -49,7 +49,9 @@ const Create = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.name ? (<div className="text-danger">{errors.name}</div>) : null}
+                {errors.name ? (
+                  <div className="text-danger">{errors.name}</div>
+                ) : null}
                 <span className="text-danger field-validation-valid"></span>
               </div>
               <div className="form-group">
@@ -65,22 +67,27 @@ const Create = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
-                {errors.name ? (<div className="text-danger">{errors.eventDateAndTime}</div>) : null}
+                {errors.name ? (
+                  <div className="text-danger">{errors.eventDateAndTime}</div>
+                ) : null}
                 <span className="text-danger field-validation-valid"></span>
               </div>
               <div className="form-group">
                 <label className="control-label" htmlFor="location">
                   Koht
                 </label>
-                <input className="form-control" 
-                type="text" 
-                name="location"
-                placeholder="Sisestage koha nimetus"
-                value={values.location}
-                onChange={handleChange}
-                onBlur={handleBlur} 
+                <input
+                  className="form-control"
+                  type="text"
+                  name="location"
+                  placeholder="Sisestage koha nimetus"
+                  value={values.location}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
-                {errors.name ? (<div className="text-danger">{errors.location}</div>) : null}
+                {errors.name ? (
+                  <div className="text-danger">{errors.location}</div>
+                ) : null}
                 <span className="text-danger field-validation-valid"></span>
               </div>
               <div className="form-group">
@@ -93,9 +100,11 @@ const Create = () => {
                   placeholder="Sisestage lisainfo"
                   value={values.additionalInfo}
                   onChange={handleChange}
-                  onBlur={handleBlur} 
+                  onBlur={handleBlur}
                 ></textarea>
-                {errors.name ? (<div className="text-danger">{errors.additionalInfo}</div>) : null}
+                {errors.name ? (
+                  <div className="text-danger">{errors.additionalInfo}</div>
+                ) : null}
                 <span className="text-danger field-validation-valid"></span>
               </div>
               <br />

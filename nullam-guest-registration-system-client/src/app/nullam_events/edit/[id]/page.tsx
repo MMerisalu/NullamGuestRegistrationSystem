@@ -2,7 +2,7 @@
 
 import IEvent from "@/app/domain/IEvent";
 import BackToButton from "@/components/BackToButton";
-import eventCreateEditSchema from "@/schemas/eventCreateEditSchema";
+import eventCreateEditSchema from "@/schemas/EVENTCREATEEDITSCHEMA";
 import { EventService } from "@/services/EventService";
 import { useFormik } from "formik";
 import React, { useState, useEffect, use } from "react";
@@ -10,7 +10,7 @@ import React, { useState, useEffect, use } from "react";
 const Edit = (props: { params: Promise<{ id: string }> }) => {
   const [event, setEvent] = useState<IEvent>();
   const { id } = use(props.params);
-  console.log(id)
+  console.log(id);
   useEffect(() => {
     async function getEvent() {
       const service = new EventService();
@@ -57,7 +57,7 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
                 data-valmsg-summary="true"
               >
                 <ul>
-                  <li style= {{display: "none"}}></li>
+                  <li style={{ display: "none" }}></li>
                 </ul>
               </div>
               <div className="form-group">
@@ -74,9 +74,9 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
                   onBlur={handleBlur}
                 />
                 {errors.name ? (
-                <div className="text-danger">{errors.name}</div>
-              ) : null}
-            </div>
+                  <div className="text-danger">{errors.name}</div>
+                ) : null}
+              </div>
               <div className="form-group">
                 <label className="control-label" htmlFor="EventDateAndTime">
                   Toimumisaeg
@@ -89,11 +89,10 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
                   value={values.eventDateAndTime}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  />
-                  {errors.eventDateAndTime ? (
-                <div className="text-danger">{errors.eventDateAndTime}</div>
-              ) : null}
-                
+                />
+                {errors.eventDateAndTime ? (
+                  <div className="text-danger">{errors.eventDateAndTime}</div>
+                ) : null}
               </div>
               <div className="form-group">
                 <label className="control-label" htmlFor="Location">
@@ -109,9 +108,8 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
                   onBlur={handleBlur}
                 />
                 {errors.location ? (
-                <div className="text-danger">{errors.location}</div>
-              ) : null}
-                
+                  <div className="text-danger">{errors.location}</div>
+                ) : null}
               </div>
               <div className="form-group">
                 <label className="control-label" htmlFor="AdditionalInfo">
@@ -126,13 +124,17 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
                   name="AdditionalInfo"
                 ></textarea>
                 {errors.additionalInfo ? (
-                <div className="text-danger">{errors.additionalInfo}</div>
-              ) : null}
+                  <div className="text-danger">{errors.additionalInfo}</div>
+                ) : null}
               </div>
-              
+
               <br />
               <div className="form-group">
-              <input type="submit" value="Muuda" className="btn btn-primary" />
+                <input
+                  type="submit"
+                  value="Muuda"
+                  className="btn btn-primary"
+                />
               </div>
             </form>
           </div>

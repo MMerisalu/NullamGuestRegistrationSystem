@@ -1,5 +1,6 @@
 import IAttendee from "@/app/domain/IAttendee";
 import { BaseEntityService } from "./BaseEntityService";
+import IEvent from "@/app/domain/IEvent";
 
 
 export class AttendeeService extends BaseEntityService<IAttendee> {
@@ -27,5 +28,38 @@ export class AttendeeService extends BaseEntityService<IAttendee> {
           } 
       }
 
+
+      async getAllFutureEventsOrdedByTimeAndName(id? : string | number ) : Promise<IEvent[] | undefined> {
+        try {
+          const response = await this.axios.get<IEvent[]>(`/GetFutureEvents/${id}`);
+          console.log("response", response);
+          if (response.status === 200) {
+            return response.data;
+          }
+        } catch (e) {
+          console.log("error: ", (e as Error).message);
+          return undefined;
+        }
+        
+    
+      }
      
+      async addAttendeeToAnotherEvent(
+        id: string,
+        body: IAttendee
+      ): Promise<number | undefined> {
+        console.log("body", body);
+        try {
+          console.log("this.axios", this.axios.defaults.baseURL);
+          let response = await this.axios.post(`/AddAttendeeToAnotherEvent/${id}`, body);
+          console.log("response.status:", response.status);
+          if (response.status === 204) {
+            return response.status;
+          }
+          return undefined;
+        } catch (e) {
+          console.log("Details -  error: ", (e as Error).message);
+          return undefined;
+        }
+      }
 }

@@ -1,7 +1,7 @@
 "use client";
 import IPaymentMethod from "@/app/domain/IPaymentMethod";
 import BackToButton from "@/components/BackToButton";
-import paymentMethodCreateEditSchema from "@/schemas/paymentMethodCreateEditSchema";
+import paymentMethodCreateEditSchema from "@/schemas/PAYMENTMETHODCREATEEEDITSCHEMA";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
 import { useFormik } from "formik";
 import React, { useState, useEffect, use } from "react";

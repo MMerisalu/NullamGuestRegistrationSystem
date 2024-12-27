@@ -6,7 +6,8 @@ interface IEvent extends IBaseEntity {
     eventDateAndTime: string,
     location: string,
     numberOfAttendees: number,
-    additionalInfo?: string
+    additionalInfo?: string,
+    eventDateTimeAndName?: string
 
 }
 export default IEvent

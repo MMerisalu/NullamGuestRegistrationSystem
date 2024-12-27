@@ -64,7 +64,7 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
                 <td>{item.code}</td>
                 <td>
                   <Link
-                     style={{textDecoration: "none"}} href={`/attendees/add_attendee_to_another_event/${item.id}`}
+                     style={{textDecoration: "none"}} href={`/attendees/add_attendee_to_another_event/${item.attendeeId}`}
                   >
                     Lisa osavõtja teisele üritusele
                   </Link>

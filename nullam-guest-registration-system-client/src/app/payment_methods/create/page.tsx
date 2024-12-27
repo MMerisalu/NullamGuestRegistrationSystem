@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import BackToButton from "@/components/BackToButton";
 import React from "react";
-import paymentMethodCreateEditSchema from "@/schemas/paymentMethodCreateEditSchema";
+import paymentMethodCreateEditSchema from "@/schemas/PAYMENTMETHODCREATEEEDITSCHEMA";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
 import SharedPaymentMethodForm from "../../../components/SharedPaymentMethodForm";
 import { SharedPaymentMethodFormValues } from "@/types";

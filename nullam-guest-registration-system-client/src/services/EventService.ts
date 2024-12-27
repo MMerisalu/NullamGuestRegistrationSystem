@@ -44,9 +44,7 @@ export class EventService extends BaseEntityService<IEvent> {
 
   }
 
-  async getAllFutureEventsOrdedByTimeAndName(attendeeId? : string | number ) : Promise<IEvent[] | undefined> {
-    
-  }
+  
 
 
  
