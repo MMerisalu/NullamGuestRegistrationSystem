@@ -51,7 +51,7 @@ const PaymentMethods = () => {
             <tr key={item.id}>
               <td>{item.name}</td>
               <td>
-                <Link href={`/payment_methods/edit/${item.id}`}>Muuda</Link>
+                <Link style={{textDecoration:"none"}} href={`/payment_methods/edit/${item.id}`}>MUUDA</Link>
               </td>
               <td>
                 <form

@@ -31,11 +31,13 @@ const SharedPaymentMethodForm = (props: SharedProps) => {
 
   return (
     <>
+      <h1>Maksemeetodi lisamine</h1>
+      <hr />
       <div className="row">
         <div className="col-md-4">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="name">Nimetus</label>
+              <label htmlFor="name">Maksemeetod</label>
               <input
                 className={`form-control ${errors.name ? "is-invalid" : ""}`}
                 id="name"

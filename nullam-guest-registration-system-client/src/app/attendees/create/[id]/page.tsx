@@ -34,9 +34,16 @@ const BaseAttendeeForm = () => {
 
   const formik = useFormik<CreateAttendeeValues>({
     initialValues: {
-      attendeeType: "0",
-      PaymentMethodId: "",
+      attendeeType: "",
+      paymentMethodId: "",
       surName: "",
+      givenName: "",
+      personalIdentifier: "",
+      personAdditionalInfo: "",
+      companyName: "",
+      registryCode: "",
+      numberOfPeopleFromCompany: "",
+      companyAdditionalInfo: "",
     },
     validationSchema: ATTENDEECREATEEDITSCHEMA,
     onSubmit: async (values) => {
@@ -70,6 +77,7 @@ const BaseAttendeeForm = () => {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="attendeeType">Osavõtja tüüp</label>
+                
                 <div className="form-check">
                   <input
                     type="radio"
@@ -110,20 +118,20 @@ const BaseAttendeeForm = () => {
               {values.attendeeType === "1" ? (
                 <PersonAttendeeForm formik={formik} />
               ) : values.attendeeType === "2" ? (
-                <CompanyAttendeeForm />
+                <CompanyAttendeeForm formik={formik} />
               ) : null}
               {formik.errors.attendeeType ? (
                 <div className="text-danger">{formik.errors.attendeeType}</div>
               ) : null}
 
               <div className="form-group">
-                <label htmlFor="PaymentMethodId">Maksemeetod</label>
+                <label htmlFor="paymentMethodId">Maksemeetod</label>
                 <select
-                  name="PaymentMethodId"
+                  name="paymentMethodId"
                   className={`form-control ${
-                    errors.PaymentMethodId ? "is-invalid" : ""
+                    errors.paymentMethodId ? "is-invalid" : ""
                   }`}
-                  value={values.PaymentMethodId || ""}
+                  value={values.paymentMethodId || ""}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 >
@@ -134,15 +142,16 @@ const BaseAttendeeForm = () => {
                     </option>
                   ))}
                 </select>
-                {errors.PaymentMethodId && (
-                  <span className="text-danger">{errors.PaymentMethodId}</span>
+                {errors.paymentMethodId && (
+                  <span className="text-danger">{errors.paymentMethodId}</span>
                 )}
               </div>
-
+              <br />
               <div className="form-group">
                 <input type="submit" value="Lisa" className="btn btn-primary" />
               </div>
             </form>
+            <br />
             <BackToButton to="/">Tagasi</BackToButton>
           </div>
         </div>

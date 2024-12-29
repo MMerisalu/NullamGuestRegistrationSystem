@@ -61,14 +61,14 @@ export default function Home() {
           {events.map((item, index) => (
             <tr key={item.id}>
               <td>{index + 1}.</td>
-              <td><Link href={`/nullam_events/list_of_attendees/${item.id}`}>{item.name}</Link></td>
+              <td><Link style={{textDecoration:"none"}} href={`/nullam_events/list_of_attendees/${item.id}`}>{item.name}</Link></td>
               <td>{item.eventDateAndTime}</td>
               <td>{item.location}</td>
               <td>{item.numberOfAttendees}</td>
               <td>{item.additionalInfo}</td>
               <td>
-                <Link href={`/nullam_events/edit/${item.id}`}>Muuda</Link> |
-                <Link href={`/attendees/create/${item.id}`}>Osavõtja</Link>
+                <Link style={{textDecoration:"none"}} href={`/nullam_events/edit/${item.id}`}>Muuda</Link> |
+                <Link style={{textDecoration:"none"}} href={`/attendees/create/${item.id}`}>OSAVÕTJAD</Link>
               </td>
               <td>
                 <form

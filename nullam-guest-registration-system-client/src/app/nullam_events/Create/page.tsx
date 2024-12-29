@@ -44,7 +44,7 @@ const Create = () => {
                   className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   name="name"
                   type="text"
-                  placeholder="Sisestage ürituse nimetus"
+                  placeholder="Sisestage ürituse nimi"
                   value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}

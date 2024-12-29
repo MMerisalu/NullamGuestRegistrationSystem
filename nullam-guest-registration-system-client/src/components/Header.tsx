@@ -14,10 +14,10 @@ const Header = () => {
                 <div  className="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul  className="navbar-nav flex-grow-1">
                         <li  className="nav-item">
-                            <a className="nav-link text-dark">AVALEHT</a>
+                            <Link href="/" className="nav-link text-dark">AVALEHT</Link>
                         </li>
                         <li  className="nav-item">
-                            <a className="nav-link text-dark" href="/nullam_events/Create">ÜRITUSE LISAMINE</a>
+                            <Link href="/nullam_events/Create" className="nav-link text-dark">ÜRITUSE LISAMINE</Link>
                         </li> 
                         <li  className="nav-item">
                             <Link href="/payment_methods" className="nav-link text-dark">MAKSEMEETODID</Link>

@@ -27,8 +27,15 @@ export type SharedProps = SharedBaseProps &
 export interface CreateAttendeeValues
 {
   attendeeType: string;
-  PaymentMethodId: string;
+  paymentMethodId: string;
   surName: string;
+  givenName: string;
+  personalIdentifier: string;
+  personAdditionalInfo: string;
+  companyName: string;
+  registryCode: string;
+  numberOfPeopleFromCompany: string;
+  companyAdditionalInfo: string;
 }
 
 export type FormikInstance<Values extends FormikValues> = ReturnType<typeof useFormik<Values>>
