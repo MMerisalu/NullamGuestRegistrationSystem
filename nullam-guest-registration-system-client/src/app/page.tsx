@@ -67,7 +67,8 @@ export default function Home() {
               <td>{item.numberOfAttendees}</td>
               <td>{item.additionalInfo}</td>
               <td>
-                <Link href={`/nullam_events/edit/${item.id}`}>Muuda</Link>
+                <Link href={`/nullam_events/edit/${item.id}`}>Muuda</Link> |
+                <Link href={`/attendees/create/${item.id}`}>Osavõtja</Link>
               </td>
               <td>
                 <form
