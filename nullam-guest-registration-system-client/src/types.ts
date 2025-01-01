@@ -26,7 +26,7 @@ export type SharedProps = SharedBaseProps &
 
 export interface CreateAttendeeValues
 {
-  attendeeType: string;
+  attendeeType: string | number;
   paymentMethodId: string;
   surName: string;
   givenName: string;

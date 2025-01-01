@@ -112,11 +112,11 @@ namespace WebApp.Controllers
 
                 if (vm.AttendeeType == AttendeeType.Person)
                 {
-                    attendeeId = _uow.Attendees.GetAttendeeId(AttendeeType.Person, vm.SurName, vm.GivenName);
+                    attendeeId = _uow.Attendees.GetPersonAttendeeId(vm.PersonalIdentifier!, vm.SurName!, vm.GivenName!);
                 }
                 else if (vm.AttendeeType == AttendeeType.Company)
                 {
-                    attendeeId = _uow.Attendees.GetAttendeeId(AttendeeType.Company, null, null, vm.CompanyName);
+                    attendeeId = _uow.Attendees.GetCompanyAttendeeId(vm.CompanyName!, vm.RegistryCode!);
                 }
 
                 if (attendeeId != null)

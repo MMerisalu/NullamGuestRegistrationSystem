@@ -21,7 +21,8 @@ namespace App.Contracts.DAL.IAppRepositories
         List<TEntity?>? GetAllAttendeesOfEventOrderedByName(int eventId, bool noTracking = true, bool noIncludes = false);
         Task<IEnumerable<TEntity?>> GetAllAttendeesOrderedByNameAsync(bool noTracking = true, bool noIncludes = false);
         IEnumerable<TEntity?> GetAllAttendeesOrderedByName( bool noTracking = true, bool noIncludes = false);
-        int? GetAttendeeId(AttendeeType attendeeType,string? surName = null, string? givenName = null, string? companyName = null, bool noTracking = true, bool noIncludes = false);
+        int? GetPersonAttendeeId(string personalIdentifier, string surName, string givenName, bool noTracking = true, bool noIncludes = false);
+        int? GetCompanyAttendeeId(string companyName, string registryCode, bool noTracking = true, bool noIncludes = false);
         Task<TEntity?> GetAttendeeByIdAsync(int id, bool noTracking = true, bool noIncludes = false);
         TEntity? GetAttendeeById(int id, bool noTracking = true, bool noIncludes = false);
         Task<bool?> IsAttendeeAlreadyRegisteredAsync(AttendeeType attendeeType, string? personalIdentifier = null, string? companyName = null, string? registeryCode = null, bool noTracking = true, bool noIncludes = false);

@@ -14,8 +14,9 @@ const eventService = new EventService();
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter()
-
-    const [events, setEvents] = useState<IEvent[]>([]);
+ const [events, setEvents] = useState<IEvent[]>([]);
+  const [getDateTime, setDateTime] = useState()
+  const [isEventVisibile, setIsEventVisible ] = useState(false)
 
  // Function to fetch events
  const fetchEvents = async () => {
@@ -28,9 +29,16 @@ export default function Home() {
       setEvents([]);
     } finally {
       setIsLoading(false);
+      getDate()
     }
   };
-  
+  const getDate = () => {
+    const dt = null;
+  const [cdate,setDate] = useState(dt); 
+  const handelDate = () =>{
+    let dt = new Date().toLocaleDateString();
+    setDate(dt);
+  }
  // UseEffect to call the fetch function on component mount
    useEffect(() => {
      fetchEvents();
@@ -67,9 +75,11 @@ export default function Home() {
               <td>{item.numberOfAttendees}</td>
               <td>{item.additionalInfo}</td>
               <td>
+                
                 <Link style={{textDecoration:"none"}} href={`/nullam_events/edit/${item.id}`}>Muuda</Link> |
                 <Link style={{textDecoration:"none"}} href={`/attendees/create/${item.id}`}>OSAVÕTJAD</Link>
               </td>
+              
               <td>
                 <form
                   onSubmit={() => {  

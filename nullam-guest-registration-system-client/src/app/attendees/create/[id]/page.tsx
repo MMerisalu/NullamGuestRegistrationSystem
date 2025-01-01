@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { AttendeeService } from "@/services/AttendeeService";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
 import BackToButton from "@/components/BackToButton";
@@ -10,14 +10,17 @@ import PersonAttendeeForm from "../../PersonAttendeeForm";
 import CompanyAttendeeForm from "../../CompanyAttendeeForm";
 import { number } from "yup";
 import { CreateAttendeeValues } from "@/types";
+import { EventService } from "@/services/EventService";
 
-const BaseAttendeeForm = () => {
-  // const service = new AttendeeService();
+const BaseAttendeeForm = (props: {params: Promise<{id: string}>}) => {
+   const service = new AttendeeService();
   const paymentMethodService = new PaymentMethodService();
+  const eventService = new EventService();
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const fetchPaymentMethods = async () => {
+  const {id} = use(props.params);
+  
+  const fetchPaymentMethods = async() => {
     try {
       const response = await paymentMethodService.getAll();
       setPaymentMethods(response || []);
@@ -27,6 +30,7 @@ const BaseAttendeeForm = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchPaymentMethods();
@@ -49,10 +53,10 @@ const BaseAttendeeForm = () => {
     onSubmit: async (values) => {
       console.log("onSubmit values", values);
       try {
-        //const result = await service.create(values);
-        /* if (result) {
+        const result = await service.addAttendeeToAnEvent(id, values);
+         if (result) {
           window.location.href = "/";
-        } */
+        } 
       } catch (error) {
         console.error("Failed to create attendee:", error);
         alert("Submission failed. Please try again.");
@@ -86,7 +90,6 @@ const BaseAttendeeForm = () => {
                     checked={values.attendeeType === "1"}
                     name="attendeeType"
                     onChange={(e) => {
-                      console.log("e", e);
                       handleChange(e);
                     }}
                   />

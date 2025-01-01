@@ -61,23 +61,22 @@ namespace App.DAL.EF.Repositories
             return Mapper.Map(await CreateQuery(noTracking, noIncludes).FirstOrDefaultAsync(a => a.Id == id));
         }
 
-        public int? GetAttendeeId(AttendeeType attendeeType, string? surName = null, string? givenName = null, string? companyName = null, bool noTracking = true, bool noIncludes = false)
+        public int? GetPersonAttendeeId(string personalIdentifier, string surName, string givenName, bool noTracking = true, bool noIncludes = false)
         {
-            if (attendeeType == AttendeeType.Person)
-            {
-                var attendeeId = CreateQuery(noTracking, noIncludes).FirstOrDefault(a => a.SurName!.Equals(surName)
-                 && givenName!.Equals(givenName))!.Id;
-                return attendeeId;
-
-            }
-            else if (attendeeType == AttendeeType.Company)
-            {
-                var attendeeId = CreateQuery(noTracking, noIncludes)
-                    .FirstOrDefault(a => a.CompanyName!.Equals(companyName))!.Id;
-                return attendeeId;
-            }
-            // Should not get here
-            return null;
+            var attendeeId = CreateQuery(noTracking, noIncludes)
+                .Single(a => a.PersonalIdentifier!.Equals(personalIdentifier)
+                    && a.SurName!.Equals(surName)
+                    && a.GivenName!.Equals(givenName)
+                    )!.Id;
+            return attendeeId;
+        }
+        public int? GetCompanyAttendeeId(string companyName, string registryCode,  bool noTracking = true, bool noIncludes = false)
+        {
+            var attendeeId = CreateQuery(noTracking, noIncludes)
+                .Single(a => a.CompanyName!.Equals(companyName)
+                && a.RegistryCode!.Equals(registryCode)
+                )!.Id;
+            return attendeeId;
         }
 
         public bool? IsAttendeeAlreadyRegistered(AttendeeType attendeeType, string? personalIdentifier = null, string? companyName = null, string? registeryCode = null, bool noTracking = true, bool noIncludes = false)

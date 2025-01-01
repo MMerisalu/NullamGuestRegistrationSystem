@@ -62,4 +62,26 @@ export class AttendeeService extends BaseEntityService<IAttendee> {
           return undefined;
         }
       }
+
+      async addAttendeeToAnEvent(
+        id: string,
+        body: IAttendee
+      ): Promise<number | undefined> {
+        console.log("body", body);
+        try {
+          console.log("this.axios", this.axios.defaults.baseURL);
+          let response = await this.axios.post(`/PostAttendee/${id}`, body);
+          console.log("response.status:", response.status);
+          if (response.status === 204) {
+            return response.status;
+          }
+          if (response.status === 404) {
+            return response.status;
+          }
+          return undefined;
+        } catch (e) {
+          console.log("Details -  error: ", (e as Error).message);
+          return undefined;
+        }
+      }
 }

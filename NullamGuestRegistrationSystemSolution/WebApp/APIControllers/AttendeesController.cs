@@ -50,8 +50,8 @@ namespace WebApp.APIControllers
         // PUT: api/Attendees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}/{eventId}")]
-        
-        public async Task<IActionResult> PutAttendee(int id, AttendeeDTO attendee, [FromRoute]int eventId)
+
+        public async Task<IActionResult> PutAttendee(int id, AttendeeDTO attendee, [FromRoute] int eventId)
         {
             if (id != attendee.Id)
             {
@@ -199,9 +199,11 @@ namespace WebApp.APIControllers
         [HttpPost("{id}")]
         public async Task<ActionResult<AttendeeDTO>> PostAttendee(AttendeeDTO attendee, [FromRoute] int id)
         {
+            int? attendeeId = 0;
             var eventDb = await _uow.Events.GetEventByIdAsync(id);
             if (eventDb == null)
-            { return NotFound("Kirjet ei leitud!");
+            {
+                return NotFound("Kirjet ei leitud!");
             }
             if (eventDb.EventDateAndTime < DateTime.Now)
             {
@@ -242,58 +244,86 @@ namespace WebApp.APIControllers
                 _uow.Attendees.Add(attendee);
                 await _uow.SaveChangesAsync();
 
-                var attendeeAndEvent = new EventAndAttendeeDTO()
+                if (attendee.AttendeeType == AttendeeType.Person)
                 {
-                    AttendeeId = attendee.Id,
-                    EventId = eventDb.Id,
-                    NumberOfPeople = 1
-                };
-                _uow.EventsAndAttendes.Add(attendeeAndEvent);
-                await _uow.SaveChangesAsync();
+                    attendeeId = _uow.Attendees.GetPersonAttendeeId(attendee.PersonalIdentifier, attendee.SurName, attendee.GivenName);
+                    if (attendeeId.HasValue && attendee.AttendeeType == AttendeeType.Person)
+                    {
+                        var attendeeAndEvent = new EventAndAttendeeDTO()
+                        {
+
+                            AttendeeId = attendeeId.Value,
+                            EventId = eventDb.Id,
+                            NumberOfPeople = 1
+                        };
+                        _uow.EventsAndAttendes.Add(attendeeAndEvent);
+                        await _uow.SaveChangesAsync();
+                    }
+                }
+
             }
 
-            else if (attendee.AttendeeType == AttendeeType.Company)
+            else if (attendee.AttendeeType.Value == AttendeeType.Company)
             {
-                if (!attendee.CompanyName.IsNullOrEmpty() || attendee.RegistryCode.IsNullOrEmpty())
+                var isAlreadyRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(AttendeeType.Company, null, attendee.CompanyName, attendee.RegistryCode);
+                if (isAlreadyRegistered.Value == true)
+                {
+                    return BadRequest("Ettevõtte juba lisatud!");
+                }
+                if (attendee.CompanyName.IsNullOrEmpty() || attendee.RegistryCode.IsNullOrEmpty())
                 {
                     return BadRequest("Andmed kirje loomiseks puuduvad!");
                 }
-
+                if (attendee.CompanyName!.Length > 64)
+                {
+                    return BadRequest("Sisestava teksti pikkus peab olema 1 kuni 64 tähemärki!");
+                }
                 if (attendee.RegistryCode!.Length != 8)
                 {
-                    return BadRequest("Eesti ettevõte registrikoodi pikkuseks on 8 numbrit! Palun sisestage uus!");
+                    return BadRequest("Eesti registrikoodi pikkuseks on 8 numbrit! Palun sisestage uus!");
                 }
-
-                if (attendee.NumberOfPeopleFromCompany == null || (attendee.NumberOfPeopleFromCompany.Value <= 0 && attendee.NumberOfPeopleFromCompany.Value > 250))
+                if (attendee.NumberOfPeopleFromCompany!.Value <= 0 && attendee.NumberOfPeopleFromCompany.Value > 250)
                 {
                     return BadRequest("Ettevõttest tulevate osavõtjate peab jääma vahemikku 1 kuni 250! Palun sisestage uus!");
                 }
-
-                if (attendee.CompanyAdditionalInfo!.Length > 5000)
+                if (!attendee.PersonAdditionalInfo.IsNullOrEmpty())
                 {
-                    return BadRequest("Sisestatud teksti pikkus võib olla kuni 5000 tähemärki!");
+                    if (attendee.PersonAdditionalInfo!.Length > 5000)
+                    {
+                        return BadRequest("Sisestatud teksti pikkus võib olla kuni 5000 tähemärki!");
+                    }
                 }
+
 
                 _uow.Attendees.Add(attendee);
                 await _uow.SaveChangesAsync();
+
+                if (attendee.AttendeeType.Value == AttendeeType.Company)
+                {
+                    attendeeId = _uow.Attendees.GetCompanyAttendeeId(attendee.CompanyName, attendee.RegistryCode);
+                    if (attendeeId.HasValue && attendee.AttendeeType == AttendeeType.Company)
+                    {
+                        var attendeeAndEvent = new EventAndAttendeeDTO()
+                        {
+
+                            AttendeeId = attendeeId.Value,
+                            EventId = eventDb.Id,
+                            NumberOfPeople = attendee.NumberOfPeopleFromCompany.Value
+                        };
+                        _uow.EventsAndAttendes.Add(attendeeAndEvent);
+                        await _uow.SaveChangesAsync();
+                    }
+                }
+
             }
-            var eventAndAttendee = new EventAndAttendeeDTO
-            {
-                EventId = id,
-                AttendeeId = attendee.Id,
-                NumberOfPeople = attendee.NumberOfPeopleFromCompany!.Value
-            };
-            _uow.EventsAndAttendes.Add(eventAndAttendee);
-            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetAttendee", new { id = attendee.Id }, attendee);
         }
 
-
         // DELETE: Events/1/Attendees/Delete/5
         [HttpDelete("{id}/{eventId}")]
-        
-        public async Task<IActionResult> DeleteAttendee(int id, int eventId )
+
+        public async Task<IActionResult> DeleteAttendee(int id, int eventId)
         {
             var attendee = await _uow.Attendees.GetAttendeeByIdAsync(id, true);
             if (attendee == null)
@@ -302,7 +332,7 @@ namespace WebApp.APIControllers
             }
 
             var eventDb = await _uow.Events.GetEventByIdAsync(eventId);
-            if (eventDb == null) 
+            if (eventDb == null)
             {
                 return BadRequest("Olemit ei leitud!");
             }
@@ -313,7 +343,7 @@ namespace WebApp.APIControllers
             {
                 var eventAndAttendee = await _uow.EventsAndAttendes
                     .GetEventAndAttendeeDTOAsync(eventDb.Id, attendee.Id);
-                if (eventAndAttendee == null) 
+                if (eventAndAttendee == null)
                 {
                     return BadRequest("Olemit ei leitud!");
                 }
@@ -328,6 +358,7 @@ namespace WebApp.APIControllers
 
             return NoContent();
         }
+        
 
         private bool AttendeeExists(int id)
         {
@@ -343,7 +374,7 @@ namespace WebApp.APIControllers
             {
                 return NotFound();
             }
-            
+
 
             if (attendeeDb.AttendeeType == AttendeeType.Company &&
                 attendeeDetails.NumberOfPeople != attendeeDb.NumberOfPeopleFromCompany)
