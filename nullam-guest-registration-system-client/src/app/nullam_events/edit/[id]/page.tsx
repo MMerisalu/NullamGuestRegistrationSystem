@@ -1,10 +1,13 @@
 "use client";
 
 import IEvent from "@/app/domain/IEvent";
+import NotFound from "@/app/not-found";
+import ErrorPage from "@/app/not-found";
 import BackToButton from "@/components/BackToButton";
 import eventCreateEditSchema from "@/schemas/EVENTCREATEEDITSCHEMA";
 import { EventService } from "@/services/EventService";
 import { useFormik } from "formik";
+import Error from "next/error";
 import React, { useState, useEffect, use } from "react";
 
 const Edit = (props: { params: Promise<{ id: string }> }) => {
@@ -22,6 +25,10 @@ const Edit = (props: { params: Promise<{ id: string }> }) => {
   }, [id]);
 
   const service = new EventService();
+  const afterNow = event && service.isAfterNow(event.eventDateAndTime);
+  if (!afterNow) {
+    return <NotFound />
+  } 
   const { values, errors, handleChange, handleSubmit, handleBlur } = useFormik({
     initialValues: {
       name: event?.name ?? "",

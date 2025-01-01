@@ -1,25 +1,22 @@
+"use client";
 
-"use client"
-
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { EventService } from "@/services/EventService";
 import { useState, useEffect } from "react";
-import Link from "next/link"
+import Link from "next/link";
 import IEvent from "./domain/IEvent";
 const eventService = new EventService();
 
-
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter()
- const [events, setEvents] = useState<IEvent[]>([]);
-  const [getDateTime, setDateTime] = useState()
-  const [isEventVisibile, setIsEventVisible ] = useState(false)
-
- // Function to fetch events
- const fetchEvents = async () => {
+  const router = useRouter();
+  const [events, setEvents] = useState<IEvent[]>([]);
+  const [date, setDate] = useState<string>();
+  const [isEventVisibile, setIsEventVisible] = useState(false);
+  // Function to fetch events
+  const fetchEvents = async () => {
     try {
       const response = await eventService.getAllEventsWithFormattedData();
       console.log(response);
@@ -29,29 +26,31 @@ export default function Home() {
       setEvents([]);
     } finally {
       setIsLoading(false);
-      getDate()
+      getDate();
     }
   };
   const getDate = () => {
     const dt = null;
-  const [cdate,setDate] = useState(dt); 
-  const handelDate = () =>{
+  };
+  const handelDate = () => {
     let dt = new Date().toLocaleDateString();
     setDate(dt);
-  }
- // UseEffect to call the fetch function on component mount
-   useEffect(() => {
-     fetchEvents();
-   }, []);
-   if (isLoading) {
+  };
+  // UseEffect to call the fetch function on component mount
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+  if (isLoading) {
     return <p>...laadimine</p>;
-  } 
+  }
 
   return (
     <>
       <h1>Üritused</h1>
       <p>
-        <Link style={{textDecoration:"none"}} href="/nullam_events/Create/">Lisa uus üritus</Link>
+        <Link style={{ textDecoration: "none" }} href="/nullam_events/Create/">
+          Lisa uus üritus
+        </Link>
       </p>
       <table className="table">
         <thead>
@@ -68,21 +67,42 @@ export default function Home() {
         <tbody>
           {events.map((item, index) => (
             <tr key={item.id}>
-              <td>{index + 1}.</td>
-              <td><Link style={{textDecoration:"none"}} href={`/nullam_events/list_of_attendees/${item.id}`}>{item.name}</Link></td>
+              <td>{index + 1}. after now: </td>
+              <td>
+                <Link
+                  style={{ textDecoration: "none" }}
+                  href={`/nullam_events/list_of_attendees/${item.id}`}
+                >
+                  {item.name}
+                </Link>
+              </td>
               <td>{item.eventDateAndTime}</td>
               <td>{item.location}</td>
               <td>{item.numberOfAttendees}</td>
               <td>{item.additionalInfo}</td>
               <td>
-                
-                <Link style={{textDecoration:"none"}} href={`/nullam_events/edit/${item.id}`}>Muuda</Link> |
-                <Link style={{textDecoration:"none"}} href={`/attendees/create/${item.id}`}>OSAVÕTJAD</Link>
+                {eventService.isAfterNow(item.eventDateAndTime) && (
+                  <>
+                    <Link
+                      style={{ textDecoration: "none" }}
+                      href={`/nullam_events/edit/${item.id}`}
+                    >
+                      Muuda
+                    </Link>{" "}
+                    |
+                    <Link
+                      style={{ textDecoration: "none" }}
+                      href={`/attendees/create/${item.id}`}
+                    >
+                      OSAVÕTJAD
+                    </Link>
+                  </>
+                )}
               </td>
-              
+
               <td>
                 <form
-                  onSubmit={() => {  
+                  onSubmit={() => {
                     eventService.delete(item.id).then(() => {
                       fetchEvents();
                     });
@@ -113,5 +133,4 @@ export default function Home() {
       </table>
     </>
   );
-
 }
