@@ -7,31 +7,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.Enum;
+using UoN.ExpressiveAnnotations.Net8.Attributes;
 
 namespace App.DAL.DTO
 {
     public class AttendeeDTO : DomainEntityId<int>
     {
         [DisplayName("Osavõtja tüüp")]
+        [Required(ErrorMessage = "Osavõtja tüübi valimine on kohustuslik!")]
+        [EnumDataType(typeof(AttendeeType))]
         public AttendeeType? AttendeeType { get; set; }
-
         #region Person info
-
+        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Person")]
+        [MaxLength(64, ErrorMessage = "Väljale eesnimi sisestava teksti pikkus on maksimaalselt 64 tähemärki!")]
+        [StringLength(64, MinimumLength = 1)]
         [DisplayName("Eesnimi")]
         public string? SurName { get; set; }
 
-
+        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Person")]
+        [MaxLength(64, ErrorMessage = "Väljale perekonnanimi sisestava teksti pikkus on maksimaalselt 64 tähemärki!")]
+        [StringLength(64, MinimumLength = 1)]
         [DisplayName("Perekonnanimi")]
         public string? GivenName { get; set; }
 
 
         [DisplayName("Ees- ja perekonnanimi")]
-        public string SurAndGivenName => $"{SurName} {GivenName}";
+        public string SurAndGivenName { get => $"{SurName} {GivenName}"; }
 
         [DisplayName("Perekonna- ja eesnimi")]
-        public string GivenAndSurName => $"{GivenName} {SurName}";
+        public string GivenAndSurName { get => $"{GivenName} {SurName}"; }
 
 
+        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Person")]
+        [RegularExpression("^[0-9]{11,11}$", ErrorMessage = "Eesti isikukood pikkuseks on 11 numbrit! " +
+            "Palun sisestage uus isikukood!")]
+        [StringLength(11)]
         [DisplayName("Isikukood")]
         public string? PersonalIdentifier { get; set; }
 
@@ -44,25 +54,34 @@ namespace App.DAL.DTO
 
         #region Company info
 
-        [DisplayName("Ettevõtte juriidiline nimi")]
+        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
+        [MaxLength(64, ErrorMessage = "Väljale ettevõtte juurdiline nimi sisestava teksti pikkus on maksimaalselt 64 tähemärki!")]
+        [StringLength(64, MinimumLength = 1)]
+        [DisplayName("Ettevõtte juurdiline nimi")]
         public string? CompanyName { get; set; }
 
 
+        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
+        [RegularExpression("^[0-9]{8,8}$", ErrorMessage = "Ettevõtte registrikoodi pikkuseks on 8 numbrit! " +
+            "Palun sisestage uus registrikood!")]
+        [StringLength(8)]
         [DisplayName("Ettevõtte registrikood")]
         public string? RegistryCode { get; set; }
 
 
+        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
         [DisplayName("Ettevõttest tulevate osavõtjate arv")]
-        [Range(0, 250)]
+        [Range(1, 250, ErrorMessage = "Ettevõttest tulevate isikute arv peab jääma 1 kuni 250.")]
         public int? NumberOfPeopleFromCompany { get; set; }
 
 
-        [MaxLength(5000)]
+        [MaxLength(5000, ErrorMessage = "Sisestava teksti pikkus peab olema kuni 5000 tähemärki")]
         [DisplayName("Lisainfo")]
         public string? CompanyAdditionalInfo { get; set; }
 
         #endregion
 
+        [Required(ErrorMessage = "Maksemeetodi valimine on kohustuslik!")]
         [DisplayName("Maksemeetod")]
         public int PaymentMethodId { get; set; }
         

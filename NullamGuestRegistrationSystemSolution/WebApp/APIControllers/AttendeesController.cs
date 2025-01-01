@@ -53,6 +53,10 @@ namespace WebApp.APIControllers
 
         public async Task<IActionResult> PutAttendee(int id, AttendeeDTO attendee, [FromRoute] int eventId)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if (id != attendee.Id)
             {
                 return BadRequest();
@@ -62,7 +66,7 @@ namespace WebApp.APIControllers
             {
                 return BadRequest("Kirjet ei leitud!");
             }
-            var eventDb = await _uow.Events.GetEventByIdAsync(id, noIncludes: true);
+            var eventDb = await _uow.Events.GetEventByIdAsync(eventId, noIncludes: true);
             if (eventDb == null)
             {
                 return BadRequest("Kirjet ei leitud!");
@@ -85,28 +89,19 @@ namespace WebApp.APIControllers
                     {
                         attendeeDb.SurName = attendee.SurName;
                         attendeeDb.GivenName = attendee.GivenName;
-                        if (attendee.PersonalIdentifier != null)
+                        // If there is no change to PersonalIdentifier, then just change their name globally
+                        if (attendee.PersonalIdentifier != null && !attendeeDb.PersonalIdentifier.Equals(attendee.PersonalIdentifier))
                         {
-                            if (attendee.PersonalIdentifier.Length != 11)
-                            {
-                                return BadRequest("Eesti isikukoodi pikkuseks on 11 numbrit! Palun sisestage uus!");
-                            }
+                            attendeeDb.PersonalIdentifier = attendee.PersonalIdentifier;
                             var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb.AttendeeType.Value, attendee.PersonalIdentifier, null, null, true, true);
                             if (isRegistered.Value == true)
                             {
-                                var errorDetails = new { Message = "Sisestatud isikukoodiga eraisik on juba registeeritud!" };
-                                return new ObjectResult(errorDetails) { StatusCode = 406 };
+                                return BadRequest("Sisestatud isikukoodiga eraisik on juba registeeritud!");
                             }
-
                         }
 
-                        attendeeDb.PersonalIdentifier = attendee.PersonalIdentifier;
                         if (attendee.PersonAdditionalInfo != null)
                         {
-                            if (attendee.PersonAdditionalInfo.Length > 1000)
-                            {
-                                return BadRequest("Sisestatud teksti pikkus võib olla kuni 1000 tähemärki!");
-                            }
                             attendeeDb.PersonAdditionalInfo = attendee.PersonAdditionalInfo;
                         }
 
@@ -120,22 +115,12 @@ namespace WebApp.APIControllers
                     }
                     else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                     {
-                        if (attendee.RegistryCode.IsNullOrEmpty() || attendee.RegistryCode!.Length != 8)
-                        {
-                            return BadRequest("Eesti ettevõte registrikoodi pikkuseks on 8 numbrit! Palun sisestage uus!");
-                        }
-                        if (attendee.CompanyName == attendeeDb.CompanyName)
-                        {
-                            return BadRequest("Eesti ettevõte registrikoodi muutmisel, tuleb muuta ka ettevõte juuridilist nime! Palun sisestage uus!");
-                        }
                         if (attendee.AttendeeType.HasValue)
                         {
                             var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendee.AttendeeType.Value, null, attendeeDb.CompanyName, attendeeDb.RegistryCode);
                             if (isRegistered.HasValue && isRegistered.Value == true)
                             {
-                                var errorDetails = new { Message = "Sisestatud ettevõtte juurdilise nime / registrikoodiga ettevõtte on juba registreeritud!  eraisik on juba registeeritud!" };
-                                return new ObjectResult(errorDetails) { StatusCode = 406 };
-
+                                return BadRequest("Sisestatud ettevõtte juurdilise nime / registrikoodiga ettevõtte on juba registreeritud!");
                             }
                         }
 
@@ -143,21 +128,10 @@ namespace WebApp.APIControllers
                         attendeeDb.RegistryCode = attendeeDb.RegistryCode;
                         if (attendee.NumberOfPeopleFromCompany != null && attendeeDb.NumberOfPeopleFromCompany != null)
                         {
-                            if (attendee.NumberOfPeopleFromCompany.Value != attendeeDb.NumberOfPeopleFromCompany.Value)
-                            {
-                                if (attendee.NumberOfPeopleFromCompany.Value <= 0 || attendee.NumberOfPeopleFromCompany.Value > 250)
-                                {
-                                    return BadRequest("Ettevõttest tulevate osavõtjate peab jääma vahemikku 1 kuni 250! Palun sisestage uus!");
-                                }
-                            }
                             attendeeDb.NumberOfPeopleFromCompany = attendee.NumberOfPeopleFromCompany.Value;
                         }
                         if (attendee.CompanyAdditionalInfo != null)
                         {
-                            if (attendee.CompanyAdditionalInfo.Length > 5000)
-                            {
-                                return BadRequest("Sisestatud teksti pikkus võib olla kuni 5000 tähemärki!");
-                            }
                             attendeeDb.CompanyAdditionalInfo = attendee.CompanyAdditionalInfo;
 
                             if (attendee.PaymentMethodId != attendeeDb.PaymentMethodId)

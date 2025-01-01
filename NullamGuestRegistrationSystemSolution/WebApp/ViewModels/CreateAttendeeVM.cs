@@ -33,7 +33,7 @@ namespace WebApp.ViewModels
         [DisplayName("Isikukood")]
         public string? PersonalIdentifier { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(1000, ErrorMessage = "Sisestava teksti pikkus peab olema kuni 1000 tähemärki.")]
         [DisplayName("Lisainfo")]
 
         public string? PersonAdditionalInfo { get; set; }
@@ -52,21 +52,15 @@ namespace WebApp.ViewModels
         public string? RegistryCode { get; set; }
 
         [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
-
         [DisplayName("Ettevõttest tulevate osavõtjate arv")]
-
-
-        [RequiredIf("AttendeeType == App.Enum.AttendeeType.Company")]
         [Range(1, 250, ErrorMessage = "Ettevõtest tulevate osavõtjate arv jääb vahemikku 1 kuni 250! Palun sisestage ettevõttest tulevate isikute arv uuesti.")]
         public int? NumberOfPeopleFromCompany { get; set; }
 
-        [MaxLength(5000)]
+        [MaxLength(5000, ErrorMessage = "Sisestava teksti pikkus peab olema kuni 5000 tähemärki")]
         [DisplayName("Lisainfo")]
 
         public string? CompanyAdditionalInfo { get; set; }
         [DisplayName("Maksemeetod")]
-
-
         [Required(ErrorMessage = "Maksemeetodi valimine on kohustuslik!")]
         public int PaymentMethodId { get; set; }
 

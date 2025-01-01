@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="UoN.ExpressiveAnnotations.Net8" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\App.Enum\App.Enum.csproj" />
     <ProjectReference Include="..\Base.Domain\Base.Domain.csproj" />
   </ItemGroup>

@@ -11,6 +11,7 @@ using App.Contracts.DAL;
 using App.DAL.DTO;
 using App.Enum;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WebApp.Controllers
 {
@@ -208,52 +209,95 @@ namespace WebApp.Controllers
                     vm.AttendeeType = attendeeDb.AttendeeType;
                     if (attendeeDb.AttendeeType!.Value == AttendeeType.Person)
                     {
-                        attendeeDb.SurName = vm.SurName;
-                        attendeeDb.GivenName = vm.GivenName;
-                        if (!vm.PersonalIdentifier.IsNullOrEmpty() && vm.PersonalIdentifier != attendeeDb.PersonalIdentifier)
+                        if (String.IsNullOrWhiteSpace(attendeeDb.SurName) || attendeeDb.SurName.Length > 64)
                         {
-                            var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
-                            if (isRegistered.Value == true)
-                            {
-                                ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
-                                var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
-                                return View(vm);
-                            }
-                            attendeeDb.PersonalIdentifier = vm.PersonalIdentifier;
-                            attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
-
+                            ModelState.AddModelError("Surname", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 64 tähemärki.");
+                        }
+                        if (String.IsNullOrWhiteSpace(attendeeDb.GivenName) || attendeeDb.GivenName.Length > 64)
+                        {
+                            ModelState.AddModelError("GivenName", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 64 tähemärki.");
+                        }
+                        if (String.IsNullOrWhiteSpace(attendeeDb.PersonAdditionalInfo) || attendeeDb.PersonAdditionalInfo.Length > 1000)
+                        {
+                            ModelState.AddModelError("PersonAdditionalInfo", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 1000 tähemärki.");
+                        }
+                        if (String.IsNullOrWhiteSpace(attendeeDb.PersonalIdentifier) || attendeeDb.PersonalIdentifier.Length != 11)
+                        {
+                            ModelState.AddModelError("PersonalIdentifier", "Sisestatud teksti pikkus peab jääma vahemikku 11 numbers.");
                         }
 
+                        if (ModelState.IsValid)
+                        {
+                            attendeeDb.SurName = vm.SurName;
+                            attendeeDb.GivenName = vm.GivenName;
+                            attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
+
+                            // only check for duplicate registration if we are changing the attendee (which is determined by change of PersonalIdentifier)
+                            if (!attendeeDb.PersonalIdentifier!.Equals(vm.PersonalIdentifier))
+                            {
+                                // We are creating a new attendee
+                                if (!vm.PersonalIdentifier.IsNullOrEmpty() && vm.PersonalIdentifier != attendeeDb.PersonalIdentifier)
+                                {
+                                    var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                                    if (isRegistered.Value == true)
+                                    {
+                                        ModelState.AddModelError("PersonalIdentifier", "Sisestatud isikukoodiga eraisik on juba registeeritud!");
+                                        var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
+                                        vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
+                                        return View(vm);
+                                    }
+                                    attendeeDb.PersonalIdentifier = vm.PersonalIdentifier;
+                                    attendeeDb.PersonAdditionalInfo = vm.PersonAdditionalInfo;
+                                    attendeeDb.SurName = vm.SurName;
+                                    attendeeDb.GivenName = vm.GivenName;
+                                }
+                            }
+                        }
                     }
                     else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                     {
-
-                        attendeeDb.CompanyName = vm.CompanyName;
-                        attendeeDb.RegistryCode = vm.RegistryCode;
-                        if (!vm.CompanyName.IsNullOrEmpty() && !vm.CompanyName!.Equals(attendeeDb.CompanyName) && !vm.RegistryCode.IsNullOrEmpty() && !vm.RegistryCode!.Equals(attendeeDb.RegistryCode))
+                        if (String.IsNullOrWhiteSpace(attendeeDb.CompanyName) || attendeeDb.CompanyName.Length > 64)
                         {
-                            var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
-                            if (isRegistered.Value == true)
+                            ModelState.AddModelError("CompanyName", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 64 tähemärki.");
+                        }
+                        if (String.IsNullOrWhiteSpace(attendeeDb.RegistryCode) || attendeeDb.RegistryCode.Length != 8)
+                        {
+                            ModelState.AddModelError("RegistryCode", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 8 tähemärki.");
+                        }
+                        if (String.IsNullOrWhiteSpace(attendeeDb.PersonAdditionalInfo) || attendeeDb.PersonAdditionalInfo.Length > 1000)
+                        {
+                            ModelState.AddModelError("PersonAdditionalInfo", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 1000 tähemärki.");
+                        }
+
+                        if (ModelState.IsValid)
+                        {
+
+                            attendeeDb.CompanyName = vm.CompanyName;
+                            attendeeDb.RegistryCode = vm.RegistryCode;
+                            if (!vm.CompanyName.IsNullOrEmpty() && !vm.CompanyName!.Equals(attendeeDb.CompanyName) && !vm.RegistryCode.IsNullOrEmpty() && !vm.RegistryCode!.Equals(attendeeDb.RegistryCode))
                             {
-                                ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
-                                ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
-                                var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
-                                vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
-                                return View(vm);
+                                var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb!.AttendeeType!.Value, vm.PersonalIdentifier, vm.CompanyName, vm.RegistryCode);
+                                if (isRegistered.Value == true)
+                                {
+                                    ModelState.AddModelError("CompanyName", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                                    ModelState.AddModelError("RegistryCode", "Sisestatud nime/registrikoodiga ettevõte on juba registeeritud!");
+                                    var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
+                                    vm.PaymentMethods = new SelectList(paymentMethods, nameof(PaymentMethodDTO.Id), nameof(PaymentMethodDTO.Name));
+                                    return View(vm);
+                                }
                             }
-                        }
 
-                        attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
-                        var eventAndAttendeeDb = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(vm.EventId, vm.Id, noIncludes: true);
-                        if (eventAndAttendeeDb != null)
-                        {
-                            eventAndAttendeeDb.NumberOfPeople = vm.NumberOfPeopleFromCompany!.Value;
-                            var result = _uow.EventsAndAttendes.Update(eventAndAttendeeDb);
-                            await _uow.SaveChangesAsync();
-                        }
+                            attendeeDb.NumberOfPeopleFromCompany = vm.NumberOfPeopleFromCompany!.Value;
+                            var eventAndAttendeeDb = await _uow.EventsAndAttendes.GetEventAndAttendeeDTOAsync(vm.EventId, vm.Id, noIncludes: true);
+                            if (eventAndAttendeeDb != null)
+                            {
+                                eventAndAttendeeDb.NumberOfPeople = vm.NumberOfPeopleFromCompany!.Value;
+                                var result = _uow.EventsAndAttendes.Update(eventAndAttendeeDb);
+                                await _uow.SaveChangesAsync();
+                            }
 
-                        attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
+                            attendeeDb.CompanyAdditionalInfo = vm.CompanyAdditionalInfo;
+                        }
                     }
                     attendeeDb.PaymentMethodId = vm.PaymentMethodId;
                     _uow.Attendees.Update(attendeeDb);
