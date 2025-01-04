@@ -4,23 +4,26 @@ import { AttendeeService } from "@/services/AttendeeService";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
 import BackToButton from "@/components/BackToButton";
 import IPaymentMethod from "@/app/domain/IPaymentMethod";
-import { useFormik } from "formik";
-import ATTENDEECREATEEDITSCHEMA from "@/schemas/ATTENDEECREATEEDITSCHEMA";
+import { ErrorMessage, useFormik } from "formik";
+import attendeeCreateEditSchema from "@/schemas/ATTENDEECREATEEDITSCHEMA";
 import PersonAttendeeForm from "../../PersonAttendeeForm";
 import CompanyAttendeeForm from "../../CompanyAttendeeForm";
 import { number } from "yup";
-import { CreateAttendeeValues } from "@/types";
+import { APIErrorData, CreateAttendeePersonValues, CreateAttendeeValues } from "@/types";
 import { EventService } from "@/services/EventService";
+import IAttendee from "@/app/domain/IAttendee";
+import { match } from "node:assert";
 
-const BaseAttendeeForm = (props: {params: Promise<{id: string}>}) => {
-   const service = new AttendeeService();
+const BaseAttendeeForm = (props: { params: Promise<{ id: string }> }) => {
+  const service = new AttendeeService();
   const paymentMethodService = new PaymentMethodService();
   const eventService = new EventService();
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
-  const {id} = use(props.params);
+  const { id } = use(props.params);
   
-  const fetchPaymentMethods = async() => {
+
+  const fetchPaymentMethods = async () => {
     try {
       const response = await paymentMethodService.getAll();
       setPaymentMethods(response || []);
@@ -31,32 +34,65 @@ const BaseAttendeeForm = (props: {params: Promise<{id: string}>}) => {
     }
   };
 
-
   useEffect(() => {
     fetchPaymentMethods();
   }, []);
 
   const formik = useFormik<CreateAttendeeValues>({
     initialValues: {
-      attendeeType: "",
+      attendeeType: "1",
       paymentMethodId: "",
       surName: "",
       givenName: "",
       personalIdentifier: "",
       personAdditionalInfo: "",
-      companyName: "",
-      registryCode: "",
-      numberOfPeopleFromCompany: "",
-      companyAdditionalInfo: "",
+      companyName : ""
     },
-    validationSchema: ATTENDEECREATEEDITSCHEMA,
+    validationSchema: attendeeCreateEditSchema,
     onSubmit: async (values) => {
       console.log("onSubmit values", values);
+
+      let dto : IAttendee = {
+        attendeeType: Number(values.attendeeType),
+        paymentMethodId: Number(values.paymentMethodId)
+      };
+      if (values.attendeeType === "1") {
+        //dto.attendeeType = 5;
+        //dto.paymentMethodId = 4;
+        dto.givenName = values.givenName;
+        dto.surName = values.surName;
+        dto.personalIdentifier = values.personalIdentifier;
+        dto.personAdditionalInfo = values.personAdditionalInfo;
+      }
+      else {
+        dto.companyName = values.companyName;
+        dto.registryCode = values.registryCode;
+        dto.companyAdditionalInfo = values.companyAdditionalInfo;
+        dto.numberOfPeopleFromCompany = Number(values.numberOfPeopleFromCompany);
+      }
+      
       try {
-        const result = await service.addAttendeeToAnEvent(id, values);
-         if (result) {
+        const result = await service.addAttendeeToAnEvent(id, dto);
+        if (typeof result === 'number') {
           window.location.href = "/";
-        } 
+        }
+        else if (typeof result === 'string') {
+          alert(result);
+        }
+        else
+        {
+          let apiError = result as APIErrorData;
+          let formFieldNames = Object.entries(formik.values).map(x => x[0]);
+          let errorFields = Object.entries(apiError.errors);
+          errorFields.forEach(([key, value]) => {
+            // find the field that matches the key
+            let formFieldName = formFieldNames.find(x => x.toLowerCase() === key.toLowerCase());
+            if (formFieldName)
+              formik.setFieldError(formFieldName, value.join(', '));
+            else
+              alert(`${key}: ${value}`);
+          });       
+        }
       } catch (error) {
         console.error("Failed to create attendee:", error);
         alert("Submission failed. Please try again.");
@@ -81,17 +117,15 @@ const BaseAttendeeForm = (props: {params: Promise<{id: string}>}) => {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="attendeeType">Osavõtja tüüp</label>
-                
+
                 <div className="form-check">
                   <input
                     type="radio"
                     value="1"
                     className="form-check-input"
-                    checked={values.attendeeType === "1"}
+                    checked={ values.attendeeType === "1"}
                     name="attendeeType"
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
                   />
                   <label
                     htmlFor="AttendeeType_Person"
@@ -99,13 +133,14 @@ const BaseAttendeeForm = (props: {params: Promise<{id: string}>}) => {
                   >
                     Eraisik
                   </label>
+                  
                 </div>
                 <div className="form-check">
                   <input
                     name="attendeeType"
                     type="radio"
                     value="2"
-                    checked={values.attendeeType === "2"}
+                    checked={ values.attendeeType === "2"}
                     className="form-check-input"
                     onChange={(e) => handleChange(e)}
                   />

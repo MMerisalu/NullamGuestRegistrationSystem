@@ -9,6 +9,21 @@ namespace WebApp.ViewModels
 {
     public class CreateAttendeeVM : DomainEntityId<int>
     {
+        #region Event Details (Readonly)
+
+        [DisplayName("Ürituse nimi")]
+        public required string EventName { get; set; }
+
+        [DisplayName("Toimumisaeg")]
+        public required string FormattedEventDate { get; set; }
+        [DisplayName("Koht")]
+        public required string Location { get; set; }
+
+        public ICollection<ListOfAttendeeVM> Attendees { get; set; } = new List<ListOfAttendeeVM>();
+
+        #endregion  Event Details (Readonly)
+
+
         [DisplayName("Osavõtja tüüp")]
         [Required(ErrorMessage = "Osavõtja tüübi valimine on kohustuslik!")]
         [EnumDataType(typeof(AttendeeType))]

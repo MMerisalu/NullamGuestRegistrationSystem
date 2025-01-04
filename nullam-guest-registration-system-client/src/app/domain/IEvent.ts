@@ -4,6 +4,7 @@ interface IEvent extends IBaseEntity {
     lineNumber : string
     name: string,
     eventDateAndTime: string,
+    eventDateAndTimeFormatted : string,
     location: string,
     numberOfAttendees: number,
     additionalInfo?: string,

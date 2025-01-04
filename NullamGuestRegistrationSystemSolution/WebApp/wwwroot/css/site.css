@@ -17,3 +17,21 @@ html {
   min-height: 100%;
 }
 
+.header-filled {
+    background-color: #3F5C9C;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+#home-page-image {
+    background-image: url(/images/pilt.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+footer {
+    background-color: #3D3C3E;
+    color:lightgray;
+}
+.form-group .control-label {
+    min-width: 100px
+}

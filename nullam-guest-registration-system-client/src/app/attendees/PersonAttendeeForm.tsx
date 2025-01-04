@@ -1,7 +1,9 @@
-import { CreateAttendeeFormik } from "@/types";
+import { CreateAttendeeFormik, EditAttendeeFormik } from "@/types";
 import React from "react";
 
-const PersonAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
+const PersonAttendeeForm = (props: {
+  formik: CreateAttendeeFormik | EditAttendeeFormik;
+}) => {
   return (
     <>
       <div id="sur_name_div" className="form-group">
@@ -55,7 +57,9 @@ const PersonAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
         />
         <span className="text-danger field-validation-valid">
           {props.formik.errors.personalIdentifier ? (
-            <div className="text-danger">{props.formik.errors.personalIdentifier}</div>
+            <div className="text-danger">
+              {props.formik.errors.personalIdentifier}
+            </div>
           ) : null}
         </span>
       </div>
@@ -72,8 +76,10 @@ const PersonAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
           onBlur={props.formik.handleBlur}
         ></textarea>
         <span className="text-danger field-validation-valid">
-        {props.formik.errors.personAdditionalInfo ? (
-            <div className="text-danger">{props.formik.errors.personAdditionalInfo}</div>
+          {props.formik.errors.personAdditionalInfo ? (
+            <div className="text-danger">
+              {props.formik.errors.personAdditionalInfo}
+            </div>
           ) : null}
         </span>
       </div>

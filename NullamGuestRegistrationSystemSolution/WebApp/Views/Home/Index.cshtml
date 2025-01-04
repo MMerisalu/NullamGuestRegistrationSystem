@@ -4,10 +4,30 @@
 <p>
     <a style="text-decoration:none" asp-controller="Events" asp-action="Create">Lisa uus üritus</a>
 </p>
+<div class="container">
+    <div class="row" style="min-height:300px">
+        <div class="col header-filled text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae interdum tellus. In lobortis convallis lacinia. Sed tempus ligula magna, eu vehicula nisi vulputate vitae. Donec lorem ante, rutrum nec facilisis quis, ultrices sit amet arcu. Proin urna erat, vestibulum et augue at, cursus aliquam risus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam sit amet odio quis nunc dignissim posuere. Vivamus faucibus a mauris sit amet efficitur. Nunc rutrum tortor volutpat eros dapibus, sit amet interdum eros accumsan. Curabitur ullamcorper pellentesque libero. Curabitur sollicitudin luctus sagittis.</div>
+        <div class="col" id="home-page-image">
+            &nbsp;
+        </div>
+    </div>
+</div>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col px-2">
+            <div class="header-filled">
+                <h1>Tulevased üritused</h1>
+            </div>
+            @await Html.PartialAsync("_EventTable", Model.FutureEvents)
+        </div>
+        <div class="col">
+            <div class="header-filled">
+                <h1>Toimunud üritused</h1>
+            </div>
+            @await Html.PartialAsync("_EventTable", Model.PastEvents)
+        </div>
+    </div>
+</div>
 
-<h1>Tulevased üritused</h1>
-@await Html.PartialAsync("_EventTable", Model.FutureEvents)
-<h1>Toimunud üritused</h1>
-@await Html.PartialAsync("_EventTable", Model.PastEvents)
- 
 

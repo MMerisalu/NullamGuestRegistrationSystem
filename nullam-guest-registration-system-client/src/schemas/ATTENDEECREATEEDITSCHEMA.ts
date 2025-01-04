@@ -1,10 +1,10 @@
 import * as yup from 'yup';
 
-const ATTENDEECREATEEDITSCHEMA = yup.object().shape({
+const attendeeCreateEditSchema = yup.object().shape({
   attendeeType: yup
     .string()
     .required("Väli osavõtja tüüp on kohustuslik!"),
-   
+
   surName: yup.string().when("attendeeType", (attendeeType, schema) =>
   {
     console.log('surName attendeeType', attendeeType)
@@ -19,7 +19,7 @@ const ATTENDEECREATEEDITSCHEMA = yup.object().shape({
   givenName: yup.string().when("attendeeType", (attendeeType, schema) =>
   {
     if (attendeeType[0] === '1') {
-      
+
       return schema
         .required("Väli perekonnanimi on kohustuslik!")
         .max(64, "Väljale perekonnanimi sisestava teksti pikkus on maksimaalselt 64 tähemärki!");
@@ -29,7 +29,7 @@ const ATTENDEECREATEEDITSCHEMA = yup.object().shape({
   personalIdentifier: yup.string().when("attendeeType", (attendeeType, schema) =>
   {
     if (attendeeType[0] === '1') {
-      
+
       return schema
         .required("Väli isikukood on kohustuslik!")
         .matches(/^\d{11}$/, "Eesti isikukoodi pikkuseks on 11 numbrit! Palun sisestage uus isikukood!");
@@ -54,7 +54,7 @@ const ATTENDEECREATEEDITSCHEMA = yup.object().shape({
     if (attendeeType[0] === '2') {
       return schema
         .required("Väli ettevõtte registrikood on kohustuslik!")
-        .matches(/^\d{8}$/, "Eesti ettevõtte registrikoodi pikkuseks on 8 numbrit! Palun sisestage uus registrikood!");  
+        .matches(/^\d{8}$/, "Eesti ettevõtte registrikoodi pikkuseks on 8 numbrit! Palun sisestage uus registrikood!");
     }
     return schema.notRequired();
   }),
@@ -73,11 +73,11 @@ const ATTENDEECREATEEDITSCHEMA = yup.object().shape({
     .notRequired()
     .max(5000, "Väljale ettevõtte lisainfo sisestava teksti pikkus on maksimaalselt 5000 tähemärki!"),
 
-    paymentMethodId: yup
+  paymentMethodId: yup
     .string()
     .required("Väli maksemeetod on kohustuslik!")
 });
 
 
 
-export default ATTENDEECREATEEDITSCHEMA;
+export default attendeeCreateEditSchema;

@@ -93,7 +93,7 @@ namespace WebApp.APIControllers
             {
                 return BadRequest();
             }
-
+           
             _uow.Events.Add(eventDTO);
             await _uow.SaveChangesAsync();
 

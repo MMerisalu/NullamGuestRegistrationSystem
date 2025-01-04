@@ -2,7 +2,7 @@ import IEvent from "@/app/domain/IEvent";
 import axios from "axios";
 import { BaseEntityService } from "./BaseEntityService";
 import { format } from "date-fns";
-import IAttendeeDetails from "@/app/domain/IAttendeeDetail";
+import IAttendeeDetails from "@/app/domain/IAttendeeDetails";
 import { number, string } from "yup";
 
 export class EventService extends BaseEntityService<IEvent>
@@ -20,7 +20,7 @@ export class EventService extends BaseEntityService<IEvent>
       if (response.status === 200) {
         response.data.forEach((element) =>
         {
-          element.eventDateAndTime = format(
+          element.eventDateAndTimeFormatted = format(
             element.eventDateAndTime,
             "dd.MM.yyyy HH:mm"
           );
@@ -52,20 +52,21 @@ export class EventService extends BaseEntityService<IEvent>
   isAfterNow(eventDateTimeString: string)
   {
     const nowDateTime = new Date();
+    console.log(eventDateTimeString)
+    /* const nowDateTime = new Date();
     console.log("eventDateTimeString", eventDateTimeString);
-    const day = Number(eventDateTimeString.substring(0, 2));
+    const day = Number(eventDateTimeString.substring(0, 4));
     console.log("day", day);
-    const monthString = eventDateTimeString.substring(3, 5);
+    const monthString = eventDateTimeString.substring(5, 7);
     const month = Number(monthString) - 1;
     console.log("month", month);
-    const year = Number(eventDateTimeString.substring(6, 10));
-    console.log("year", year);
+    const year = Number(eventDateTimeString.substring(8, 10));
+    console.log("day", day);
     const hours = Number(eventDateTimeString.substring(11, 13));
     console.log("hours", hours);
     const minutes = Number(eventDateTimeString.substring(14, 16));
-    console.log("minutes", minutes);
-
-    const eventDateTime = new Date(year, month, day, hours, minutes);
+    */
+    const eventDateTime = new Date(eventDateTimeString);
     console.log("eventDateTime", eventDateTime);
     const afterNow = eventDateTime > nowDateTime;
     return afterNow;

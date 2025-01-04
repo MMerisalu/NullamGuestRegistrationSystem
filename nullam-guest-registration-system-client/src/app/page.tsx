@@ -76,7 +76,7 @@ export default function Home() {
                   {item.name}
                 </Link>
               </td>
-              <td>{item.eventDateAndTime}</td>
+              <td>{item.eventDateAndTimeFormatted}</td>
               <td>{item.location}</td>
               <td>{item.numberOfAttendees}</td>
               <td>{item.additionalInfo}</td>
@@ -96,12 +96,7 @@ export default function Home() {
                     >
                       OSAVÕTJAD
                     </Link>
-                  </>
-                )}
-              </td>
-
-              <td>
-                <form
+                    <form
                   onSubmit={() => {
                     eventService.delete(item.id).then(() => {
                       fetchEvents();
@@ -126,6 +121,12 @@ export default function Home() {
                     </svg>
                   </button>
                 </form>
+                  </>
+                )}
+              </td>
+
+              <td>
+                
               </td>
             </tr>
           ))}

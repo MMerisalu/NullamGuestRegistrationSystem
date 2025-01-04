@@ -33,16 +33,16 @@ const AddAttendeeToAnotherEvent = (props: { params: Promise<{ id: string }> }) =
     initialValues: {
       eventId : "",
       attendeeType: attendee?.attendeeType ?? 0,
-      numberOfPeople: attendee?.numberOfPeopleFromCompany ?? 0,
+      numberOfPeople: attendee?.numberOfPeopleFromCompany ?? 1,
       isChecked: false,
     },
     validationSchema: ADDATTENDEETOANOTHEREVENTSCHEMA,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      const result = await service.addAttendeeToAnotherEvent(id, { id, ...values });
-      if (result) {
+       const result = await service.addAttendeeToAnotherEvent(id, values); 
+       if (result) {
         return (window.location.href = "/") 
-      }
+      } 
     },
   });
 

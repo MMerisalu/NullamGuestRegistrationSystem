@@ -1,7 +1,9 @@
-import { CreateAttendeeFormik } from "@/types";
+import { CreateAttendeeFormik, EditAttendeeFormik } from "@/types";
 import React from "react";
 
-const CompanyAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
+const CompanyAttendeeForm = (props: {
+  formik: CreateAttendeeFormik | EditAttendeeFormik;
+}) => {
   return (
     <>
       <div id="company_name_div" className="form-group">
@@ -22,24 +24,7 @@ const CompanyAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
           ) : null}
         </span>
       </div>
-      <div id="registry_code_div" className="form-group">
-        <label className="control-label" htmlFor="RegistryCode">
-          Ettevõtte registrikood
-        </label>
-        <input
-          className="form-control"
-          type="text"
-          name="registryCode"
-          value={props.formik.values.registryCode}
-          onChange={props.formik.handleChange}
-          onBlur={props.formik.handleBlur}
-        />
-        <span className="text-danger field-validation-valid">
-          {props.formik.errors.registryCode ? (
-            <div className="text-danger">{props.formik.errors.registryCode}</div>
-          ) : null}
-        </span>
-      </div>
+      
       <div id="number_of_people_from_company_div" className="form-group">
         <label className="control-label" htmlFor="NumberOfPeopleFromCompany">
           Ettevõttest tulevate osavõtjate arv
@@ -54,7 +39,9 @@ const CompanyAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
         />
         <span className="text-danger field-validation-valid">
           {props.formik.errors.numberOfPeopleFromCompany ? (
-            <div className="text-danger">{props.formik.errors.numberOfPeopleFromCompany}</div>
+            <div className="text-danger">
+              {props.formik.errors.numberOfPeopleFromCompany}
+            </div>
           ) : null}
         </span>
       </div>
@@ -70,8 +57,10 @@ const CompanyAttendeeForm = (props: { formik: CreateAttendeeFormik }) => {
           onBlur={props.formik.handleBlur}
         ></textarea>
         <span className="text-danger field-validation-valid">
-        {props.formik.errors.companyAdditionalInfo ? (
-            <div className="text-danger">{props.formik.errors.companyAdditionalInfo}</div>
+          {props.formik.errors.companyAdditionalInfo ? (
+            <div className="text-danger">
+              {props.formik.errors.companyAdditionalInfo}
+            </div>
           ) : null}
         </span>
       </div>

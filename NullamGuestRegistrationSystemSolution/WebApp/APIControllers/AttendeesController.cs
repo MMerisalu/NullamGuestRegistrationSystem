@@ -115,15 +115,6 @@ namespace WebApp.APIControllers
                     }
                     else if (attendeeDb.AttendeeType.Value == AttendeeType.Company)
                     {
-                        if (attendee.AttendeeType.HasValue)
-                        {
-                            var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendee.AttendeeType.Value, null, attendeeDb.CompanyName, attendeeDb.RegistryCode);
-                            if (isRegistered.HasValue && isRegistered.Value == true)
-                            {
-                                return BadRequest("Sisestatud ettevõtte juurdilise nime / registrikoodiga ettevõtte on juba registreeritud!");
-                            }
-                        }
-
                         attendeeDb.CompanyName = attendee.CompanyName;
                         attendeeDb.RegistryCode = attendeeDb.RegistryCode;
                         if (attendee.NumberOfPeopleFromCompany != null && attendeeDb.NumberOfPeopleFromCompany != null)
@@ -139,6 +130,20 @@ namespace WebApp.APIControllers
                                 attendeeDb.PaymentMethodId = attendee.PaymentMethodId;
                             }
                         }
+                        
+                        if (attendee.CompanyName != null && !attendeeDb.CompanyName.Equals(attendee.CompanyName) && !attendeeDb.RegistryCode.Equals(attendee.RegistryCode) )
+                        {
+                            attendeeDb.CompanyName = attendee.CompanyName;
+                            attendeeDb.RegistryCode = attendee.RegistryCode;
+                            var isRegistered = await _uow.Attendees.IsAttendeeAlreadyRegisteredAsync(attendeeDb.AttendeeType.Value, companyName: attendee.CompanyName, registeryCode: attendee.RegistryCode);
+                            if (isRegistered.Value == true)
+                            {
+                                return BadRequest("Sisestatud nime/registrikoodiga ettevõte on juba registeeritud! Palun kontrollige andmeid");
+                            }
+                        }
+                       
+
+                        
                     }
                     _uow.Attendees.Update(attendeeDb);
                     await _uow.SaveChangesAsync();
