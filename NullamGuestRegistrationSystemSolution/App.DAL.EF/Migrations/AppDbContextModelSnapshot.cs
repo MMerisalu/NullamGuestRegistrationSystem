@@ -43,7 +43,7 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PersonAdditionalInfo")
-                        .HasMaxLength(1000)
+                        .HasMaxLength(1500)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PersonalIdentifier")

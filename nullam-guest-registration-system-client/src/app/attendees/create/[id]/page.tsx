@@ -9,7 +9,7 @@ import attendeeCreateEditSchema from "@/schemas/ATTENDEECREATEEDITSCHEMA";
 import PersonAttendeeForm from "../../PersonAttendeeForm";
 import CompanyAttendeeForm from "../../CompanyAttendeeForm";
 import { number } from "yup";
-import { APIErrorData, CreateAttendeePersonValues, CreateAttendeeValues } from "@/types";
+import { APIErrorData, CreateAttendeeValues } from "@/types";
 import { EventService } from "@/services/EventService";
 import IAttendee from "@/app/domain/IAttendee";
 import { match } from "node:assert";
@@ -46,7 +46,10 @@ const BaseAttendeeForm = (props: { params: Promise<{ id: string }> }) => {
       givenName: "",
       personalIdentifier: "",
       personAdditionalInfo: "",
-      companyName : ""
+      companyName : "",
+      registryCode: "",
+      numberOfPeopleFromCompany : "",
+      companyAdditionalInfo: ""
     },
     validationSchema: attendeeCreateEditSchema,
     onSubmit: async (values) => {

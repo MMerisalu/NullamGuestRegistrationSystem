@@ -14,7 +14,7 @@ export default function Home() {
   const router = useRouter();
   const [events, setEvents] = useState<IEvent[]>([]);
   const [date, setDate] = useState<string>();
-  const [isEventVisibile, setIsEventVisible] = useState(false);
+  const [serverErrors, setServerErrors] = useState<string[]>([]);
   // Function to fetch events
   const fetchEvents = async () => {
     try {
@@ -96,17 +96,20 @@ export default function Home() {
                     >
                       OSAVÕTJAD
                     </Link>
-                    <form
-                  onSubmit={() => {
-                    eventService.delete(item.id).then(() => {
-                      fetchEvents();
-                    });
-                  }}
-                >
+                    <form>
                   <button
                     type="submit"
                     className="btn btn-link text-danger"
                     aria-label="Delete"
+                    onClick={() => {
+                      eventService.delete(item.id).then(() => {
+                        fetchEvents();
+                      })
+                        .catch(error => {
+                          alert(error);
+                          setServerErrors([].concat(error));
+                      });
+                    }}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

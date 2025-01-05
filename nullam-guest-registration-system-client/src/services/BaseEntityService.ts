@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { IBaseEntity } from "@/app/domain/IBaseEntity";
 import BaseService from "./BaseService";
+import { APIErrorData } from "@/types";
+import { AxiosError } from "axios";
 
 export abstract class BaseEntityService<
   TEntity extends IBaseEntity
@@ -25,24 +27,25 @@ export abstract class BaseEntityService<
     }
   }
 
-  async delete(id?: string | number): Promise<number | undefined> {
+  async delete(id?: string | number): Promise<number | APIErrorData> {
     console.log("id", id);
 
     try {
       const response = await this.axios.delete(`/${id}`, {});
       console.log("response.status:", response.status);
-      if (response.status === 204) {
+      if (response.status >= 400)
+        return response.data as APIErrorData;
+      else
         return response.status;
-      }
-
-      return undefined;
     } catch (e) {
-      if (!(e instanceof Error)) {
-        console.log('Details - unknown error')
-        throw e
+      let axiosError = e as AxiosError;
+      if (axiosError) {
+        console.log("Details -  error: ", axiosError.response);
+        if (axiosError.response)
+          throw axiosError.response.data ?? axiosError.response;
       }
-      console.log("Details -  error: ", e.message);
-      return undefined;
+      
+      throw e;
     }
   }
   async getById(id?: string | number): Promise<TEntity | undefined> {
@@ -55,10 +58,10 @@ export abstract class BaseEntityService<
     } catch (e) {
       if (!(e instanceof Error)) {
         console.log('Details - unknown error')
-        throw e
-      }
+      } else {
       console.log("Details -  error: ", e.message);
-      return undefined;
+      }
+      throw e;
     }
   }
 
@@ -74,12 +77,11 @@ export abstract class BaseEntityService<
       }
     } catch (e) {
       if (!(e instanceof Error)) {
-        console.log("Details - unknown error")
-
-        throw e
-      }
+        console.log('Details - unknown error')
+      } else {
       console.log("Details -  error: ", e.message);
-      return undefined;
+      }
+      throw e;
     }
   }
   async edit(
@@ -96,8 +98,12 @@ export abstract class BaseEntityService<
       }
       return undefined;
     } catch (e) {
-      console.log("Details -  error: ", (e as Error).message);
-      return undefined;
+      if (!(e instanceof Error)) {
+        console.log('Details - unknown error')
+      } else {
+      console.log("Details -  error: ", e.message);
+      }
+      throw e;
     }
   }
 }

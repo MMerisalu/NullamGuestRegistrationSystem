@@ -80,8 +80,6 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
         return Remove(entity);
     }
 
-    
-
     public virtual TDalEntity? FirstOrDefault(TKey id, bool noTracking = true, bool noIncludes = false)
     {
         return Mapper.Map(CreateQuery(noTracking, noIncludes)
@@ -160,8 +158,6 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
         return await CreateQuery().AnyAsync(a => a.Id.Equals(id));
     }
 
-    
-
     public virtual async Task<TDalEntity> RemoveAsync(TKey id,bool noTracking = true, bool noIncludes = false)
     {
         var entity = await FirstOrDefaultAsync(id);
@@ -206,8 +202,6 @@ public class BaseEntityRepository<TDomainEntity, TDalEntity, TKey, TDbContext> :
             query = query.IgnoreAutoIncludes();
 
         return query;
-    }
-
-    
+    }  
     
 }

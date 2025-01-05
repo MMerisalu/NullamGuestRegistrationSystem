@@ -233,9 +233,9 @@ namespace WebApp.Controllers
                         {
                             ModelState.AddModelError("GivenName", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 64 tähemärki.");
                         }
-                        if (String.IsNullOrWhiteSpace(attendeeDb.PersonAdditionalInfo) || attendeeDb.PersonAdditionalInfo.Length > 1000)
+                        if (String.IsNullOrWhiteSpace(attendeeDb.PersonAdditionalInfo) || attendeeDb.PersonAdditionalInfo.Length > 1500)
                         {
-                            ModelState.AddModelError("PersonAdditionalInfo", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 1000 tähemärki.");
+                            ModelState.AddModelError("PersonAdditionalInfo", "Sisestatud teksti pikkus peab jääma vahemikku 1 kuni 1500 tähemärki.");
                         }
                         if (String.IsNullOrWhiteSpace(attendeeDb.PersonalIdentifier) || attendeeDb.PersonalIdentifier.Length != 11)
                         {

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DAL.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241129235358_Initial")]
+    [Migration("20250104231953_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace App.DAL.EF.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PersonAdditionalInfo")
-                        .HasMaxLength(1000)
+                        .HasMaxLength(1500)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PersonalIdentifier")

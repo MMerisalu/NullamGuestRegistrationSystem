@@ -24,9 +24,28 @@ const CompanyAttendeeForm = (props: {
           ) : null}
         </span>
       </div>
-      
+      <div id="registry_code_div" className="form-group">
+        <label className="control-label" htmlFor="registryCode">
+          Ettevõtte registrikood
+        </label>
+        <input
+          name="registryCode"
+          className="form-control"
+          type="text"
+          value={props.formik.values.registryCode}
+          onChange={props.formik.handleChange}
+          onBlur={props.formik.handleBlur}
+        />
+        <span className="text-danger field-validation-valid">
+          {props.formik.errors.registryCode ? (
+            <div className="text-danger">
+              {props.formik.errors.registryCode}
+            </div>
+          ) : null}
+        </span>
+      </div>
       <div id="number_of_people_from_company_div" className="form-group">
-        <label className="control-label" htmlFor="NumberOfPeopleFromCompany">
+        <label className="control-label" htmlFor="numberOfPeopleFromCompany">
           Ettevõttest tulevate osavõtjate arv
         </label>
         <input

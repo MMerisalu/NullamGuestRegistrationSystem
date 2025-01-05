@@ -113,7 +113,7 @@ namespace WebApp.APIControllers
                 return NotFound();
             }
 
-            var isUsed = await _uow.Attendees.AnyAsync(p => p!.PaymentMethodId == paymentMethod.Id);
+            var isUsed = await _uow.Attendees.IsConnectedToAnyPaymentMethodsAsync(id);
             if (isUsed) 
             {
                 return BadRequest("Olemit ei saa kustutada, kuna see on seotud teiste olemitega!");

@@ -38,7 +38,7 @@ namespace App.Domain
         public string? PersonalIdentifier { get; set; }
 
         
-        [MaxLength(1000)]
+        [MaxLength(1500)]
         [DisplayName("Lisainfo")]
         public string? PersonAdditionalInfo { get; set; }
 

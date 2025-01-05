@@ -1,7 +1,7 @@
 import IAttendee from "@/app/domain/IAttendee";
 import { BaseEntityService } from "./BaseEntityService";
 import IEvent from "@/app/domain/IEvent";
-import { APIErrorData, APIErrorResponse, CreateAttendeeValues } from "@/types";
+import { APIErrorData, APIErrorResponse, CreateAttendeeValues, EditAttendeeValues } from "@/types";
 import { AxiosError } from "axios";
 
 
@@ -41,9 +41,9 @@ export class AttendeeService extends BaseEntityService<IAttendee>
     }
     return response.status;
   }
-  async editAttendee(attendeeId: string, eventId: string, body: CreateAttendeeValues,)
+  async editAttendee(id: string, eventId: string, body: IAttendee,)
   {
-    let response = await this.axios.put(`/${attendeeId}/${eventId}`, body);
+    let response = await this.axios.put(`/${id}/${eventId}`, body);
     console.log("editAttendee response.status:", response.status);
     if (response.status === 204) {
       return response.status;

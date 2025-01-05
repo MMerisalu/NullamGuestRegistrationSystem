@@ -39,7 +39,7 @@ const attendeeCreateEditSchema = yup.object().shape({
   personAdditionalInfo: yup
     .string()
     .notRequired()
-    .max(1000, "Väljale lisainfo sisestava teksti pikkus on maksimaalselt 1000 tähemärki!"),
+    .max(1500, "Väljale lisainfo sisestava teksti pikkus on maksimaalselt 1500 tähemärki!"),
   companyName: yup.string().when("attendeeType", (attendeeType, schema) =>
   {
     if (attendeeType[0] === '2') {

@@ -22,6 +22,7 @@ const AttendeeEdit = (props: {
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
   const [methodsLoading, setMethodsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState();
+  
   const params = use(props.params);
 
   const fetchAttendee = async () => {
@@ -48,6 +49,7 @@ const AttendeeEdit = (props: {
   }, []);
   const formik = useFormik<EditAttendeeValues>({
     initialValues: {
+      attendeeId: attendee?.id ?? "",
       attendeeType: String(attendee?.attendeeType) ?? "",
       paymentMethodId: attendee?.paymentMethodId ?? "",
       surName: attendee?.surName ?? "",
@@ -55,7 +57,7 @@ const AttendeeEdit = (props: {
       personalIdentifier: attendee?.personalIdentifier ?? "",
       personAdditionalInfo: attendee?.personAdditionalInfo ?? "",
       companyName: attendee?.companyName ?? "",
-      code: attendee?.registryCode ?? "",
+      registryCode: attendee?.registryCode ?? "",
       numberOfPeopleFromCompany: attendee?.numberOfPeopleFromCompany
         ? String(attendee.numberOfPeopleFromCompany)
         : "",
@@ -65,13 +67,32 @@ const AttendeeEdit = (props: {
     validationSchema: attendeeCreateEditSchema,
     onSubmit: async (values) => {
       console.log("onSubmit values", values);
+      let dto : IAttendee = {
+        id: attendee?.id,
+        attendeeType: Number(values.attendeeType),
+        paymentMethodId: Number(values.paymentMethodId)
+      };
+      if (values.attendeeType === "1") {
+        //dto.paymentMethodId = 4;
+        dto.givenName = values.givenName;
+        dto.surName = values.surName;
+        dto.personalIdentifier = values.personalIdentifier;
+        dto.personAdditionalInfo = values.personAdditionalInfo;
+      }
+      else {
+        dto.companyName = values.companyName;
+        dto.registryCode = values.registryCode;
+        dto.companyAdditionalInfo = values.companyAdditionalInfo;
+        dto.numberOfPeopleFromCompany = Number(values.numberOfPeopleFromCompany);
+      }
       try {
         const params = await props.params;
         const result = await service.editAttendee(
           params.id,
           params.eventId,
-          values
+          dto
         );
+
         console.log("result", result);
         if (result) {
           window.location.href = "/";

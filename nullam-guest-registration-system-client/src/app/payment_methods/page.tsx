@@ -3,13 +3,15 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import IPaymentMethod from "../domain/IPaymentMethod";
 import { PaymentMethodService } from "@/services/PaymentMethodService";
+import { Axios, AxiosError } from "axios";
+import { string } from "yup";
 
 const paymentMethodService = new PaymentMethodService();
 
 const PaymentMethods = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
-
+  const [serverErrors, setServerErrors] = useState<string[]>([]);
   // Function to fetch payment methods
   const fetchPaymentMethods = async () => {
     try {
@@ -18,7 +20,7 @@ const PaymentMethods = () => {
       setPaymentMethods(response || []);
     } catch (error) {
       console.error("Failed to fetch payment methods:", error);
-      setPaymentMethods([]);
+      setPaymentMethods([])
     } finally {
       setIsLoading(false);
     }
@@ -35,6 +37,7 @@ const PaymentMethods = () => {
 
   return (
     <>
+    {serverErrors.length !== 0 ? <p>{serverErrors.join(",")}</p> : ""} 
       <h1>Maksemeetodid</h1>
       <p>
         <Link style={{textDecoration:"none"}} href="/payment_methods/create/">Lisa uus maksemeetod</Link>
@@ -55,17 +58,24 @@ const PaymentMethods = () => {
               </td>
               <td>
                 <form
-                  onSubmit={() => {
-                    
-                    paymentMethodService.delete(item.id).then(() => {
-                      fetchPaymentMethods();
-                    });
-                  }}
+                  
                 >
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-link text-danger"
                     aria-label="Delete"
+                    onClick={(e) => {
+                      setServerErrors([]);
+                      paymentMethodService.delete(item.id).then(() => {
+                        fetchPaymentMethods();
+                      }).catch(error => {
+                        alert(error);
+                        setServerErrors([].concat(error));
+                        e.preventDefault;
+                        });
+                        return false;
+                      }
+                    }
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

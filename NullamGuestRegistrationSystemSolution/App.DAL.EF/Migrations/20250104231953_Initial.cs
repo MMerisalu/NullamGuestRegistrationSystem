@@ -50,7 +50,7 @@ namespace App.DAL.EF.Migrations
                     SurName = table.Column<string>(type: "TEXT", nullable: true),
                     GivenName = table.Column<string>(type: "TEXT", nullable: true),
                     PersonalIdentifier = table.Column<string>(type: "TEXT", nullable: true),
-                    PersonAdditionalInfo = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    PersonAdditionalInfo = table.Column<string>(type: "TEXT", maxLength: 1500, nullable: true),
                     CompanyName = table.Column<string>(type: "TEXT", nullable: true),
                     RegistryCode = table.Column<string>(type: "TEXT", nullable: true),
                     NumberOfPeopleFromCompany = table.Column<int>(type: "INTEGER", nullable: true),

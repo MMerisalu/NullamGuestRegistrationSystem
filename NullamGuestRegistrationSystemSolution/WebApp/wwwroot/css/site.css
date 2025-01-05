@@ -35,3 +35,21 @@ footer {
 .form-group .control-label {
     min-width: 100px
 }
+
+.col {
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.col p {
+        display: block;
+        margin-bottom: 6px;
+        padding: 0;
+        line-height: 1;
+}
+
+.col h3 {
+        font-weight: normal;
+}
+

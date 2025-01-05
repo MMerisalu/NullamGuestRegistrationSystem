@@ -40,7 +40,7 @@ export interface CreateAttendeeValues
   personAdditionalInfo?: string;
   companyName?: string;
   registryCode?: string;
-  numberOfPeopleFromCompany?: string | number;
+  numberOfPeopleFromCompany?: string;
   companyAdditionalInfo?: string;
 
 }
@@ -58,9 +58,7 @@ export type APIErrorMessages = {
   [key:string]: Array<string>
 }
 
-export interface CreateAttendeePersonValues extends CreateAttendeeValues{
- 
-}
+
 
 
 export interface EditAttendeeValues extends CreateAttendeeValues

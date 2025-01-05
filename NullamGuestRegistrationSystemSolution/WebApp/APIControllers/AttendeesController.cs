@@ -102,6 +102,10 @@ namespace WebApp.APIControllers
 
                         if (attendee.PersonAdditionalInfo != null)
                         {
+                            if(attendee.PersonAdditionalInfo.Length > 1500)
+                            {
+                                return BadRequest("Sisestatud teksti pikkus võib olla kuni 1500 tähemärki!");
+                            }
                             attendeeDb.PersonAdditionalInfo = attendee.PersonAdditionalInfo;
                         }
 
@@ -141,8 +145,6 @@ namespace WebApp.APIControllers
                                 return BadRequest("Sisestatud nime/registrikoodiga ettevõte on juba registeeritud! Palun kontrollige andmeid");
                             }
                         }
-                       
-
                         
                     }
                     _uow.Attendees.Update(attendeeDb);
@@ -213,9 +215,9 @@ namespace WebApp.APIControllers
                 }
                 if (!attendee.PersonAdditionalInfo.IsNullOrEmpty())
                 {
-                    if (attendee.PersonAdditionalInfo!.Length > 1000)
+                    if (attendee.PersonAdditionalInfo!.Length > 1500)
                     {
-                        return BadRequest("Sisestatud teksti pikkus võib olla kuni 1000 tähemärki!");
+                        return BadRequest("Sisestatud teksti pikkus võib olla kuni 1500 tähemärki!");
                     }
                 }
 
@@ -338,7 +340,6 @@ namespace WebApp.APIControllers
             return NoContent();
         }
         
-
         private bool AttendeeExists(int id)
         {
             return _uow.Attendees.Any(e => e!.Id == id);

@@ -11,6 +11,7 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = use(props.params);
   const [attendees, setAttendees] = useState<IAttendeeDetails[]>();
+  const [serverErrors, setServerErrors] = useState<string[]>([]);
   const fetchAttendees = async () => {
     try {
       const response = await service.getAttendeesByEventId(id);
@@ -52,7 +53,7 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
                   <td>
                     <Link
                       style={{ textDecoration: "none" }}
-                      href={`/attendees/edit/${item.attendeeId}/${item.id}`}
+                      href={`/attendees/edit/${item.attendeeId}/${item.eventId}`}
                     >
                       {item.name}
                     </Link>
@@ -68,16 +69,18 @@ const ListOfAttendees = (props: { params: Promise<{ id: string }> }) => {
                     </Link>
                   </td>
                   <td>
-                    <form
-                      method="post"
-                      onSubmit={() => {
+                    <form>
+                      <link className="link-danger" />
+                      <button type="button" className="btn btn-link" onClick={() => {
+                        setServerErrors([]);
                         attendeeService
                           .deleteAttendee(item.eventId, item.id)
-                          .then(() => fetchAttendees());
-                      }}
-                    >
-                      <link className="link-danger" />
-                      <button type="submit" className="btn btn-link">
+                          .then(() => fetchAttendees())
+                          .catch(error => {
+                            alert(error);
+                            setServerErrors([].concat(error));
+                            });
+                      }}>
                         <svg
                           style={{ color: "red" }}
                           xmlns="http://www.w3.org/2000/svg"
