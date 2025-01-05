@@ -9,7 +9,7 @@ namespace WebApp.ViewModels
 {
     public class CreateAttendeeVM : DomainEntityId<int>
     {
-        #region Event Details (Readonly)
+        /*#region Event Details (Readonly)
 
         [DisplayName("Ürituse nimi")]
         public required string EventName { get; set; }
@@ -21,7 +21,7 @@ namespace WebApp.ViewModels
 
         public ICollection<ListOfAttendeeVM> Attendees { get; set; } = new List<ListOfAttendeeVM>();
 
-        #endregion  Event Details (Readonly)
+        #endregion  Event Details (Readonly)*/
 
 
         [DisplayName("Osavõtja tüüp")]

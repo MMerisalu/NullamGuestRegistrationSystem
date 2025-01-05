@@ -11,7 +11,7 @@ const EVENTCREATEEDITSCHEMA = yup.object().shape({
     .typeError("Väli Ürituse nimi on kohustuslik!")
     .min(DATETIME, "Sisestatud kuupäev / kellaaeg on juba möödunud. Palun valige uus."),
     location: yup.string()
-    .required("Väli Ürituse nimi on kohustuslik!")
+    .required("Väli Koht on kohustuslik!")
     .max(64,"Väljale sisestatava teksti maksimaalne pikkus peab jääma vahemikku 1 - 64 tähemärki!" ),
     additionalInfo: yup.string()
     .notRequired()

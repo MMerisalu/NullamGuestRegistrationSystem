@@ -24,12 +24,28 @@ namespace WebApp.APIControllers
             _uow = uow;
         }
 
-        // GET: api/Events
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventDTO?>>> GetEvents()
+        // GET: api/GetFutureEvents
+        [HttpGet("GetFutureEvents")]
+
+        public async Task<ActionResult<IEnumerable<EventDTO?>>> GetFutureEvents()
         {
-            return Ok(await _uow.Events.GetAllEventsDTOOrderedByNameAsync());
+            return Ok(await _uow.Events.GetAllFutureEventsOrderedByNameAsync());
         }
+
+        // GET: api/GetPastEvents
+
+        [HttpGet("GetPastEvents")]
+
+        public async Task<ActionResult<IEnumerable<EventDTO?>>> GetPastEvents()
+        {
+            return Ok(await _uow.Events.GetAllPastEventsOrderedByNameAsync());
+        }
+        // GET: api/Events
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<EventDTO?>>> GetPastEvents()
+        //{
+        //    return Ok(await _uow.Events.GetAllPastEventsOrderedByNameAsync());
+        //}
 
         // GET: api/Events/5
         [HttpGet("{id:int}")]

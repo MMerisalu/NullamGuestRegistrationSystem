@@ -45,21 +45,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            var vm = new CreateAttendeeVM 
-            { 
-                EventName = eventDb.Name, 
-                FormattedEventDate = eventDb.EventDateAndTime.ToString("g"),
-                Location = eventDb.Location
-            };
-
-            // get the attendees to show in the form header
-            vm.Attendees = (await _uow.Attendees.GetAllAttendeesOfEventOrderedByNameAsync(id, true)!)
-                .Select(a => new ListOfAttendeeVM
-                {
-                    AttendeeId = a!.Id, AttendeeType = a.AttendeeType, NumberOfPeople = a.NumberOfPeopleFromCompany.GetValueOrDefault(),
-                    Name = a.AttendeeType == AttendeeType.Person ? a.GivenAndSurName : a.CompanyName!,
-                    Code = a.AttendeeType == AttendeeType.Person ? a.PersonalIdentifier! : a.RegistryCode!
-                }).ToList();
+            var vm = new CreateAttendeeVM();
+            
 
 
             var paymentMethods = await _uow.PaymentMethods.GetAllPaymentMehodsOrderedByNameAsync();
