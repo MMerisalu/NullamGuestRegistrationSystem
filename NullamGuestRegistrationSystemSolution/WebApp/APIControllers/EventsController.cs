@@ -40,13 +40,7 @@ namespace WebApp.APIControllers
         {
             return Ok(await _uow.Events.GetAllPastEventsOrderedByNameAsync());
         }
-        // GET: api/Events
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<EventDTO?>>> GetPastEvents()
-        //{
-        //    return Ok(await _uow.Events.GetAllPastEventsOrderedByNameAsync());
-        //}
-
+       
         // GET: api/Events/5
         [HttpGet("{id:int}")]
         public async Task<ActionResult<EventDTO?>> GetEvent(int id)
